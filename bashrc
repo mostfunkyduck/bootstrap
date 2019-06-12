@@ -19,11 +19,11 @@ git_branch () {
 }
 
 parse_git_dirty () {
-  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "modified" || echo "no modifications"
+  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit, working tree clean" ]] && echo "modified" || echo "no modifications"
 }
 
 parse_git_up_to_date () {
-  [[ $(git status 2> /dev/null | grep -ic "your branch is up to date") != 1 ]] && echo "pull required" || echo "up to date"
+  [[ $(git status 2> /dev/null | grep -ic "your branch is up to date") != 1 ]] && echo "out of sync" || echo "up to date"
 }
 
 git_ps1 () {
