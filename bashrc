@@ -10,11 +10,32 @@ then
 fi
 export PATH
 
+in_git () {
+  git rev-parse --git-dir > /dev/null 2>&1
+}
+
+git_branch () {
+  git branch 2> /dev/null | sed "s/* //"
+}
+
+parse_git_dirty () {
+  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "modified" || echo "no modifications"
+}
+
+parse_git_up_to_date () {
+  [[ $(git status 2> /dev/null | grep -ic "your branch is up to date") != 1 ]] && echo "pull required" || echo "up to date"
+}
+
+git_ps1 () {
+  if in_git; then
+    echo "($(git_branch)/$(parse_git_dirty)/$(parse_git_up_to_date))"
+  fi
+}
 get_number_of_jobs () {
   jobs | wc -l | tr -d " "
 }
 
-export PS1='[\t   <\W> [$(get_number_of_jobs)]] \n> '
+export PS1='[\t   <\W> [$(get_number_of_jobs)]] $(git_ps1)  \n> '
 
 export PYTHONDONTWRITEBYTECODE=True
 
