@@ -26,11 +26,17 @@ parse_git_up_to_date () {
   [[ $(git status 2> /dev/null | grep -ic "your branch is up to date") != 1 ]] && echo "out of sync" || echo "up to date"
 }
 
+
+git_repo () {
+  basename `git rev-parse --show-toplevel`
+}
+
 git_ps1 () {
   if in_git; then
-    echo "($(git_branch)/$(parse_git_dirty)/$(parse_git_up_to_date))"
+    echo "($(git_repo): $(git_branch)/$(parse_git_dirty)/$(parse_git_up_to_date))"
   fi
 }
+
 get_number_of_jobs () {
   jobs | wc -l | tr -d " "
 }
