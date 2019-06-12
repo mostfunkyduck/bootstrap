@@ -19,7 +19,7 @@ git_branch () {
 }
 
 parse_git_dirty () {
-  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit, working tree clean" ]] && echo "modified" || echo "no modifications"
+  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit, working tree clean" ]] && echo "dirty" || echo "clean"
 }
 
 parse_git_up_to_date () {
