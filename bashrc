@@ -15,7 +15,7 @@ in_git () {
 }
 
 git_branch () {
-  git branch 2> /dev/null | sed "s/* //"
+  git branch 2> /dev/null | grep '*' | sed "s/* //"
 }
 
 parse_git_dirty () {
