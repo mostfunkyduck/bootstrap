@@ -212,3 +212,6 @@ let g:ale_linters = {
 \}
 nmap <Leader>ln :lnext<CR>
 nmap <Leader>lp :lprevious<CR>
+
+" https://vi.stackexchange.com/questions/177/what-is-the-purpose-of-swap-files
+set directory^=$HOME/.vim/swapfiles//
