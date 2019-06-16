@@ -4,6 +4,10 @@ cp ./bashrc ~/.bashrc
 chmod o+x ~/.bashrc
 . ~/.bashrc
 
+### tmux ###
+cp ~/.tmux.conf ~/.tmux.conf.bootstrap.bkp
+cp tmux.conf ~/.tmux.conf
+
 ### Vim config ###
 # pathogen
 mkdir -p ~/.vim/autoload ~/.vim/bundle && \
