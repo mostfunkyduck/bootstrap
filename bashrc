@@ -19,13 +19,13 @@ git_branch () {
 }
 
 parse_git_dirty () {
-  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit, working tree clean" ]] && echo "dirty" || echo "clean"
+  MODIFIED=$(git status 2> /dev/null | grep -c "modified: ")
+  echo "$MODIFIED modified"
 }
 
 parse_git_up_to_date () {
-  [[ $(git status 2> /dev/null | grep -ic "your branch is up to date") != 1 ]] && echo "out of sync" || echo "up to date"
+  [[ $(git status 2> /dev/null | grep -ic "your branch is up to date") != 1 ]] && echo "unpushed commits" || echo "no unpushed commits"
 }
-
 
 git_repo () {
   basename `git rev-parse --show-toplevel`
@@ -33,7 +33,7 @@ git_repo () {
 
 git_ps1 () {
   if in_git; then
-    echo "($(git_repo): $(git_branch)/$(parse_git_dirty)/$(parse_git_up_to_date))"
+    echo "($(git_repo): $(git_branch)|$(parse_git_dirty)|$(parse_git_up_to_date))"
   fi
 }
 
