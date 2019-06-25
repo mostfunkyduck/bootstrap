@@ -1,4 +1,5 @@
 # Source global definitions
+## Doing this to ensure compatibility with distros that include the global defs in their ~/.bashrc
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
@@ -10,26 +11,41 @@ then
 fi
 export PATH
 
+### Git functions
+
+# Determines whether or not the current directory is part of a git repo
 in_git () {
   git rev-parse --git-dir > /dev/null 2>&1
 }
 
+# retrieves the current branch
 git_branch () {
   git branch 2> /dev/null | grep '*' | sed "s/* //"
 }
 
-parse_git_dirty () {
-  MODIFIED=$(git status 2> /dev/null | grep -c "modified: ")
+### Git status functions
+# Each of these functions takes the output of 'git status --porcelain' and parses
+# it into ps1-friendly chunks
+parse_git_modified () {
+  # ' M' = modified, unstaged. 'MM' = staged
+  MODIFIED=$(echo "$1" | grep -c "^[ ]*M")
   echo "$MODIFIED modified"
 }
 
-parse_git_up_to_date () {
-  # some versions of git use dashes between the words 'up to date'
-  if [[ $(git status 2> /dev/null | grep -ie "your branch is up.to.date") ]]; then
-    echo "no unpushed commits"
-  else
-    echo "unpushed commits"
-  fi
+parse_git_staged () {
+  # M = staged, MM = staged and unstaged commits, A = added (implies staged)
+  STAGED=$(echo "$1" | grep -c "^[MA]")
+  echo "$STAGED staged"
+}
+
+parse_untracked_files () {
+  UNTRACKED=$(echo "$1" | grep -c "^??")
+  echo "$UNTRACKED untracked"
+}
+
+parse_unstaged_commits () {
+  UNSTAGED=$(echo "$1" | grep -c "^ M")
+  echo "$UNSTAGED unstaged"
 }
 
 git_repo () {
@@ -38,9 +54,12 @@ git_repo () {
 
 git_ps1 () {
   if in_git; then
-    echo "($(git_repo): $(git_branch)|$(parse_git_dirty)|$(parse_git_up_to_date))"
+    STATUS=`git status --porcelain 2>/dev/null`
+    echo "($(git_repo): $(git_branch) | $(parse_git_modified "${STATUS}") | $(parse_untracked_files "${STATUS}") | $(parse_unstaged_commits "${STATUS}") | $(parse_git_staged "${STATUS}"))"
   fi
 }
+
+## Other stuff
 
 get_number_of_jobs () {
   jobs | wc -l | tr -d " "

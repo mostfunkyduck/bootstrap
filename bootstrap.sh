@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -v
 
 set -e
 
@@ -7,7 +7,6 @@ echo "installing ~/.bashrc"
 cp ~/.bashrc ~/.bashrc.bootstrap.bkp
 cp ./bashrc ~/.bashrc
 chmod o+x ~/.bashrc
-source ~/.bashrc
 
 ### tmux ###
 echo "installing ~/.tmux.conf"
@@ -39,3 +38,9 @@ git clone --depth 1 https://github.com/fholgado/minibufexpl.vim.git ~/.vim/pack/
 echo "installing vimrc"
 cp ~/.vimrc ~/.vimrc.bootstrap.bkp
 cp ./vimrc ~/.vimrc
+
+# gitignore
+echo "installing gitignore_global"
+cp ~/.gitignore_global ~/.gitignore_global.bootstrap.bkp
+cp ./gitignore_global ~/.gitignore_global
+git config --global core.excludesfile ~/.gitignore_global
