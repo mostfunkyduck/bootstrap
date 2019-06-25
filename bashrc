@@ -24,7 +24,12 @@ parse_git_dirty () {
 }
 
 parse_git_up_to_date () {
-  [[ $(git status 2> /dev/null | grep -ie "your branch is up.to.date") ]] || echo "unpushed commits" && echo "no unpushed commits"
+  # some versions of git use dashes between the words 'up to date'
+  if [[ $(git status 2> /dev/null | grep -ie "your branch is up.to.date") ]]; then
+    echo "unpushed commits"
+  else
+    echo "no unpushed commits"
+  fi
 }
 
 git_repo () {
