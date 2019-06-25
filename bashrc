@@ -1,5 +1,4 @@
 # Source global definitions
-## Doing this to ensure compatibility with distros that include the global defs in their ~/.bashrc
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
@@ -11,29 +10,21 @@ then
 fi
 export PATH
 
-### Git functions
-
-# Determines whether or not the current directory is part of a git repo
 in_git () {
   git rev-parse --git-dir > /dev/null 2>&1
 }
 
-# retrieves the current branch
 git_branch () {
   git branch 2> /dev/null | grep '*' | sed "s/* //"
 }
 
-### Git status functions
-# Each of these functions takes the output of 'git status --porcelain' and parses
-# it into ps1-friendly chunks
 parse_git_modified () {
-  # ' M' = modified, unstaged. 'MM' = staged
   MODIFIED=$(echo "$1" | grep -c "^[ ]*M")
   echo "$MODIFIED modified"
 }
 
 parse_git_staged () {
-  # M = staged, MM = staged and unstaged commits, A = added (implies staged)
+  # M = staged, MM = staged and unstaged commits
   STAGED=$(echo "$1" | grep -c "^[MA]")
   echo "$STAGED staged"
 }
@@ -48,18 +39,24 @@ parse_unstaged_commits () {
   echo "$UNSTAGED unstaged"
 }
 
+parse_branch_ahead () {
+  VAL=$(echo "$1" | grep -c "^##.*ahead ")
+  if [[ $VAL -ge 1 ]]; then
+    echo "P"
+  else
+    echo " "
+  fi
+}
 git_repo () {
   basename `git rev-parse --show-toplevel`
 }
 
 git_ps1 () {
   if in_git; then
-    STATUS=`git status --porcelain 2>/dev/null`
-    echo "($(git_repo): $(git_branch) | $(parse_git_modified "${STATUS}") | $(parse_untracked_files "${STATUS}") | $(parse_unstaged_commits "${STATUS}") | $(parse_git_staged "${STATUS}"))"
+    STATUS=`git status --porcelain -b 2>/dev/null`
+    echo "($(git_repo): $(git_branch) [$(parse_branch_ahead "${STATUS}")] | $(parse_git_modified "${STATUS}") | $(parse_untracked_files "${STATUS}") | $(parse_unstaged_commits "${STATUS}") | $(parse_git_staged "${STATUS}"))"
   fi
 }
-
-## Other stuff
 
 get_number_of_jobs () {
   jobs | wc -l | tr -d " "
