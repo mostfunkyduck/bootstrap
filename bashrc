@@ -24,7 +24,7 @@ parse_git_dirty () {
 }
 
 parse_git_up_to_date () {
-  [[ $(git status 2> /dev/null | grep -ic "your branch is up to date") != 1 ]] && echo "unpushed commits" || echo "no unpushed commits"
+  [[ $(git status 2> /dev/null | grep -ie "your branch is up.to.date") ]] || echo "unpushed commits" && echo "no unpushed commits"
 }
 
 git_repo () {
