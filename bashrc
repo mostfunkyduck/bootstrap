@@ -18,31 +18,45 @@ git_branch () {
   git branch 2> /dev/null | grep '*' | sed "s/* //"
 }
 
+# pass this the number of items and the action, e.g "colorize_git_output (<command>, "tweaked")"
+colorize_git_output () {
+  if [[ $1 -ge 1 ]]; then
+    echo -e "\033[0;31m$1 $2\033[m"
+  else
+    echo -e "\033[0;32m$1 $2\033[m"
+  fi
+
+}
 parse_git_modified () {
   MODIFIED=$(echo "$1" | grep -c "^[ ]*M")
-  echo "$MODIFIED modified"
+  colorize_git_output $MODIFIED "modified"
+  #if [[ $MODIFIED -ge 1 ]]; then
+    #echo -e "\033[0;31m$MODIFIED modified\033[m"
+  #else
+    #echo -e "\033[0;32m$MODIFIED modified\033[m"
+  #fi
 }
 
 parse_git_staged () {
   # M = staged, MM = staged and unstaged commits
   STAGED=$(echo "$1" | grep -c "^[MA]")
-  echo "$STAGED staged"
+  colorize_git_output $STAGED "staged"
 }
 
 parse_untracked_files () {
   UNTRACKED=$(echo "$1" | grep -c "^??")
-  echo "$UNTRACKED untracked"
+  colorize_git_output $UNTRACKED "untracked"
 }
 
 parse_unstaged_commits () {
   UNSTAGED=$(echo "$1" | grep -c "^ M")
-  echo "$UNSTAGED unstaged"
+  colorize_git_output $UNSTAGED "unstaged"
 }
 
 parse_branch_ahead () {
   VAL=$(echo "$1" | grep -c "^##.*ahead ")
   if [[ $VAL -ge 1 ]]; then
-    echo "P"
+    echo -e "\033[0;31mP\033[m"
   else
     echo " "
   fi
@@ -62,7 +76,7 @@ get_number_of_jobs () {
   jobs | wc -l | tr -d " "
 }
 
-export PS1='[\e[0;32m\t   <\W> [$(get_number_of_jobs)]] $(git_ps1)\e[m  \n> '
+export PS1='[\e[0;32m\t   <\W>\e[m [$(get_number_of_jobs)] $(git_ps1)  \n> '
 
 export PYTHONDONTWRITEBYTECODE=True
 
