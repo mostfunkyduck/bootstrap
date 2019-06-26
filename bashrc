@@ -58,7 +58,7 @@ parse_branch_ahead () {
   if [[ $VAL -ge 1 ]]; then
     echo -e "\033[0;31mP\033[m"
   else
-    echo " "
+    echo -e "\033[032mC\033[m"
   fi
 }
 git_repo () {
