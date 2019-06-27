@@ -41,6 +41,8 @@ cp ./vimrc ~/.vimrc
 
 # gitignore
 echo "installing gitignore_global"
-cp ~/.gitignore_global ~/.gitignore_global.bootstrap.bkp
+if [ -e ~/.gitignore_global ]; then
+  cp ~/.gitignore_global ~/.gitignore_global.bootstrap.bkp
+fi
 cp ./gitignore_global ~/.gitignore_global
 git config --global core.excludesfile ~/.gitignore_global
