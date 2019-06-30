@@ -1,12 +1,12 @@
-#!/bin/bash -v
+#!/bin/bash
 
 set -e
 
 ### Regular config ###
-echo "installing ~/.bashrc"
-cp ~/.bashrc ~/.bashrc.bootstrap.bkp
-cp ./bashrc ~/.bashrc
-chmod o+x ~/.bashrc
+echo "installing ~/.custom_bashrc"
+cp ./bashrc ~/.custom_bashrc
+chmod o+x ~/.custom_bashrc
+echo "after this runs, add 'source .custom_bashrc' to the regular bashrc"
 
 ### tmux ###
 echo "installing ~/.tmux.conf"
