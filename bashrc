@@ -76,7 +76,7 @@ get_number_of_jobs () {
   jobs | wc -l | tr -d " "
 }
 
-export PS1='  \e[0;32m\t   <\W>\e[m [$(get_number_of_jobs)] $(git_ps1)  \n> '
+export PS1='>\e[0;32m \u (\t)   <\W>\e[m [$(get_number_of_jobs)] $(git_ps1)  \n> '
 
 export PYTHONDONTWRITEBYTECODE=True
 
