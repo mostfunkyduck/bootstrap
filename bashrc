@@ -8,6 +8,11 @@ if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
 then
     PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 fi
+
+if [ -f ~/go ]; then
+  PATH=$PATH:~/bin/go
+fi
+
 export PATH
 
 in_git () {
