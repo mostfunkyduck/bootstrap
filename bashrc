@@ -81,3 +81,5 @@ export PS1='  \e[0;32m\t   <\W>\e[m [$(get_number_of_jobs)] $(git_ps1)  \n> '
 export PYTHONDONTWRITEBYTECODE=True
 
 set -o vi
+
+alias ls='ls -F --color'
