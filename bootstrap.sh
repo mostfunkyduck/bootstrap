@@ -10,7 +10,9 @@ echo "after this runs, add 'source .custom_bashrc' to the regular bashrc"
 
 ### tmux ###
 echo "installing ~/.tmux.conf"
-cp ~/.tmux.conf ~/.tmux.conf.bootstrap.bkp
+if [ -f ~/.tmux.conf ]; then
+  cp ~/.tmux.conf ~/.tmux.conf.bootstrap.bkp
+fi
 cp tmux.conf ~/.tmux.conf
 
 ### Vim config ###
@@ -36,7 +38,10 @@ git clone --depth 1 https://github.com/fholgado/minibufexpl.vim.git ~/.vim/pack/
 
 # .vimrc
 echo "installing vimrc"
-cp ~/.vimrc ~/.vimrc.bootstrap.bkp
+if [ -f ~/.vimrc ]; then
+  cp ~/.vimrc ~/.vimrc.bootstrap.bkp
+fi
+
 cp ./vimrc ~/.vimrc
 
 # gitignore
