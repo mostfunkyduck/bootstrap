@@ -88,3 +88,5 @@ export PYTHONDONTWRITEBYTECODE=True
 set -o vi
 
 alias ls='ls -F --color'
+
+alias clipcopy='xclip -selection clipboard'
