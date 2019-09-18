@@ -90,3 +90,9 @@ set -o vi
 alias ls='ls -F --color'
 
 alias clipcopy='xclip -selection clipboard'
+
+wait_for_node () {
+  until nc -vz -G1 $1 22; do
+    sleep 1;
+  done
+}
