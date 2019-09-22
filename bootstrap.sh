@@ -19,6 +19,8 @@ cp tmux.conf ~/.tmux.conf
 echo "installing vim plugins"
 # pathogen
 echo -ne "\tpathogen: "
+# path for the vimrc to dump swpfiles in
+mkdir -p ~/.vim/swpfiles
 mkdir -p ~/.vim/autoload ~/.vim/bundle && \
 curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim 2>/dev/null && echo "ok" || echo "didn't install pathogen"
 
