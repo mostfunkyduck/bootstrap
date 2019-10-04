@@ -96,3 +96,7 @@ wait_for_node () {
     sleep 1;
   done
 }
+
+# force vim as the default editor
+export VISUAL=vim
+export EDITOR="$VISUAL"
