@@ -1,6 +1,17 @@
 #!/bin/bash
 
-set -e
+set -ex
+
+PACKAGES="jq xclip vim tmux"
+### packages ###
+echo installing packages, sudo required
+if which apt-get; then
+  sudo apt-get -y install $PACKAGES
+elif which yum; then
+  sudo yum install -y $PACKAGES
+else
+  echo "could not find a package manager!"
+fi
 
 ### Regular config ###
 echo "installing ~/.custom_bashrc"
