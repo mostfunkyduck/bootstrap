@@ -58,6 +58,11 @@ parse_unstaged_commits () {
   colorize_git_output $UNSTAGED "unstaged"
 }
 
+parse_deleted_files () {
+  DELETED=$(echo"$1" | grep -c "^ D")
+  colorize_git_output $DELETED "deleted"
+}
+
 parse_branch_ahead () {
   VAL=$(echo "$1" | grep -c "^##.*ahead ")
   if [[ $VAL -ge 1 ]]; then
@@ -73,7 +78,7 @@ git_repo () {
 git_ps1 () {
   if in_git; then
     STATUS=`git status --porcelain -b 2>/dev/null`
-    echo "($(git_repo): $(git_branch) [$(parse_branch_ahead "${STATUS}")] | $(parse_git_modified "${STATUS}") | $(parse_untracked_files "${STATUS}") | $(parse_unstaged_commits "${STATUS}") | $(parse_git_staged "${STATUS}"))"
+    echo "($(git_repo): $(git_branch) [$(parse_branch_ahead "${STATUS}")] | $(parse_git_modified "${STATUS}") | $(parse_untracked_files "${STATUS}") | $(parse_unstaged_commits "${STATUS}") | $(parse_git_staged "${STATUS}") | $(parse_deleted_files "${STATUS}"))"
   fi
 }
 
@@ -92,7 +97,7 @@ alias ls='ls -F --color'
 alias clipcopy='xclip -selection clipboard'
 
 wait_for_node () {
-  until nc -vz -G1 $1 22; do
+  until nc -vz -w1 $1 22; do
     sleep 1;
   done
 }
