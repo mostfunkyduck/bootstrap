@@ -9,8 +9,8 @@ then
     PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 fi
 
-if [ -f ~/go ]; then
-  PATH=$PATH:~/bin/go
+if [ -e ~/go ]; then
+  PATH=$PATH:$HOME/go/bin
 fi
 
 export PATH
