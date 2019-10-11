@@ -59,7 +59,7 @@ parse_unstaged_commits () {
 }
 
 parse_deleted_files () {
-  DELETED=$(echo"$1" | grep -c "^ D")
+  DELETED=$(echo "$1" | grep -c "^ D")
   colorize_git_output $DELETED "deleted"
 }
 
