@@ -8,6 +8,10 @@ cp ./bashrc ~/.custom_bashrc
 chmod o+x ~/.custom_bashrc
 echo "after this runs, add 'source .custom_bashrc' to the regular bashrc"
 
+### pylint ###
+echo "installing ~/.pylint"
+cp ./pylint ~/.pylint 
+
 ### tmux ###
 echo "installing ~/.tmux.conf"
 if [ -f ~/.tmux.conf ]; then
