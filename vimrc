@@ -203,6 +203,8 @@ nmap <Leader>mq :bd<cr>
 "let g:syntastic_python_pylint_args="--disable broad-except,invalid-name"
 
 " ale
+let g:ale_python_auto_pipenv = 1
+let g:ale_python_pylint_auto_pipenv = 1
 let g:ale_python_pylint_options = "--max-line-length 100 --rcfile ~/.pylint"
 let g:ale_list_window_size = 5
 let g:ale_open_list = 1
