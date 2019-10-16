@@ -1,6 +1,17 @@
 #!/bin/bash
 
-set -e
+set -ex
+
+PACKAGES="jq xclip vim tmux"
+### packages ###
+echo installing packages, sudo required
+if which apt-get; then
+  sudo apt-get -y install $PACKAGES
+elif which yum; then
+  sudo yum install -y $PACKAGES
+else
+  echo "could not find a package manager!"
+fi
 
 ### Regular config ###
 echo "installing ~/.custom_bashrc"
@@ -23,6 +34,8 @@ cp tmux.conf ~/.tmux.conf
 echo "installing vim plugins"
 # pathogen
 echo -ne "\tpathogen: "
+# path for the vimrc to dump swpfiles in
+mkdir -p ~/.vim/swpfiles
 mkdir -p ~/.vim/autoload ~/.vim/bundle && \
 curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim 2>/dev/null && echo "ok" || echo "didn't install pathogen"
 
