@@ -68,3 +68,10 @@ if [ -e ~/.gitignore_global ]; then
 fi
 cp ./gitignore_global ~/.gitignore_global
 git config --global core.excludesfile ~/.gitignore_global
+
+# jq
+echo "installing jq config"
+if [ -e ~/.jq ]; then
+  cp ~/.jq ~/.jq.bkp
+fi
+cp jq ~/.jq
