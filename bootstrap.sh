@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 PACKAGES="jq xclip vim tmux"
 ### packages ###
@@ -75,3 +75,11 @@ if [ -e ~/.jq ]; then
   cp ~/.jq ~/.jq.bkp
 fi
 cp jq ~/.jq
+
+# jira.d
+echo "installing go-jira config"
+if [ -d ~/.jira.d ]; then
+  cp -r ~/.jira.d ~/.jira.d.backup
+fi
+rm -fr ~/.jira.d
+cp -r jira.d ~/.jira.d
