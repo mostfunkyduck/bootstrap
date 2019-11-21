@@ -8,3 +8,6 @@ def instancefilter(field; value):
   value as $value | 
   select (.[$field]==$value) |
   .InstanceId;
+
+def instanceids():
+  .[][].Instances[] | .InstanceId

@@ -210,8 +210,10 @@ let g:ale_list_window_size = 5
 let g:ale_open_list = 1
 let g:ale_set_highlights = 0
 let g:ale_linters = {
-\  'python': ['pylint', 'python']
+\  'python': ['pylint', 'python'],
+\  'yaml': []
 \}
+
 nmap <Leader>ln :lnext<CR>
 nmap <Leader>lp :lprevious<CR>
 
