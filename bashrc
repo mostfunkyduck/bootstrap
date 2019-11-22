@@ -1,14 +1,3 @@
-# Source global definitions
-if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
-fi
-
-# User specific environment
-if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
-then
-    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
-fi
-
 if [ -e ~/go ]; then
   PATH=$PATH:$HOME/go/bin
 fi
@@ -35,11 +24,6 @@ colorize_git_output () {
 parse_git_modified () {
   MODIFIED=$(echo "$1" | grep -c "^[ ]*M")
   colorize_git_output $MODIFIED "modified"
-  #if [[ $MODIFIED -ge 1 ]]; then
-    #echo -e "\033[0;31m$MODIFIED modified\033[m"
-  #else
-    #echo -e "\033[0;32m$MODIFIED modified\033[m"
-  #fi
 }
 
 parse_git_staged () {
@@ -117,18 +101,25 @@ op_get_password() {
     echo "op_get_password <item title>"
     return
   fi
-  op get item $1 --vault=Private | jq '.details.fields[] | select(.designation == "password") | .value' | sed 's/"//g' | clipcopy && echo "done"
-}
-
-op_get_login_password() {
-  if [ $# -lt 1 ]; then
-    echo "copies password for a given item to the clipboard"
-    echo "works for formats that aren't regular logins, don't ask me why"
-    echo "op_get_login_password <password>"
+  PASSWORD=$(op get item $1 --vault=Private)
+  if [ -z "$PASSWORD" ]; then
+    echo "could not find password named $1!"
     return
   fi
 
-  op get item $1 --vault=Private | jq '.details.password' | sed 's/"//g' | clipcopy && echo "done"
+  PARSED=$(echo $PASSWORD | jq '.details.fields[] | select(.designation == "password") | .value')
+  if [ -z "$PARSED" ]; then
+    # it's in this password-only format... hopefully
+    PARSED=$(echo $PASSWORD | jq '.details.password')
+  fi
+
+  if [ -z "$PARSED" ]; then
+    # somethings funky
+    echo "could not parse this blob: $PASSWORD"
+    return
+  fi
+
+  echo $PARSED | sed 's/"//g' | clipcopy && echo "done"
 }
 
 op_create_login() {
