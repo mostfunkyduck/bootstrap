@@ -105,3 +105,64 @@ wait_for_node () {
 # force vim as the default editor
 export VISUAL=vim
 export EDITOR="$VISUAL"
+
+#### OnePassword Hacks ####
+
+# depends on the clipcopy hack above 
+
+op_get_password() {
+  if [ $# -lt 1 ]; then
+    echo "copies password for a given item to the clipboard"
+    echo "works for a standard 'Login' item"
+    echo "op_get_password <item title>"
+    return
+  fi
+  op get item $1 --vault=Private | jq '.details.fields[] | select(.designation == "password") | .value' | sed 's/"//g' | clipcopy && echo "done"
+}
+
+op_get_login_password() {
+  if [ $# -lt 1 ]; then
+    echo "copies password for a given item to the clipboard"
+    echo "works for formats that aren't regular logins, don't ask me why"
+    echo "op_get_login_password <password>"
+    return
+  fi
+
+  op get item $1 --vault=Private | jq '.details.password' | sed 's/"//g' | clipcopy && echo "done"
+}
+
+op_create_login() {
+  LOGINBLOB='{ "notesPlain": "", "sections": [], "passwordHistory": [], "fields": [ { "value": "USERNAME", "name": "username", "type": "T", "designation": "username" }, { "value": "PASSWORD", "name": "password", "type": "P", "designation": "password" } ] }'
+  if [ $# -lt 3 ]; then
+    echo "This function creates a username and password in onepassword"
+    echo "example: op_create_login <username> <password> <item title>"
+    return
+  fi
+  ENCODED=$(echo $LOGINBLOB | sed "s/USERNAME/$1/" | sed "s/PASSWORD/$2/" | op encode)
+  op create item --vault=Private --title=$3 Login $ENCODED
+}
+
+op_delete_item() {
+  if [ $# -lt 1 ]; then
+    echo "op_delete_item <name of item>"
+    return
+  fi
+
+  ORIGINAL=$(op get item $1 --vault=Private | jq .)
+  if [ -z $ORIGINAL ]; then
+    echo "could not retrieve an item named $1!"
+    return
+  fi
+
+  echo "deleting item: $ORIGINAL"
+
+  UUID=$(echo $ORIGINAL | jq .uuid | sed 's/"//g')
+  echo -n "enter 'Y' to confirm deletion: "
+  read confirm
+  if [ "$confirm" = "Y" ]; then
+    echo 'deleting!'
+    op delete item $UUID
+  else
+    echo 'not deleting!'
+  fi
+}

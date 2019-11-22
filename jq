@@ -9,5 +9,5 @@ def instancefilter(field; value):
   select (.[$field]==$value) |
   .InstanceId;
 
-def instanceids():
-  .[][].Instances[] | .InstanceId
+def instanceids:
+  .[][].Instances[] | .InstanceId;
