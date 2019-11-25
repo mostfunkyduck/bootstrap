@@ -1,0 +1,6 @@
+[core]
+  excludesfile = ~/.gitignore_global
+  editor = vim
+[user]
+  email = mostfunkyduck@protonmail.com
+  name = mostfunkyduck

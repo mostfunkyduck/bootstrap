@@ -2,7 +2,10 @@
 
 set -e
 
-PACKAGES="jq xclip vim tmux"
+PACKAGES="jq vim tmux"
+if which X; then
+  PACKAGES+=('xclip')
+fi
 ### packages ###
 echo installing packages, sudo required
 if which apt-get; then
