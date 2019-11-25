@@ -48,6 +48,10 @@ git clone --depth 1 https://github.com/w0rp/ale.git ~/.vim/pack/git-plugins/star
 echo -ne "\tnerdtree: "
 git clone https://github.com/scrooloose/nerdtree.git ~/.vim/bundle/nerdtree 2>/dev/null && echo "ok" || echo "didn't install nerdtree"
 
+# AnsiEsc
+echo -ne "\tAnsiEsc: "
+git clone https://github.com/vim-scripts/AnsiEsc.vim.git ~/.vim/bundle/ansiesc && echo "ok" || echo "didn't install ansiesc"
+
 # MBE
 echo -ne "\tMBE: "
 curl -LSso ~/.vim/autoload/minibufexpl.vim https://raw.githubusercontent.com/fholgado/minibufexpl.vim/master/plugin/minibufexpl.vim
@@ -83,3 +87,4 @@ if [ -d ~/.jira.d ]; then
 fi
 rm -fr ~/.jira.d
 cp -r jira.d ~/.jira.d
+
