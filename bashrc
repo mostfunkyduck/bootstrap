@@ -157,3 +157,6 @@ op_delete_item() {
     echo 'not deleting!'
   fi
 }
+
+# FZF/GIT, YO!
+alias git_log_fzf="git log --oneline | fzf --multi --preview 'git show {+1}'"
