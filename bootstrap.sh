@@ -42,23 +42,32 @@ mkdir -p ~/.vim/swpfiles
 mkdir -p ~/.vim/autoload ~/.vim/bundle && \
 curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim 2>/dev/null && echo "ok" || echo "didn't install pathogen"
 
+function pull_or_clone() {
+  if [ -d $2 ]; then
+    git -C $2 pull && echo "ok" || echo "couldn't pull $3"
+  else
+    git clone $1 $2 && echo "ok" || echo "couldn't clone $3"
+  fi  
+}
+
 # Ale
 echo -ne "\tale: "
 mkdir -p ~/.vim/pack/git-plugins/start
-git clone --depth 1 https://github.com/w0rp/ale.git ~/.vim/pack/git-plugins/start/ale 2>/dev/null && echo "ok" || echo "didn't install ale"
+pull_or_clone "https://github.com/w0rp/ale.git" "~/.vim/pack/git-plugins/start/ale"
 
 # NERDTree
 echo -ne "\tnerdtree: "
-git clone https://github.com/scrooloose/nerdtree.git ~/.vim/bundle/nerdtree 2>/dev/null && echo "ok" || echo "didn't install nerdtree"
+
+pull_or_clone "https://github.com/scrooloose/nerdtree.git" "~/.vim/bundle/nerdtree" "nerdtree"
 
 # AnsiEsc
 echo -ne "\tAnsiEsc: "
-git clone https://github.com/vim-scripts/AnsiEsc.vim.git ~/.vim/bundle/ansiesc && echo "ok" || echo "didn't install ansiesc"
+pull_or_clone "https://github.com/vim-scripts/AnsiEsc.vim.git" "~/.vim/bundle/ansiesc" "ansiesc"
 
 # MBE
 echo -ne "\tMBE: "
 curl -LSso ~/.vim/autoload/minibufexpl.vim https://raw.githubusercontent.com/fholgado/minibufexpl.vim/master/plugin/minibufexpl.vim
-git clone --depth 1 https://github.com/fholgado/minibufexpl.vim.git ~/.vim/pack/git-plugins/start/minibufexpl 2>/dev/null && echo "ok" || echo "didn't install minibufexplorer"
+pull_or_clone "https://github.com/fholgado/minibufexpl.vim.git" "~/.vim/pack/git-plugins/start/minibufexpl"
 
 # .vimrc
 echo "installing vimrc"

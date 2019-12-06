@@ -1,5 +1,7 @@
 if [ -e ~/go ]; then
-  PATH=$PATH:$HOME/go/bin
+  # go doesn't put itself in the global path on installs, root doesn't use /snap/bin
+  # for some reason
+  PATH=$PATH:$HOME/go/bin:/snap/bin
 fi
 
 export PATH
