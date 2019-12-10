@@ -100,17 +100,32 @@ export EDITOR="$VISUAL"
 
 # depends on the clipcopy hack above 
 
+op_get_login () {
+  if [ $# -lt 1 ]; then
+    echo "returns login for a given entry"
+    echo "op_get_login <item title>"
+    return
+  fi  
+  LOGIN=$(op get item $1 --vault=Private)
+  PARSED=$(echo $LOGIN | jq '.details.fields[] | select(.designation == "username") | .value')
+  if [ -z "$PARSED" ]; then
+    echo "could not parse login! $LOGIN"
+    return 1
+  fi
+  echo $PARSED
+  return
+}
 op_get_password() {
   if [ $# -lt 1 ]; then
     echo "copies password for a given item to the clipboard"
     echo "works for a standard 'Login' item"
     echo "op_get_password <item title>"
-    return
+    return 1
   fi
   PASSWORD=$(op get item $1 --vault=Private)
   if [ -z "$PASSWORD" ]; then
     echo "could not find password named $1!"
-    return
+    return 1
   fi
 
   PARSED=$(echo $PASSWORD | jq '.details.fields[] | select(.designation == "password") | .value')
@@ -122,7 +137,7 @@ op_get_password() {
   if [ -z "$PARSED" ]; then
     # somethings funky
     echo "could not parse this blob: $PASSWORD"
-    return
+    return 1
   fi
 
   echo $PARSED | sed 's/"//g' | clipcopy && echo "done"
@@ -133,7 +148,7 @@ op_create_login() {
   if [ $# -lt 3 ]; then
     echo "This function creates a username and password in onepassword"
     echo "example: op_create_login <username> <password> <item title>"
-    return
+    return 1
   fi
   ENCODED=$(echo $LOGINBLOB | sed "s/USERNAME/$1/" | sed "s/PASSWORD/$2/" | op encode)
   op create item --vault=Private --title=$3 Login $ENCODED
@@ -142,13 +157,13 @@ op_create_login() {
 op_delete_item() {
   if [ $# -lt 1 ]; then
     echo "op_delete_item <name of item>"
-    return
+    return 1
   fi
 
   ORIGINAL=$(op get item $1 --vault=Private | jq .)
   if [ -z $ORIGINAL ]; then
     echo "could not retrieve an item named $1!"
-    return
+    return 1
   fi
 
   echo "deleting item: $ORIGINAL"
