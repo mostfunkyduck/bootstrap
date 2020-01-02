@@ -184,9 +184,9 @@ alias git_log_fzf="git log --oneline | fzf --multi --preview 'git show {+1}'"
 
 # quicky commands to bring networkmanager vpns up and down
 activate_vpn() {
-  nmcli con up id $1
+  nmcli --ask con up id "$@"
 }
 
 deactivate_vpn() {
-  nmcli con down id $1
+  nmcli con down id "$@"
 }
