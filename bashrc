@@ -181,3 +181,12 @@ op_delete_item() {
 
 # FZF/GIT, YO!
 alias git_log_fzf="git log --oneline | fzf --multi --preview 'git show {+1}'"
+
+# quicky commands to bring networkmanager vpns up and down
+activate_vpn() {
+  nmcli con up id $1
+}
+
+deactivate_vpn() {
+  nmcli con down id $1
+}
