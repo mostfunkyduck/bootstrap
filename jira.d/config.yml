@@ -60,7 +60,7 @@ custom-commands:
     args:
       - name: issue
     script: |-
-      jira superclose
+      jira superclose {{ args.issue }}
       jira transition --noedit "Hotfix - In Staging" {{ args.issue }}
       jira transition --noedit "Verified in Staging" {{ args.issue }}
       jira transition --noedit "In Production" {{ args.issue }}

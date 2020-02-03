@@ -1,0 +1,63 @@
+{{/* edit template for CHANGE tickets */ -}}
+# issue: {{ .key }} - created: {{ .fields.created | age}} ago
+update:
+  comment:
+    - add: 
+        body: |~
+          {{ or .overrides.comment "" | indent 10 }}
+fields:
+  summary: >-
+    {{ or .overrides.summary .fields.summary }}
+{{- if .meta.fields.assignee}}
+  assignee:
+    name: {{ if .overrides.assignee }}{{.overrides.assignee}}{{else}}{{if .fields.assignee }}{{ .fields.assignee.name }}{{end}}{{end}}{{end}}
+{{- if .meta.fields.reporter}}
+  reporter:
+    name: {{ if .overrides.reporter }}{{ .overrides.reporter }}{{else if .fields.reporter}}{{ .fields.reporter.name }}{{end}}{{end}}
+  description: |~
+    {{ or .overrides.description .fields.description "" | indent 4 }}
+
+  # affected customers
+  customfield_12506: |~
+    {{ or .overrides.affectedCustomers .fields.customfield_12506 "" | indent 4 }} 
+
+  # risk
+  customfield_12501: |~
+    {{ or .overrides.risk .fields.customfield_12501 "" | indent 4 }}
+
+  # justification
+  customfield_12502: |~ 
+    {{ or .overrides.justification .fields.customfield_12502 "" | indent 4 }}
+
+  # implementation procedure
+  customfield_12503: |~
+    {{ or .overrides.procedure .fields.customfield_12503 "" | indent 4 }}
+
+  #rollback
+  customfield_12504: |~
+    {{ or .overrides.rollback .fields.customfield_12504 "" | indent 4 }}
+
+  # criteria for success
+  customfield_12505: |~
+    {{ or .overrides.criteriaForSuccess .fields.customfield_12505 "" | indent 4 }}
+
+  # QA plan
+  customfield_13201: |~
+    {{ or .overrides.qa .fields.customfield_13201 "" | indent 4 }}
+
+  #deployed in test or stage
+  customfield_13202:
+    - value: {{ range .fields.customfield_13202 }} {{ .value }} {{ end }} # Values: {{ range .meta.fields.customfield_13202.allowedValues }}{{.value}}, {{end}}
+  
+  # review
+  customfield_12507: |~
+    {{ or .overrides.review .fields.customfield_12507 "" | indent 4 }}
+
+  # security review
+  customfield_13203: {"value": "{{ .fields.customfield_13203.value }}"} # Values: {{ range .meta.fields.customfield_13203.allowedValues }}{{.value}}, {{end}}
+
+comments:
+ {{ range .fields.comment.comments }}  - | # {{.author.name}}, {{.created | age}} ago
+     {{ or .body "" | indent 4 | comment}}
+ {{end}}
+
