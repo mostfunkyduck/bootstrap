@@ -15,7 +15,7 @@ fields:
   # affected customers
   customfield_12506: |~
     {{ or .overrides.affectedCustomers "" | indent 4 }} 
-  # risk
+  # risk - what could break
   customfield_12501: |~
     {{ or .overrides.risk "" | indent 4 }}
 
@@ -31,11 +31,11 @@ fields:
   customfield_12504: |~
     {{ or .overrides.rollback "" | indent 4 }}
 
-  # criteria for success
+  # QA the Change Succeeded
   customfield_12505: |~
     {{ or .overrides.criteriaForSuccess "" | indent 4 }}
 
-  # QA plan
+  # QA that Nothing Broke
   customfield_13201: |~
     {{ or .overrides.qa "" | indent 4 }}
 
@@ -43,12 +43,20 @@ fields:
   customfield_13202:
     - value: # Values: {{ range .meta.fields.customfield_13202.allowedValues }}{{.value}}, {{end}}
   
-  # review
+  # Code and Architecture Review
   customfield_12507: |~
     {{ or .overrides.review "" | indent 4 }}
 
   # security review
   customfield_13203: { "value": "" } # Values: {{ range .meta.fields.customfield_13203.allowedValues }}{{.value}}, {{end}}
+
+  # Monitoring Dashboard URLs for Affected Services
+  customfield_13406: |~
+    {{ or .overrides.monitoring "" | indent 4 }}
+
+  # CHANGE Ticket Reviews
+  customfield_13407: |~
+    {{ or .overrides.ticket_reviews "" | indent 4 }}
 
   description: |~
     {{ or .overrides.description "" | indent 4 }}{{if .meta.fields.assignee}}
