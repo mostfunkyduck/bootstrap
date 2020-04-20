@@ -190,3 +190,8 @@ activate_vpn() {
 deactivate_vpn() {
   nmcli con down id "$@"
 }
+
+#Adapted from https://docs.brew.sh/Homebrew-on-Linux
+test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+
+alias less=less\ -R

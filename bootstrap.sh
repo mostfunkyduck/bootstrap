@@ -50,6 +50,8 @@ function pull_or_clone() {
   fi  
 }
 
+# Bash my AWS
+pull_or_clone "https://github.com/bash-my-aws/bash-my-aws.git" "$HOME/.bash-my-aws"
 # Ale
 echo -ne "\tale: "
 mkdir -p $HOME/.vim/pack/git-plugins/start
