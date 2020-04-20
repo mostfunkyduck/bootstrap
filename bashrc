@@ -195,3 +195,8 @@ deactivate_vpn() {
 test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
 alias less=less\ -R
+
+# delete aws-vault sessions without risking removal of a profile by omission of the cli arg
+remove_aws_vault_sessions() {
+  aws-vault remove $1 --sessions-only
+}
