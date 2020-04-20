@@ -102,8 +102,11 @@ fi
 rm -fr $HOME/.jira.d
 cp -r jira.d $HOME/.jira.d
 
-# fzf
+# fzf - not using pull_or_clone because it's cloning at depth 1
+# TODO should pull_or_clone do the same thing? unclear...
 if [ ! -d $HOME/.fzf ]; then
   git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
-  echo "to install fzf, run '$HOME/.fzf/install'"
+else
+  git -C $HOME/.fzf pull https://github.com/junegunn/fzf.git
 fi
+echo "to install or upgrade fzf, run '$HOME/.fzf/install'"
