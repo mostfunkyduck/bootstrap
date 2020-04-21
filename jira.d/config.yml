@@ -5,7 +5,7 @@ custom-commands:
   - name: mine
     help: display issues assigned to me
     script: |-
-      {{jira}} list -t table --query "assignee = currentUser() and project in (CM, SRE, ESCSP, TR) and status != closed and status != done order by status, rank"
+      {{jira}} list -t table --query "assignee = currentUser() and project in (CHANGE, SRE, ESCSP, TR) and status != closed and status != done order by status, rank"
 
   - name: trboard
     help: display all issues on the tr board
