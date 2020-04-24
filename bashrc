@@ -200,3 +200,15 @@ alias less=less\ -R
 remove_aws_vault_sessions() {
   aws-vault remove $1 --sessions-only
 }
+
+# bash users may source the functions instead of loading the aliases
+if [ -d ${HOME}/.bash-my-aws ]; then
+  export PATH="$PATH:$HOME/.bash-my-aws/bin"
+  source ~/.bash-my-aws/aliases
+
+  # For ZSH users, uncomment the following two lines:
+  # autoload -U +X compinit && compinit
+  # autoload -U +X bashcompinit && bashcompinit
+
+  source ~/.bash-my-aws/bash_completion.sh
+fi
