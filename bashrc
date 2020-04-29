@@ -212,3 +212,6 @@ if [ -d ${HOME}/.bash-my-aws ]; then
 
   source ~/.bash-my-aws/bash_completion.sh
 fi
+
+# because https://github.com/scop/bash-completion/issues/44
+set +o nounset
