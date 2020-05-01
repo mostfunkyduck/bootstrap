@@ -184,9 +184,34 @@ alias git_log_fzf="git log --oneline | fzf --multi --preview 'git show {+1}'"
 
 # quicky commands to bring networkmanager vpns up and down
 activate_vpn() {
-  nmcli --ask con up id "$@"
+  echo push | nmcli --ask con up id "$@"
 }
 
 deactivate_vpn() {
   nmcli con down id "$@"
 }
+
+#Adapted from https://docs.brew.sh/Homebrew-on-Linux
+test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+
+alias less=less\ -R
+
+# delete aws-vault sessions without risking removal of a profile by omission of the cli arg
+remove_aws_vault_sessions() {
+  aws-vault remove $1 --sessions-only
+}
+
+# bash users may source the functions instead of loading the aliases
+if [ -d ${HOME}/.bash-my-aws ]; then
+  export PATH="$PATH:$HOME/.bash-my-aws/bin"
+  source ~/.bash-my-aws/aliases
+
+  # For ZSH users, uncomment the following two lines:
+  # autoload -U +X compinit && compinit
+  # autoload -U +X bashcompinit && bashcompinit
+
+  source ~/.bash-my-aws/bash_completion.sh
+fi
+
+# because https://github.com/scop/bash-completion/issues/44
+set +o nounset

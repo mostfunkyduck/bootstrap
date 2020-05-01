@@ -50,6 +50,8 @@ function pull_or_clone() {
   fi  
 }
 
+# Bash my AWS
+pull_or_clone "https://github.com/bash-my-aws/bash-my-aws.git" "$HOME/.bash-my-aws"
 # Ale
 echo -ne "\tale: "
 mkdir -p $HOME/.vim/pack/git-plugins/start
@@ -100,8 +102,11 @@ fi
 rm -fr $HOME/.jira.d
 cp -r jira.d $HOME/.jira.d
 
-# fzf
+# fzf - not using pull_or_clone because it's cloning at depth 1
+# TODO should pull_or_clone do the same thing? unclear...
 if [ ! -d $HOME/.fzf ]; then
   git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
-  echo "to install fzf, run '$HOME/.fzf/install'"
+else
+  git -C $HOME/.fzf pull https://github.com/junegunn/fzf.git
 fi
+echo "to install or upgrade fzf, run '$HOME/.fzf/install'"

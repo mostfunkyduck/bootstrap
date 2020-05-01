@@ -41,7 +41,7 @@ description:
 affected customers:
   {{ or .fields.customfield_12506 "" | indent 2}}
 
-risk:
+risk - what could break:
   {{ or .fields.customfield_12501 "" | indent 2}}
 
 justification:
@@ -54,17 +54,21 @@ rollback:
   {{ or .fields.customfield_12504 "" | indent 2 }}
 
 
-criteria for success:
+QA the change succeeded:
   {{ or .fields.customfield_12505 "" | indent 2 }}
 
-QA plan:
+QA that nothing broke:
   {{ or .fields.customfield_13201 "" | indent 2 }}
 
 Deployed in test or stage: {{ range .fields.customfield_13202 }} {{ .value }} {{ end }}
 
 Security review: {{ .fields.customfield_13203.value }}
 
-Review: {{ .fields.customfield_12507 }}
+Code and Architecture Review: {{ .fields.customfield_12507 }}
+
+Monitoring Dashboard URLs for Affected Services: {{ .fields.customfield_13406 }}
+
+CHANGE Ticket Reviews: {{ .fields.customfield_13407 }}
 
 {{if .fields.comment.comments}}
 comments:

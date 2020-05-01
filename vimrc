@@ -214,3 +214,6 @@ nmap <Leader>lp :lprevious<CR>
 
 " https://vi.stackexchange.com/questions/177/what-is-the-purpose-of-swap-files
 set directory^=$HOME/.vim/swpfiles//
+" good bye annoying bell
+set noeb
+set vb
