@@ -18,16 +18,11 @@ source $VIMRUNTIME/ftplugin/man.vim
 set ruler
 set backspace=indent,eol,start
 
-"let tracesyntaxfile= "~/tracesyntax.vim"
-au BufRead,BufNewFile *.trc set filetype=msystrace
-au! Syntax msystrace source ~/tracesyntax.vim
-au BufRead,BufNewFile *.ec set filetype=msyslog
-au! Syntax msyslog source ~/logsyntax.vim
-
 au BufRead,BufNewFile *.json set filetype=javascript
 au BufRead,BufNewFile *.pp set filetype=ruby
 au FileType python setl sw=4 ts=4
 au FileType make setl noet
+au FileType go noet
 
 " some cscope hacks {
   nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
