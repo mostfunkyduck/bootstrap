@@ -22,7 +22,7 @@ au BufRead,BufNewFile *.json set filetype=javascript
 au BufRead,BufNewFile *.pp set filetype=ruby
 au FileType python setl sw=4 ts=4
 au FileType make setl noet
-au FileType go noet
+au FileType go setl noet
 
 " some cscope hacks {
   nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
