@@ -18,6 +18,10 @@ git_branch () {
   git branch 2> /dev/null | grep '*' | sed "s/* //"
 }
 
+git_rev () {
+  git show 2>/dev/null | head -1 | awk '{print $NF}' | cut -c 1-10
+}
+
 # pass this the number of items and the action, e.g "colorize_git_output (<command>, "tweaked")"
 colorize_git_output () {
   if [[ $1 -ge 1 ]]; then
