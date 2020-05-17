@@ -1,10 +1,10 @@
-if [ -e ~/go ]; then
-  # go doesn't put itself in the global path on installs, root doesn't use /snap/bin
-  # for some reason
+# go doesn't put itself in the global path on installs
+if [ -d $HOME/go/bin ]; then
   PATH=$PATH:$HOME/go/bin
 fi
 
-if [[ ! $PATH =~ "/snap/bin" ]]; then
+# if snap is installed and misconfigured...
+if [[ ! $PATH =~ "/snap/bin" ]] && command -v snap; then
   PATH=$PATH:/snap/bin
 fi
 
@@ -215,6 +215,11 @@ if [ -d ${HOME}/.bash-my-aws ]; then
   # autoload -U +X bashcompinit && bashcompinit
 
   source ~/.bash-my-aws/bash_completion.sh
+fi
+
+if [[ -f /home/linuxbrew ]]; then
+  # linuxbrew is installed
+  eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 fi
 
 # because https://github.com/scop/bash-completion/issues/44

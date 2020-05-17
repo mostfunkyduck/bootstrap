@@ -2,15 +2,21 @@
 
 set -e
 
-PACKAGES="jq vim tmux"
+PACKAGES="jq vim tmux ctags sysstat shellcheck"
 if which X; then
   PACKAGES+=('xclip')
 fi
+
 ### packages ###
+echo installing homebrew for linux
+if ! command -v brew; then
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+fi
 echo installing packages, sudo required
-if which apt-get; then
-  sudo apt-get -y install $PACKAGES
-elif which yum; then
+if command -v apt-get; then
+  sudo apt-get -y install $PACKAGES build-essential
+elif command -v yum; then
+  sudo yum -y groupinstall "Development Tools"
   sudo yum install -y $PACKAGES
 else
   echo "could not find a package manager!"
@@ -40,7 +46,9 @@ echo -ne "\tpathogen: "
 # path for the vimrc to dump swpfiles in
 mkdir -p $HOME/.vim/swpfiles
 mkdir -p $HOME/.vim/autoload $HOME/.vim/bundle && \
-curl -LSso $HOME/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim 2>/dev/null && echo "ok" || echo "didn't install pathogen"
+if [[ ! -f $HOME/.vim/autoload/pathogen.vim ]]; then
+  curl -LSso $HOME/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim 2>/dev/null && echo "ok" || echo "didn't install pathogen"
+fi
 
 function pull_or_clone() {
   if [ -d $2 ]; then
