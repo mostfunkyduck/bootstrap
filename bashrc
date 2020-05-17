@@ -1,5 +1,5 @@
 # go doesn't put itself in the global path on installs
-if [ -d $HOME/go/bin ]; then
+if [ -d "$HOME/go/bin" ]; then
   PATH=$PATH:$HOME/go/bin
 fi
 
@@ -15,7 +15,7 @@ in_git () {
 }
 
 git_branch () {
-  git branch 2> /dev/null | grep '*' | sed "s/* //"
+  git branch 2> /dev/null | grep '\*' | sed "s/* //"
 }
 
 git_rev () {
@@ -33,28 +33,28 @@ colorize_git_output () {
 }
 parse_git_modified () {
   MODIFIED=$(echo "$1" | grep -c "^[ ]*M")
-  colorize_git_output $MODIFIED "modified"
+  colorize_git_output "$MODIFIED" "modified"
 }
 
 parse_git_staged () {
   # M = staged, MM = staged and unstaged commits
   STAGED=$(echo "$1" | grep -c "^[MA]")
-  colorize_git_output $STAGED "staged"
+  colorize_git_output "$STAGED" "staged"
 }
 
 parse_untracked_files () {
   UNTRACKED=$(echo "$1" | grep -c "^??")
-  colorize_git_output $UNTRACKED "untracked"
+  colorize_git_output "$UNTRACKED" "untracked"
 }
 
 parse_unstaged_commits () {
   UNSTAGED=$(echo "$1" | grep -c "^ M")
-  colorize_git_output $UNSTAGED "unstaged"
+  colorize_git_output "$UNSTAGED" "unstaged"
 }
 
 parse_deleted_files () {
   DELETED=$(echo "$1" | grep -c "^ D")
-  colorize_git_output $DELETED "deleted"
+  colorize_git_output "$DELETED" "deleted"
 }
 
 parse_branch_ahead () {
@@ -66,12 +66,12 @@ parse_branch_ahead () {
   fi
 }
 git_repo () {
-  basename `git rev-parse --show-toplevel`
+  basename "$(git rev-parse --show-toplevel)"
 }
 
 git_ps1 () {
   if in_git; then
-    STATUS=`git status --porcelain -b 2>/dev/null`
+    STATUS=$(git status --porcelain -b 2>/dev/null)
     echo "($(git_repo): $(git_branch) [$(parse_branch_ahead "${STATUS}")] | $(parse_git_modified "${STATUS}") | $(parse_untracked_files "${STATUS}") | $(parse_unstaged_commits "${STATUS}") | $(parse_git_staged "${STATUS}") | $(parse_deleted_files "${STATUS}"))"
   fi
 }
@@ -80,6 +80,7 @@ get_number_of_jobs () {
   jobs | wc -l | tr -d " "
 }
 
+# shellcheck disable=SC2025
 export PS1='>\e[0;32m \u (\t)   <\W>\e[m [$(get_number_of_jobs 2>/dev/null)] $(git_ps1 2>/dev/null)  \n\h > '
 
 export PYTHONDONTWRITEBYTECODE=True
@@ -90,8 +91,8 @@ alias ls='ls -F --color'
 
 alias clipcopy='xclip -selection clipboard'
 
-wait_for_node () {
-  until nc -vz -w1 $1 22; do
+wait_for_ssh () {
+  until nc -vz -w1 "$1" 22; do
     sleep 1;
   done
 }
@@ -110,13 +111,13 @@ op_get_login () {
     echo "op_get_login <item title>"
     return
   fi  
-  LOGIN=$(op get item $1 --vault=Private)
-  PARSED=$(echo $LOGIN | jq '.details.fields[] | select(.designation == "username") | .value')
+  LOGIN=$(op get item "$1" --vault=Private)
+  PARSED=$(echo "$LOGIN" | jq '.details.fields[] | select(.designation == "username") | .value')
   if [ -z "$PARSED" ]; then
     echo "could not parse login! $LOGIN"
     return 1
   fi
-  echo $PARSED
+  echo "$PARSED"
   return
 }
 op_get_password() {
@@ -126,16 +127,16 @@ op_get_password() {
     echo "op_get_password <item title>"
     return 1
   fi
-  PASSWORD=$(op get item $1 --vault=Private)
+  PASSWORD=$(op get item "$1" --vault=Private)
   if [ -z "$PASSWORD" ]; then
     echo "could not find password named $1!"
     return 1
   fi
 
-  PARSED=$(echo $PASSWORD | jq '.details.fields[] | select(.designation == "password") | .value')
+  PARSED=$(echo "$PASSWORD" | jq '.details.fields[] | select(.designation == "password") | .value')
   if [ -z "$PARSED" ]; then
     # it's in this password-only format... hopefully
-    PARSED=$(echo $PASSWORD | jq '.details.password')
+    PARSED=$(echo "$PASSWORD" | jq '.details.password')
   fi
 
   if [ -z "$PARSED" ]; then
@@ -144,18 +145,20 @@ op_get_password() {
     return 1
   fi
 
-  echo $PARSED | sed 's/"//g' | clipcopy && echo "done"
+  echo "$PARSED" | sed 's/"//g' | clipcopy && echo "done"
 }
 
 op_create_login() {
+  # shellcheck disable=SC2089
   LOGINBLOB='{ "notesPlain": "", "sections": [], "passwordHistory": [], "fields": [ { "value": "USERNAME", "name": "username", "type": "T", "designation": "username" }, { "value": "PASSWORD", "name": "password", "type": "P", "designation": "password" } ] }'
   if [ $# -lt 3 ]; then
     echo "This function creates a username and password in onepassword"
     echo "example: op_create_login <username> <password> <item title>"
     return 1
   fi
-  ENCODED=$(echo $LOGINBLOB | sed "s/USERNAME/$1/" | sed "s/PASSWORD/$2/" | op encode)
-  op create item --vault=Private --title=$3 Login $ENCODED
+  # shellcheck disable=SC2090
+  ENCODED=$(echo "$LOGINBLOB" | sed "s/USERNAME/$1/" | sed "s/PASSWORD/$2/" | op encode)
+  op create item --vault=Private --title="$3" Login "$ENCODED"
 }
 
 op_delete_item() {
@@ -164,20 +167,20 @@ op_delete_item() {
     return 1
   fi
 
-  ORIGINAL=$(op get item $1 --vault=Private | jq .)
-  if [ -z $ORIGINAL ]; then
+  ORIGINAL=$(op get item "$1" --vault=Private | jq .)
+  if [ -z "$ORIGINAL" ]; then
     echo "could not retrieve an item named $1!"
     return 1
   fi
 
   echo "deleting item: $ORIGINAL"
 
-  UUID=$(echo $ORIGINAL | jq .uuid | sed 's/"//g')
+  UUID=$(echo "$ORIGINAL" | jq .uuid | sed 's/"//g')
   echo -n "enter 'Y' to confirm deletion: "
-  read confirm
+  read -r confirm
   if [ "$confirm" = "Y" ]; then
     echo 'deleting!'
-    op delete item $UUID
+    op delete item "$UUID"
   else
     echo 'not deleting!'
   fi
@@ -195,31 +198,30 @@ deactivate_vpn() {
   nmcli con down id "$@"
 }
 
-#Adapted from https://docs.brew.sh/Homebrew-on-Linux
-test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-
 alias less=less\ -R
 
 # delete aws-vault sessions without risking removal of a profile by omission of the cli arg
 remove_aws_vault_sessions() {
-  aws-vault remove $1 --sessions-only
+  aws-vault remove "$1" --sessions-only
 }
 
 # bash users may source the functions instead of loading the aliases
-if [ -d ${HOME}/.bash-my-aws ]; then
+if [ -d "$HOME/.bash-my-aws" ]; then
   export PATH="$PATH:$HOME/.bash-my-aws/bin"
-  source ~/.bash-my-aws/aliases
+  # shellcheck disable=SC1090
+  source "$HOME/.bash-my-aws/aliases"
 
   # For ZSH users, uncomment the following two lines:
   # autoload -U +X compinit && compinit
   # autoload -U +X bashcompinit && bashcompinit
 
-  source ~/.bash-my-aws/bash_completion.sh
+  # shellcheck disable=SC1090
+  source "$HOME/.bash-my-aws/bash_completion.sh"
 fi
 
 if [[ -f /home/linuxbrew ]]; then
   # linuxbrew is installed
-  eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
 # because https://github.com/scop/bash-completion/issues/44

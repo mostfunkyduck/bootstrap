@@ -11,7 +11,15 @@ fi
 echo installing homebrew for linux
 if ! command -v brew; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
+
+# don't run this unless we have to, it's slow
+if ! command -v mockery; then
+  brew install vektra/tap/mockery
+  brew upgrade mockery
+fi
+
 echo installing packages, sudo required
 if command -v apt-get; then
   # shellcheck disable=SC2128,SC2086
