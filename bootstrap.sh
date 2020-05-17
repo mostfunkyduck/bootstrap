@@ -2,7 +2,7 @@
 
 set -e
 
-PACKAGES="jq vim tmux ctags sysstat shellcheck golang pipenv"
+PACKAGES="jq vim tmux ctags sysstat shellcheck golang pipenv neovim"
 if command -v X; then
   PACKAGES+=('xclip')
 fi
@@ -77,9 +77,11 @@ echo -ne "\tAnsiEsc: "
 pull_or_clone "https://github.com/vim-scripts/AnsiEsc.vim.git" "$HOME/.vim/bundle/ansiesc" "ansiesc"
 
 # MBE
-echo -ne "\tMBE: "
+echo -ne "\minibufexpl: "
 curl -LSso "$HOME/.vim/autoload/minibufexpl.vim" https://raw.githubusercontent.com/fholgado/minibufexpl.vim/master/plugin/minibufexpl.vim
-pull_or_clone "https://github.com/fholgado/minibufexpl.vim.git" "$HOME/.vim/pack/git-plugins/start/minibufexpl"
+# for some reason i don't care to debug, cloning the repo introduces a bug where syntax higlighting turns of
+# when you close a buffer, but the regular file being curled into autoload works just fine
+#pull_or_clone "https://github.com/fholgado/minibufexpl.vim.git" "$HOME/.vim/pack/git-plugins/start/minibufexpl"
 
 # .vimrc
 echo "installing vimrc"
@@ -88,6 +90,16 @@ if [ -f "$HOME/.vimrc" ]; then
 fi
 
 cp ./vimrc "$HOME/.vimrc"
+
+# nvim
+echo "installing init.vim for nvim"
+mkdir -p "$HOME/.config/nvim"
+
+if [[ -f "$HOME/.config/nvim/init.vim" ]]; then
+  cp "$HOME/.config/nvim/init.vim" "$HOME/.config/nvim/init.vim.bak"
+fi
+
+cp init.vim "$HOME/.config/nvim/init.vim"
 
 # gitignore
 echo "installing gitignore_global"

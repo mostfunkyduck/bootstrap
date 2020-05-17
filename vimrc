@@ -157,7 +157,6 @@ nmap <Leader>nc :NERDTreeClose<CR>
 let g:miniBufExplVSplit = 20
 nmap <Leader>mo :MBEOpen<CR>
 nmap <Leader>mc :MBEClose<CR>
-
 "buf stuff
 nmap <Leader>mn :bn!<cr>
 nmap <Leader>mp :bp!<cr>
