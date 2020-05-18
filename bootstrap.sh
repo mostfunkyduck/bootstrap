@@ -9,7 +9,7 @@ fi
 
 ### packages ###
 echo installing homebrew for linux
-if ! command -v brew; then
+if [[ ! -d /home/linuxbrew ]]; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
