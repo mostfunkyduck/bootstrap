@@ -8,9 +8,11 @@ if which X; then
 fi
 ### packages ###
 echo installing packages, sudo required
-if which apt-get; then
+if command -v apt-get; then
   sudo apt-get -y install $PACKAGES
-elif which yum; then
+elif command -v dnf; then
+  sudo dnf install -y $PACKAGES
+elif command -v yum; then
   sudo yum install -y $PACKAGES
 else
   echo "could not find a package manager!"
