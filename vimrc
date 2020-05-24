@@ -40,9 +40,6 @@ au FileType go setl noet
 " If in a split pane, expands the current pane
 let @w='^[10^W<'
 
-" Inserts a hash comment at the beginning of the current line
-let @c='I#j'
-
 " Same as regular 'd' in vim, but instead of copying to the default register, it blackholes the text
 let @d='"_d'
 
@@ -87,12 +84,13 @@ highlight SoftSearch ctermbg=black ctermfg=Green
 
 fun! SoftSearch()
   let word = expand("<cword>")
+  let @/=word
   let do_soft_search = "match SoftSearch /" . word . "/"
   exec do_soft_search
 endfun
 
 map <Leader>g :call SoftSearch() <CR>
-map <Leader>G :match none <CR>
+map <Leader>G :match none <CR> :noh <CR>
 
 " quick way to get input from : mode without making a mess
 " does a search within the current function, sets the last-pattern to be that pattern
@@ -109,17 +107,12 @@ fun! SearchInFunction(word)
   let foo = search(  word , "W", line(stopline) )
   " sets the last pattern to be this word
   let @/ = word
-  if foo == 0
-    echo "no more matches"
-  else
-    echo "next match at line " . foo
-  endif
 endfun 
 
-" 88 will search for the word at the current cursor position
-" 88 will iterate within the same funciton, nN will iterate on that
+" will search for the word at the current cursor position
+" will iterate within the same funciton, nN will iterate on that
 " pattern as a normal match
-map 88 :call SearchInFunction("") <CR>
+map <Leader>H :call SearchInFunction("") <CR>
 " }
 
 "some vimdiff hacks {
@@ -146,11 +139,6 @@ map 88 :call SearchInFunction("") <CR>
   set statusline+=%<%P                         " file position  
 "}
 
-map mm :!make -j6 -C ~/code/Core;<CR>;
-nmap <C-\>rr :cs reset<CR>
-nmap <C-\>a :cs add ~/code/Core ~/code/Core<CR>
-nmap <C-\>r :!cd ~/code/Core;cscope -bR;<CR>
-" :cs find d <C-R>=expand("<cword>")<CR><CR>
 nmap ,r :/\e[0;31m<CR>
 
 " gj and gk are better
@@ -161,15 +149,6 @@ nmap k gk
 call pathogen#infect()
 call pathogen#helptags()
 
-"let g:pymode_python = "python3"
-"let g:pymode_lint_on_write = 0
-"let g:pymode_folding = 0
-"let g:pymode_syntax = 1
-"let g:pymode_indent = 0
-"let g:pymode_rope_completion = 1
-" allows pymode docs to be called twice in a session lol
-"set ma
-
 " nerdtree time
 nmap <Leader>no :NERDTree<CR>
 nmap <Leader>nc :NERDTreeClose<CR>
@@ -178,24 +157,10 @@ nmap <Leader>nc :NERDTreeClose<CR>
 let g:miniBufExplVSplit = 20
 nmap <Leader>mo :MBEOpen<CR>
 nmap <Leader>mc :MBEClose<CR>
-
 "buf stuff
 nmap <Leader>mn :bn!<cr>
 nmap <Leader>mp :bp!<cr>
 nmap <Leader>mq :bd<cr>
-
-" syntastic
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"
-"let g:syntastic_loc_list_height=2
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-"let g:syntastic_python_checkers=['pylint', 'pep8', 'python3']
-"let g:syntastic_python_pylint_args="--disable broad-except,invalid-name"
 
 " ale
 let g:ale_python_auto_pipenv = 1
@@ -204,9 +169,10 @@ let g:ale_python_pylint_options = "--max-line-length 100 --rcfile ~/.pylint"
 let g:ale_list_window_size = 5
 let g:ale_open_list = 1
 let g:ale_set_highlights = 0
+" ale syntax highlighting sucks
 let g:ale_linters = {
 \  'python': ['pylint', 'python'],
-\  'yaml': []
+\  'yaml': [] 
 \}
 
 nmap <Leader>ln :lnext<CR>
