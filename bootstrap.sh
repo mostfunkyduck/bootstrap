@@ -3,7 +3,7 @@
 set -e
 
 configure_packages() {
-  PACKAGES="jq vim tmux ctags sysstat shellcheck golang neovim"
+  PACKAGES="jq vim tmux ctags sysstat shellcheck golang neovim cscope"
   if command -v X; then
     PACKAGES+=('xclip')
   fi
