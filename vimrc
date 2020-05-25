@@ -170,6 +170,7 @@ let g:ale_set_highlights = 0
 " ale syntax highlighting sucks
 let g:ale_linters = {
 \  'python': ['pylint', 'python'],
+\  'go': ['gofmt', 'govet'],
 \  'yaml': [] 
 \}
 
