@@ -3,7 +3,7 @@
 set -e
 
 configure_packages() {
-  PACKAGES="jq vim tmux ctags sysstat shellcheck golang neovim"
+  PACKAGES="jq vim tmux ctags sysstat shellcheck golang neovim cscope"
   if command -v X; then
     PACKAGES+=('xclip')
   fi
@@ -16,8 +16,11 @@ configure_packages() {
     sudo yum -y groupinstall "Development Tools"
     # shellcheck disable=SC2128,SC2086
     sudo yum install -y $PACKAGES
+  elif command -v dnf >/dev/null; then
+    # shellcheck disable=SC2128,SC2086
+    sudo dnf install -y $PACKAGES
   else
-    echo "could not find a package manager!"
+  echo "could not find a package manager!"
   fi
 }
 
@@ -29,7 +32,7 @@ configure_brew() {
   fi
 
   # don't run this unless we have to, it's slow
-  if ! command -v mockery; then
+  if ! command -v mockery >/dev/null; then
     brew install vektra/tap/mockery
     brew upgrade mockery
   fi
@@ -77,47 +80,42 @@ configure_bash() {
 }
 
 pull_or_clone() {
-  if [ -d "$2" ]; then
+  echo -ne "\t$3: "
+  if [ -d "$2/.git" ]; then
     git -C "$2" pull || echo "couldn't pull $1"
   else
+    mkdir -p "$2"
     git clone "$1" "$2" || echo "couldn't clone $1"
   fi
 }
 
-configure_vim() {
+configure_vim_extensions() {
   echo "installing vim plugins"
   # pathogen
   echo -ne "\tpathogen: "
-  # path for the vimrc to dump swpfiles in
-  mkdir -p "$HOME/.vim/swpfiles"
   mkdir -p "$HOME/.vim/autoload" "$HOME/.vim/bundle" && \
   if [[ ! -f $HOME/.vim/autoload/pathogen.vim ]]; then
     curl -LSso "$HOME/.vim/autoload/pathogen.vim" https://tpo.pe/pathogen.vim 2>/dev/null | tr -d "\n" && echo "ok" || echo "didn't install pathogen"
+  else
+    echo "ok"
   fi
 
 
   # Bash my AWS
-  pull_or_clone "https://github.com/bash-my-aws/bash-my-aws.git" "$HOME/.bash-my-aws"
+  pull_or_clone "https://github.com/bash-my-aws/bash-my-aws.git" "$HOME/.bash-my-aws" "bash-my-aws"
   # Ale
-  echo -ne "\tale: "
-  mkdir -p "$HOME/.vim/pack/git-plugins/start"
-  pull_or_clone "https://github.com/w0rp/ale.git" "$HOME/.vim/pack/git-plugins/start/ale"
+  pull_or_clone "https://github.com/w0rp/ale.git" "$HOME/.vim/pack/git-plugins/start/ale" "ale"
 
   # NERDTree
-  echo -ne "\tnerdtree: "
-
   pull_or_clone "https://github.com/scrooloose/nerdtree.git" "$HOME/.vim/bundle/nerdtree" "nerdtree"
 
   # AnsiEsc
-  echo -ne "\tAnsiEsc: "
   pull_or_clone "https://github.com/vim-scripts/AnsiEsc.vim.git" "$HOME/.vim/bundle/ansiesc" "ansiesc"
+}
 
-  # MBE
-  echo -ne "\minibufexpl: "
-  curl -LSso "$HOME/.vim/autoload/minibufexpl.vim" https://raw.githubusercontent.com/fholgado/minibufexpl.vim/master/plugin/minibufexpl.vim
-  # for some reason i don't care to debug, cloning the repo introduces a bug where syntax higlighting turns of
-  # when you close a buffer, but the regular file being curled into autoload works just fine
-  #pull_or_clone "https://github.com/fholgado/minibufexpl.vim.git" "$HOME/.vim/pack/git-plugins/start/minibufexpl"
+configure_vim() {
+  # path for the vimrc to dump swpfiles in
+  mkdir -p "$HOME/.vim/swpfiles"
 
   # .vimrc
   echo "installing vimrc"
@@ -151,14 +149,15 @@ configure_bash_extensions() {
 }
 
 run_light() {
-  configure_bash_extensions
-  configure_packages
   configure_vim
   configure_bash
 }
 
 run_normal() {
+  configure_packages
   configure_brew
+  configure_bash_extensions
+  configure_vim_extensions
   run_light
 }
 ####

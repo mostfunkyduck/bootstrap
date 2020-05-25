@@ -18,6 +18,9 @@ source $VIMRUNTIME/ftplugin/man.vim
 set ruler
 set backspace=indent,eol,start
 
+" have encountered some plugins that need this on, leaving it in just in case
+filetype plugin indent on
+
 au BufRead,BufNewFile *.json set filetype=javascript
 au BufRead,BufNewFile *.pp set filetype=ruby
 au FileType python setl sw=4 ts=4
@@ -33,6 +36,7 @@ au FileType go setl noet
   nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
   nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
   nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+  nmap <C-\>a :cs add .<CR>
 " }
 
 " Awesome alias'
@@ -126,6 +130,8 @@ map <Leader>H :call SearchInFunction("") <CR>
   nmap dg4 :diffget 4 <CR>
   nmap dp4 :diffput 4 <CR>
 
+"}
+
 " from stackoverflow: 
   set laststatus=2                             " always show statusbar  
   set statusline=  
@@ -139,6 +145,7 @@ map <Leader>H :call SearchInFunction("") <CR>
   set statusline+=%<%P                         " file position  
 "}
 
+" in case you want to search for red text in an error log 
 nmap ,r :/\e[0;31m<CR>
 
 " gj and gk are better
@@ -153,15 +160,6 @@ call pathogen#helptags()
 nmap <Leader>no :NERDTree<CR>
 nmap <Leader>nc :NERDTreeClose<CR>
 
-" minibufexpl
-let g:miniBufExplVSplit = 20
-nmap <Leader>mo :MBEOpen<CR>
-nmap <Leader>mc :MBEClose<CR>
-"buf stuff
-nmap <Leader>mn :bn!<cr>
-nmap <Leader>mp :bp!<cr>
-nmap <Leader>mq :bd<cr>
-
 " ale
 let g:ale_python_auto_pipenv = 1
 let g:ale_python_pylint_auto_pipenv = 1
@@ -172,11 +170,15 @@ let g:ale_set_highlights = 0
 " ale syntax highlighting sucks
 let g:ale_linters = {
 \  'python': ['pylint', 'python'],
+\  'go': ['gofmt', 'govet'], 
 \  'yaml': [] 
 \}
 
+let g:ale_go_golangci_lint_options = "--enable-all --disable goerr113 funlen gochecknoglobals godox golint lll 2>&1"
+let g:ale_go_golangci_lint_package = 1
 nmap <Leader>ln :lnext<CR>
 nmap <Leader>lp :lprevious<CR>
+nmap <Leader>lf :lfirst<CR>
 
 " https://vi.stackexchange.com/questions/177/what-is-the-purpose-of-swap-files
 set directory^=$HOME/.vim/swpfiles//
