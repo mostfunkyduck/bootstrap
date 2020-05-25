@@ -219,7 +219,7 @@ if [ -d "$HOME/.bash-my-aws" ]; then
   source "$HOME/.bash-my-aws/bash_completion.sh"
 fi
 
-if [[ -f /home/linuxbrew ]]; then
+if [[ -d /home/linuxbrew ]]; then
   # linuxbrew is installed
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
