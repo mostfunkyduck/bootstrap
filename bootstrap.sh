@@ -16,7 +16,8 @@ configure_packages() {
     sudo yum -y groupinstall "Development Tools"
     # shellcheck disable=SC2128,SC2086
     sudo yum install -y $PACKAGES
-  elif command -v dnf; then
+  elif command -v dnf >/dev/null; then
+    # shellcheck disable=SC2128,SC2086
     sudo dnf install -y $PACKAGES
   else
   echo "could not find a package manager!"
@@ -31,7 +32,7 @@ configure_brew() {
   fi
 
   # don't run this unless we have to, it's slow
-  if ! command -v mockery; then
+  if ! command -v mockery >/dev/null; then
     brew install vektra/tap/mockery
     brew upgrade mockery
   fi
