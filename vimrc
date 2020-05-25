@@ -130,6 +130,8 @@ map <Leader>H :call SearchInFunction("") <CR>
   nmap dg4 :diffget 4 <CR>
   nmap dp4 :diffput 4 <CR>
 
+"}
+
 " from stackoverflow: 
   set laststatus=2                             " always show statusbar  
   set statusline=  
@@ -143,6 +145,7 @@ map <Leader>H :call SearchInFunction("") <CR>
   set statusline+=%<%P                         " file position  
 "}
 
+" in case you want to search for red text in an error log 
 nmap ,r :/\e[0;31m<CR>
 
 " gj and gk are better
@@ -156,15 +159,6 @@ call pathogen#helptags()
 " nerdtree time
 nmap <Leader>no :NERDTree<CR>
 nmap <Leader>nc :NERDTreeClose<CR>
-
-" minibufexpl
-let g:miniBufExplVSplit = 20
-nmap <Leader>mo :MBEOpen<CR>
-nmap <Leader>mc :MBEClose<CR>
-"buf stuff
-nmap <Leader>mn :bn!<cr>
-nmap <Leader>mp :bp!<cr>
-nmap <Leader>mq :bd<cr>
 
 " ale
 let g:ale_python_auto_pipenv = 1
@@ -181,6 +175,7 @@ let g:ale_linters = {
 
 nmap <Leader>ln :lnext<CR>
 nmap <Leader>lp :lprevious<CR>
+nmap <Leader>lf :lfirst<CR>
 
 " https://vi.stackexchange.com/questions/177/what-is-the-purpose-of-swap-files
 set directory^=$HOME/.vim/swpfiles//
