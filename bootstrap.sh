@@ -87,7 +87,7 @@ pull_or_clone() {
   fi
 }
 
-configure_vim() {
+configure_vim_extensions() {
   echo "installing vim plugins"
   # pathogen
   echo -ne "\tpathogen: "
@@ -114,14 +114,9 @@ configure_vim() {
   # AnsiEsc
   echo -ne "\tAnsiEsc: "
   pull_or_clone "https://github.com/vim-scripts/AnsiEsc.vim.git" "$HOME/.vim/bundle/ansiesc" "ansiesc"
+}
 
-  # MBE
-  echo -ne "\minibufexpl: "
-  curl -LSso "$HOME/.vim/autoload/minibufexpl.vim" https://raw.githubusercontent.com/fholgado/minibufexpl.vim/master/plugin/minibufexpl.vim
-  # for some reason i don't care to debug, cloning the repo introduces a bug where syntax higlighting turns of
-  # when you close a buffer, but the regular file being curled into autoload works just fine
-  #pull_or_clone "https://github.com/fholgado/minibufexpl.vim.git" "$HOME/.vim/pack/git-plugins/start/minibufexpl"
-
+configure_vim() {
   # .vimrc
   echo "installing vimrc"
   if [ -f "$HOME/.vimrc" ]; then
@@ -154,14 +149,15 @@ configure_bash_extensions() {
 }
 
 run_light() {
-  configure_bash_extensions
-  configure_packages
   configure_vim
   configure_bash
 }
 
 run_normal() {
+  configure_packages
   configure_brew
+  configure_bash_extensions
+  configure_vim_extensions
   run_light
 }
 ####
