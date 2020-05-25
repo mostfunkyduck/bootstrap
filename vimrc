@@ -18,6 +18,9 @@ source $VIMRUNTIME/ftplugin/man.vim
 set ruler
 set backspace=indent,eol,start
 
+" have encountered some plugins that need this on, leaving it in just in case
+filetype plugin indent on
+
 au BufRead,BufNewFile *.json set filetype=javascript
 au BufRead,BufNewFile *.pp set filetype=ruby
 au FileType python setl sw=4 ts=4

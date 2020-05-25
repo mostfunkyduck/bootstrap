@@ -111,9 +111,6 @@ configure_vim_extensions() {
 
   # AnsiEsc
   pull_or_clone "https://github.com/vim-scripts/AnsiEsc.vim.git" "$HOME/.vim/bundle/ansiesc" "ansiesc"
-
-  #Vim-Go
-  pull_or_clone "https://github.com/fatih/vim-go.git" "$HOME/.vim/bundle/vim-go" "vim-go"
 }
 
 configure_vim() {
