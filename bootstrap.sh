@@ -80,9 +80,11 @@ configure_bash() {
 }
 
 pull_or_clone() {
-  if [ -d "$2" ]; then
+  echo -ne "\t$3: "
+  if [ -d "$2/.git" ]; then
     git -C "$2" pull || echo "couldn't pull $1"
   else
+    mkdir -p "$2"
     git clone "$1" "$2" || echo "couldn't clone $1"
   fi
 }
@@ -91,32 +93,33 @@ configure_vim_extensions() {
   echo "installing vim plugins"
   # pathogen
   echo -ne "\tpathogen: "
-  # path for the vimrc to dump swpfiles in
-  mkdir -p "$HOME/.vim/swpfiles"
   mkdir -p "$HOME/.vim/autoload" "$HOME/.vim/bundle" && \
   if [[ ! -f $HOME/.vim/autoload/pathogen.vim ]]; then
     curl -LSso "$HOME/.vim/autoload/pathogen.vim" https://tpo.pe/pathogen.vim 2>/dev/null | tr -d "\n" && echo "ok" || echo "didn't install pathogen"
+  else
+    echo "ok"
   fi
 
 
   # Bash my AWS
-  pull_or_clone "https://github.com/bash-my-aws/bash-my-aws.git" "$HOME/.bash-my-aws"
+  pull_or_clone "https://github.com/bash-my-aws/bash-my-aws.git" "$HOME/.bash-my-aws" "bash-my-aws"
   # Ale
-  echo -ne "\tale: "
-  mkdir -p "$HOME/.vim/pack/git-plugins/start"
-  pull_or_clone "https://github.com/w0rp/ale.git" "$HOME/.vim/pack/git-plugins/start/ale"
+  pull_or_clone "https://github.com/w0rp/ale.git" "$HOME/.vim/pack/git-plugins/start/ale" "ale"
 
   # NERDTree
-  echo -ne "\tnerdtree: "
-
   pull_or_clone "https://github.com/scrooloose/nerdtree.git" "$HOME/.vim/bundle/nerdtree" "nerdtree"
 
   # AnsiEsc
-  echo -ne "\tAnsiEsc: "
   pull_or_clone "https://github.com/vim-scripts/AnsiEsc.vim.git" "$HOME/.vim/bundle/ansiesc" "ansiesc"
+
+  #Vim-Go
+  pull_or_clone "https://github.com/fatih/vim-go.git" "$HOME/.vim/bundle/vim-go" "vim-go"
 }
 
 configure_vim() {
+  # path for the vimrc to dump swpfiles in
+  mkdir -p "$HOME/.vim/swpfiles"
+
   # .vimrc
   echo "installing vimrc"
   if [ -f "$HOME/.vimrc" ]; then
