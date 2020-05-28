@@ -37,6 +37,7 @@ au FileType go setl noet
   nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
   nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
   nmap <C-\>a :cs add .<CR>
+  nmap <C-\>r :cs reset <CR>
 " }
 
 " Awesome alias'
