@@ -171,11 +171,11 @@ let g:ale_set_highlights = 0
 " ale syntax highlighting sucks
 let g:ale_linters = {
 \  'python': ['pylint', 'python'],
-\  'go': ['gofmt', 'govet'], 
+\  'go': ['gofmt', 'govet', 'golangci-lint'], 
 \  'yaml': [] 
 \}
 
-let g:ale_go_golangci_lint_options = "--enable-all --disable goerr113 funlen gochecknoglobals godox golint lll 2>&1"
+let g:ale_go_golangci_lint_options = "--enable-all --disable goerr113,gochecknoglobals,godox,golint,funlen,lll 2>&1"
 let g:ale_go_golangci_lint_package = 1
 nmap <Leader>ln :lnext<CR>
 nmap <Leader>lp :lprevious<CR>
