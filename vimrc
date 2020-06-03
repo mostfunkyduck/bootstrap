@@ -175,7 +175,9 @@ let g:ale_linters = {
 \  'yaml': [] 
 \}
 
-let g:ale_go_golangci_lint_options = "--enable-all --disable goerr113,gochecknoglobals,godox,golint,funlen,lll 2>&1"
+" the expectation here is that unless you program a per-repo .golangci-lint
+" file, everything gets used
+let g:ale_go_golangci_lint_options = "2>&1"
 let g:ale_go_golangci_lint_package = 1
 nmap <Leader>ln :lnext<CR>
 nmap <Leader>lp :lprevious<CR>
