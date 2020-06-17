@@ -227,3 +227,6 @@ fi
 
 # because https://github.com/scop/bash-completion/issues/44
 set +o nounset
+
+# because caps lock is pointless
+setxkbmap -option ctrl:nocaps

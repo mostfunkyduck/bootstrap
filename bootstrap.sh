@@ -3,7 +3,7 @@
 set -e
 
 configure_packages() {
-  PACKAGES="jq vim tmux ctags sysstat shellcheck golang neovim cscope"
+  PACKAGES="jq vim tmux ctags sysstat shellcheck neovim cscope"
   if command -v X; then
     PACKAGES+=('xclip')
   fi
@@ -35,6 +35,10 @@ configure_brew() {
   if ! command -v mockery >/dev/null; then
     brew install vektra/tap/mockery
     brew upgrade mockery
+  fi
+
+  if ! command -v go >/dev/null; then
+    brew install go
   fi
 }
 
