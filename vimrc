@@ -37,6 +37,7 @@ au FileType go setl noet
   nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
   nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
   nmap <C-\>a :cs add .<CR>
+  nmap <C-\>r :cs reset <CR>
 " }
 
 " Awesome alias'
@@ -170,11 +171,13 @@ let g:ale_set_highlights = 0
 " ale syntax highlighting sucks
 let g:ale_linters = {
 \  'python': ['pylint', 'python'],
-\  'go': ['gofmt', 'govet'], 
+\  'go': ['gofmt', 'govet', 'golangci-lint'], 
 \  'yaml': [] 
 \}
 
-let g:ale_go_golangci_lint_options = "--enable-all --disable goerr113 funlen gochecknoglobals godox golint lll 2>&1"
+" the expectation here is that unless you program a per-repo .golangci-lint
+" file, everything gets used
+let g:ale_go_golangci_lint_options = "2>&1"
 let g:ale_go_golangci_lint_package = 1
 nmap <Leader>ln :lnext<CR>
 nmap <Leader>lp :lprevious<CR>
