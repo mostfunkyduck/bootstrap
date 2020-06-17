@@ -70,13 +70,6 @@ configure_bash() {
   fi
   cp jq "$HOME/.jq"
 
-  # jira.d
-  echo "installing go-jira config"
-  if [ -d "$HOME/.jira.d" ]; then
-    cp -r "$HOME/.jira.d" "$HOME/.jira.d.backup"
-  fi
-  rm -fr "$HOME/.jira.d"
-  cp -r jira.d "$HOME/.jira.d"
 }
 
 pull_or_clone() {

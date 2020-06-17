@@ -90,6 +90,7 @@ set -o vi
 alias ls='ls -F --color'
 
 alias clipcopy='xclip -selection clipboard'
+alias clippaste='xclip -sel clipboard -o'
 
 wait_for_ssh () {
   until nc -vz -w1 "$1" 22; do
