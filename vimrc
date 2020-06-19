@@ -10,6 +10,7 @@ let @d='"_d'
 let @x='"_x'
 set tabpagemax=20
 set hlsearch
+set formatoptions-=cro
 
 "modelines are insecure
 set modelines=0

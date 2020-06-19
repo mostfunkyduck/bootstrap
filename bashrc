@@ -128,6 +128,7 @@ op_get_password() {
     echo "op_get_password <item title>"
     return 1
   fi
+
   PASSWORD=$(op get item "$1" --vault=Private)
   if [ -z "$PASSWORD" ]; then
     echo "could not find password named $1!"
