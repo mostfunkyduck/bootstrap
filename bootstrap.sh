@@ -4,7 +4,7 @@ set -e
 
 configure_packages() {
   PACKAGES="jq vim tmux ctags sysstat shellcheck golang neovim cscope"
-  if command -v X; then
+  if command -v X && [[ -n $WSL_DISTRO_NAME ]]; then
     PACKAGES+=('xclip')
   fi
 
@@ -162,6 +162,7 @@ run_normal() {
 }
 ####
 
+# shellcheck disable=SC2207
 arg=($(getopt -o l --long light -- "$@"))
 # shellcheck disable=SC2181
 if [[ $? != 0 ]]; then
