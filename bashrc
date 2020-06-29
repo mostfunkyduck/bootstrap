@@ -90,6 +90,7 @@ set -o vi
 alias ls='ls -F --color'
 
 alias clipcopy='xclip -selection clipboard'
+alias clippaste='xclip -sel clipboard -o'
 
 wait_for_ssh () {
   until nc -vz -w1 "$1" 22; do
@@ -127,6 +128,7 @@ op_get_password() {
     echo "op_get_password <item title>"
     return 1
   fi
+
   PASSWORD=$(op get item "$1" --vault=Private)
   if [ -z "$PASSWORD" ]; then
     echo "could not find password named $1!"
@@ -226,3 +228,6 @@ fi
 
 # because https://github.com/scop/bash-completion/issues/44
 set +o nounset
+
+# because caps lock is pointless
+setxkbmap -option ctrl:nocaps

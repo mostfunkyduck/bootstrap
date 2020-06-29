@@ -3,7 +3,7 @@
 set -e
 
 configure_packages() {
-  PACKAGES="jq vim tmux ctags sysstat shellcheck golang neovim cscope"
+  PACKAGES="jq vim tmux ctags sysstat shellcheck neovim cscope"
   if command -v X && [[ -n $WSL_DISTRO_NAME ]]; then
     PACKAGES+=('xclip')
   fi
@@ -35,6 +35,10 @@ configure_brew() {
   if ! command -v mockery >/dev/null; then
     brew install vektra/tap/mockery
     brew upgrade mockery
+  fi
+
+  if ! command -v go >/dev/null; then
+    brew install go
   fi
 }
 
@@ -70,13 +74,6 @@ configure_bash() {
   fi
   cp jq "$HOME/.jq"
 
-  # jira.d
-  echo "installing go-jira config"
-  if [ -d "$HOME/.jira.d" ]; then
-    cp -r "$HOME/.jira.d" "$HOME/.jira.d.backup"
-  fi
-  rm -fr "$HOME/.jira.d"
-  cp -r jira.d "$HOME/.jira.d"
 }
 
 pull_or_clone() {
@@ -103,8 +100,8 @@ configure_vim_extensions() {
 
   # Bash my AWS
   pull_or_clone "https://github.com/bash-my-aws/bash-my-aws.git" "$HOME/.bash-my-aws" "bash-my-aws"
-  # Ale
-  pull_or_clone "https://github.com/w0rp/ale.git" "$HOME/.vim/pack/git-plugins/start/ale" "ale"
+  # Ale - pulling from my fork because PR #3191 in the main repo needs to be in there or go won't work
+  pull_or_clone "https://github.com/mostfunkyduck/ale.git" "$HOME/.vim/pack/git-plugins/start/ale" "ale"
 
   # NERDTree
   pull_or_clone "https://github.com/scrooloose/nerdtree.git" "$HOME/.vim/bundle/nerdtree" "nerdtree"
