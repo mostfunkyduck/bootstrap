@@ -80,8 +80,17 @@ get_number_of_jobs () {
   jobs | wc -l | tr -d " "
 }
 
+aws_ps1() {
+  if [[ -n $AWS_PROFILE ]]; then
+    echo -ne "\033[0;33m[P: $AWS_PROFILE]\033[m "
+  fi
+ 
+  if [[ -n $AWS_REGION ]]; then
+    echo -ne "\033[0;34m[R: $AWS_REGION]\033[m "
+  fi
+}
 # shellcheck disable=SC2025
-export PS1='>\e[0;32m \u (\t)   <\W>\e[m [$(get_number_of_jobs 2>/dev/null)] $(git_ps1 2>/dev/null)  \n\h > '
+export PS1='>\e[0;32m \u (\t)   <\W>\e[m [$(get_number_of_jobs 2>/dev/null)] $(git_ps1 2>/dev/null)  \n$(aws_ps1)\h > '
 
 export PYTHONDONTWRITEBYTECODE=True
 
