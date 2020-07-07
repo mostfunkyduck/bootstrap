@@ -90,7 +90,7 @@ aws_ps1() {
   fi
 }
 # shellcheck disable=SC2025
-export PS1='>\e[0;32m \u (\t)   <\W>\e[m [$(get_number_of_jobs 2>/dev/null)] $(git_ps1 2>/dev/null)  \n$(aws_ps1)\h > '
+export PS1='>\e[0;32m \u (\t)   <\W>\e[m [$(get_number_of_jobs 2>/dev/null)] $(git_ps1 2>/dev/null)  $(aws_ps1)\n\h > '
 
 export PYTHONDONTWRITEBYTECODE=True
 
