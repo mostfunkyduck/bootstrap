@@ -238,5 +238,7 @@ fi
 # because https://github.com/scop/bash-completion/issues/44
 set +o nounset
 
-# because caps lock is pointless
-setxkbmap -option ctrl:nocaps
+if command -v setxkbmap &>/dev/null; then
+  # because caps lock is pointless
+  setxkbmap -option ctrl:nocaps
+fi
