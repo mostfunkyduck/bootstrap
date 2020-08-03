@@ -42,15 +42,6 @@ configure_brew() {
   fi
 }
 
-configure_xinitrc() {
-  echo "installing $HOME/.xinitrc"
-  if [[ -f $HOME/.xinitrc ]]; then
-    echo "backing up old $HOME/.xinitrc to $HOME/.xinitrc.bak"
-    mv "$HOME/.xinitrc" "$HOME/.xinitrc.bak"
-  fi
-  cp ./xinitrc "$HOME/.xinitrc"
-}
-
 configure_shell() {
   echo "installing $HOME/.custom_bashrc"
   cp ./bashrc "$HOME/.custom_bashrc"
@@ -157,7 +148,6 @@ configure_bash_extensions() {
 run_light() {
   configure_vim
   configure_shell
-  configure_xinitrc
 }
 
 run_normal() {

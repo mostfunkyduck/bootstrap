@@ -242,3 +242,8 @@ if command -v setxkbmap &>/dev/null; then
   # because caps lock is pointless
   setxkbmap -option ctrl:nocaps
 fi
+
+if command -v xset &>/dev/null; then
+  # because i don't want x beeping at me
+  xset -b
+fi
