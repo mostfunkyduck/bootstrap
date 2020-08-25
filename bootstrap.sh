@@ -42,7 +42,7 @@ configure_brew() {
   fi
 }
 
-configure_bash() {
+configure_shell() {
   echo "installing $HOME/.custom_bashrc"
   cp ./bashrc "$HOME/.custom_bashrc"
   chmod o+x "$HOME/.custom_bashrc"
@@ -147,7 +147,7 @@ configure_bash_extensions() {
 
 run_light() {
   configure_vim
-  configure_bash
+  configure_shell
 }
 
 run_normal() {
