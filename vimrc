@@ -188,4 +188,4 @@ nmap <Leader>lf :lfirst<CR>
 set directory^=$HOME/.vim/swpfiles//
 " good bye annoying bell
 set noeb
-set vb
+set novb
