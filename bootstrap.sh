@@ -81,7 +81,7 @@ configure_shell() {
 }
 
 pull_or_clone() {
-  echo -ne "\t$3: "
+  echo -ne "\\t$3: "
   if [ -d "$2/.git" ]; then
     git -C "$2" pull || echo "couldn't pull $1"
   else
@@ -93,10 +93,10 @@ pull_or_clone() {
 configure_vim_extensions() {
   echo "installing vim plugins"
   # pathogen
-  echo -ne "\tpathogen: "
+  echo -ne "\\tpathogen: "
   mkdir -p "$HOME/.vim/autoload" "$HOME/.vim/bundle" && \
   if [[ ! -f $HOME/.vim/autoload/pathogen.vim ]]; then
-    curl -LSso "$HOME/.vim/autoload/pathogen.vim" https://tpo.pe/pathogen.vim 2>/dev/null | tr -d "\n" && echo "ok" || echo "didn't install pathogen"
+    curl -LSso "$HOME/.vim/autoload/pathogen.vim" https://tpo.pe/pathogen.vim 2>/dev/null | tr -d "\\n" && echo "ok" || echo "didn't install pathogen"
   else
     echo "ok"
   fi
