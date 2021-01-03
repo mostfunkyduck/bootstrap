@@ -26,6 +26,10 @@ configure_packages() {
 
 configure_brew() {
   echo installing homebrew for linux
+  if [[ ! "$(uname -a)" =~ \ x86_64\   ]]; then
+    echo "unsupported architecture for brew, will skip brew packages"
+    return
+  fi
   if [[ ! -d /home/linuxbrew ]]; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
