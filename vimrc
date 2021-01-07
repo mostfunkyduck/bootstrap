@@ -190,3 +190,4 @@ set directory^=$HOME/.vim/swpfiles//
 " good bye annoying bell
 set noeb
 set novb
+set paste
