@@ -112,6 +112,9 @@ configure_vim_extensions() {
 
   # AnsiEsc
   pull_or_clone "https://github.com/vim-scripts/AnsiEsc.vim.git" "$HOME/.vim/bundle/ansiesc" "ansiesc"
+
+  # plantuml syntax
+  pull_or_clone "https://github.com/aklt/plantuml-syntax.git" "$HOME/.vim/pack/git-plugins/start/plantuml-syntax"	"plantuml-syntax"
 }
 
 configure_vim() {
