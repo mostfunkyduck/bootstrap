@@ -191,3 +191,5 @@ set directory^=$HOME/.vim/swpfiles//
 set noeb
 set novb
 set paste
+
+let g:grammarous#languagetool_cmd = 'languagetool'
