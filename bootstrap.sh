@@ -12,17 +12,13 @@ function dim() {
   echo -e "\e[2m$*\e[0m"
 }
 
-# prints all arguments, underlined
-function underline() {
-  echo -e "\e[4m$*\e[0m"
-}
 configure_packages() {
   PACKAGES="jq vim tmux ctags sysstat shellcheck neovim cscope"
   if command -v X && [[ -n $WSL_DISTRO_NAME ]]; then
     PACKAGES+=('xclip')
   fi
 
-  bold underline "installing packages, sudo required"
+  bold "installing packages, sudo required"
   if command -v apt-get >/dev/null; then
     # shellcheck disable=SC2128,SC2086
     sudo apt-get -y install $PACKAGES build-essential
@@ -72,7 +68,7 @@ configure_shell() {
   dim "installing $HOME/.custom_bashrc" >&2
   cp ./bashrc "$HOME/.custom_bashrc"
   chmod o+x "$HOME/.custom_bashrc"
-  bold underline "after this runs, add 'source .custom_bashrc' to the regular bashrc"
+  bold "after this runs, add 'source .custom_bashrc' to the regular bashrc"
 
   ### pylint ###
   dim "installing $HOME/.pylint" >&2
@@ -105,10 +101,10 @@ configure_shell() {
 pull_or_clone() {
   dim "\\t$3: " | tr -d "\n" >&2 # makes it easier to use formatting funcs with `echo -e`
   if [ -d "$2/.git" ]; then
-    git -C "$2" pull >&2 || bold underline "couldn't pull $1" >&2
+    git -C "$2" pull >&2 || bold "couldn't pull $1" >&2
   else
     mkdir -p "$2"
-    git clone "$1" "$2" >&2 || bold underline "couldn't clone $1" >&2
+    git clone "$1" "$2" >&2 || bold "couldn't clone $1" >&2
   fi
 }
 
@@ -171,7 +167,7 @@ configure_bash_extensions() {
   else
     git -C "$HOME/.fzf" pull https://github.com/junegunn/fzf.git >&2
   fi
-  bold underline "to install or upgrade fzf, run '$HOME/.fzf/install'" >&2
+  bold "to install or upgrade fzf, run '$HOME/.fzf/install'" >&2
 }
 
 run_light() {

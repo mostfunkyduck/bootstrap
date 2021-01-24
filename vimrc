@@ -193,4 +193,4 @@ set noeb
 set novb
 set paste
 
-let g:grammarous#languagetool_cmd = 'languagetool'
+let g:ale_languagetool_options='-d EN_QUOTES -l en-US'
