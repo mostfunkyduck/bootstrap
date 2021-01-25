@@ -8,6 +8,12 @@ if [[ ! $PATH =~ "/snap/bin" ]] && command -v snap; then
   PATH=$PATH:/snap/bin
 fi
 
+# NOTE this is coupled with the directory name in the bootstrap script
+utilities_dir=$HOME/.bootstrap_utilities.d
+# shellcheck disable=2086
+if [ -d $utilities_dir ]; then
+  PATH=$PATH:$utilities_dir
+fi
 export PATH
 
 in_git () {

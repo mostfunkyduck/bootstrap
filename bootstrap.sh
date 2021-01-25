@@ -161,13 +161,30 @@ configure_vim() {
 
 configure_bash_extensions() {
   # fzf - not using pull_or_clone because it's cloning at depth 1
-  # TODO should pull_or_clone do the same thing? unclear...
+  # NOTE pull_or_clone doesn't clone at depth 1 since I'm using some of those repos for dev
   if [ ! -d "$HOME/.fzf" ]; then
     git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf" >&2
   else
     git -C "$HOME/.fzf" pull https://github.com/junegunn/fzf.git >&2
   fi
   bold "to install or upgrade fzf, run '$HOME/.fzf/install'" >&2
+}
+
+configure_bash_scripts() {
+  dir=$HOME/.bootstrap_utilities.d
+  # shellcheck disable=2086
+  rm -fr $dir
+  # shellcheck disable=2086
+  mkdir $dir
+  # shellcheck disable=2086
+  cat > $dir/README <<EOF
+This directory is generated automatically by github.com/mostfunkyduck/bootstrap
+It will hold useful utilities and should be added to PATH.
+Do not edit anything in here, it will be overwritten
+EOF
+
+  # shellcheck disable=2086
+  cp ./ip.sh $dir
 }
 
 run_light() {
@@ -195,6 +212,10 @@ apply_arguments() {
       --bash)
         bold "configuring bash"
         configure_bash_extensions
+        bold "configuring bash scripts"
+        configure_bash_scripts
+        bold "configuring shell"
+        configure_shell
         ;;
       --brew)
         bold "configuring brew"
