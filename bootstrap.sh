@@ -13,7 +13,7 @@ function dim() {
 }
 
 configure_packages() {
-  PACKAGES="jq vim tmux ctags sysstat shellcheck neovim cscope"
+  PACKAGES="jq vim tmux universal-ctags sysstat shellcheck neovim cscope golang-cfssl"
   if command -v X && [[ -n $WSL_DISTRO_NAME ]]; then
     PACKAGES+=('xclip')
   fi
