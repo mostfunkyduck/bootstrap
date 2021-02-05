@@ -46,6 +46,9 @@ configure_brew() {
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   fi
 
+  # run an upgrade check, could be slow, but will keep brew and its packages up to date
+  brew upgrade
+
   # don't run this unless we have to, it's slow
   if ! command -v mockery >/dev/null; then
     dim "installing mockery" >&2
