@@ -2,6 +2,17 @@
 
 set -e
 
+function usage() {
+  >&2 echo "usage:"
+  >&2 echo "$0 [--help] [--bash] [--vim] [--brew] [--light]"
+  >&2 echo ""
+  >&2 echo "--help show this message" 
+  >&2 echo "--vim configure vim extensions"
+  >&2 echo "--bash configure bashrc and bash scripts"
+  >&2 echo "--brew configure/install/update homebrew"
+  >&2 echo "--light run the lightweight parts of the bootstrap"
+  exit 0
+}
 # prints all arguments in bold
 function bold() {
   echo -e "\e[1m$*\e[0m"
@@ -227,13 +238,16 @@ apply_arguments() {
         bold "configuring brew"
         configure_brew
         ;;
+      --help)
+        usage
+        ;;
     esac
   done
 }
 ####
 
 # shellcheck disable=SC2207
-args=($(getopt -o l --long light --long vim --long bash --long brew -- "$@"))
+args=($(getopt -o l --long light --long help --long vim --long bash --long brew -- "$@"))
 # shellcheck disable=SC2181
 if [[ $? != 0 ]]; then
   echo "incorrect or illegal arguments provided"
