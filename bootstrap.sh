@@ -133,6 +133,9 @@ configure_vim_extensions() {
 
   # plantuml syntax
   pull_or_clone "https://github.com/aklt/plantuml-syntax.git" "$HOME/.vim/pack/git-plugins/start/plantuml-syntax"  "plantuml-syntax"
+
+  # vim syntax
+  pull_or_clone "https://github.com/Glench/Vim-Jinja2-Syntax.git" "$HOME/.vim/pack/git-plugins/start/vim-jinja2-syntax" "jinja2"
 }
 
 configure_vim() {
