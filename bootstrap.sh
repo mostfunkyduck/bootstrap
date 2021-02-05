@@ -76,6 +76,11 @@ configure_brew() {
     dim "installing languagetool" >&2
     brew install languagetool
   fi
+
+  if ! command -v gh >/dev/null; then
+    dim "installing gh" >&2
+    brew install gh
+  fi
 }
 
 configure_shell() {

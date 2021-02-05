@@ -29,6 +29,8 @@ au FileType python setl sw=4 ts=4
 au FileType make setl noet
 au FileType go setl noet
 au FileType sh setl et
+au FileType jinja2 setl noet
+au FileType conf setl et
 
 " some cscope hacks {
   nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
