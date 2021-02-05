@@ -59,28 +59,19 @@ configure_brew() {
 
   # run an upgrade check, could be slow, but will keep brew and its packages up to date
   brew upgrade
-
-  # don't run this unless we have to, it's slow
-  if ! command -v mockery >/dev/null; then
-    dim "installing mockery" >&2
-    brew install vektra/tap/mockery
-    brew upgrade mockery
-  fi
-
-  if ! command -v go >/dev/null; then
-    dim "installing go" >&2
-    brew install go
-  fi
-
-  if ! command -v languagetool >/dev/null; then
-    dim "installing languagetool" >&2
-    brew install languagetool
-  fi
-
-  if ! command -v gh >/dev/null; then
-    dim "installing gh" >&2
-    brew install gh
-  fi
+  brewPackages=(
+    vektra/tap/mockery
+    go
+    languagetool
+    gh
+  )
+  for package in "${brewPackages[@]}"; do
+    # remove package name down to the executable
+    if ! command -v "${package/*\//}" > /dev/null; then
+      dim "installing $package" >&2
+      brew install "$package"
+    fi
+  done
 }
 
 configure_shell() {
