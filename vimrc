@@ -29,7 +29,7 @@ au FileType python setl sw=4 ts=4
 au FileType make setl noet
 au FileType go setl noet
 au FileType sh setl et
-au FileType jinja2 setl et
+au FileType jinja setl et
 au FileType conf setl et
 
 " some cscope hacks {
