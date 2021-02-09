@@ -244,12 +244,15 @@ fi
 # because https://github.com/scop/bash-completion/issues/44
 set +o nounset
 
-if command -v setxkbmap &>/dev/null; then
-  # because caps lock is pointless
-  setxkbmap -option ctrl:nocaps
-fi
 
-if command -v xset &>/dev/null; then
-  # because i don't want x beeping at me
-  xset -b
+# x commands don't play nicely with the WSL unless you explicitly have an X server working, so skip it if WSL env vars are present
+if [ -z "$WSL_DISTRO_NAME" ]; then
+  if command -v xset &>/dev/null; then
+    # disable the bell
+    xset -b
+  fi
+  if command -v setxkbmap &>/dev/null; then
+    # because caps lock is pointless
+    setxkbmap -option ctrl:nocaps
+  fi
 fi
