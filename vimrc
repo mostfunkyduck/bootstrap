@@ -1,3 +1,22 @@
+" minpac, should make package management much easier
+" minpac only needs to run when you want it to run, it does all the work of checking out the code
+" and loading the plugins
+function! PackInit() abort
+  packadd minpac
+
+  call minpac#init()
+  call minpac#add('k-takata/minpac', {'type': 'opt'})
+  call minpac#add('chimay/wheel', { 'type' : 'start' })
+endfunction
+
+" Define user commands for updating/cleaning the plugins.
+" Each of them calls PackInit() to load minpac and register
+" the information of plugins, then performs the task.
+command! PackUpdate call PackInit() | call minpac#update()
+command! PackClean  call PackInit() | call minpac#clean()
+command! PackStatus packadd minpac | call minpac#status()
+
+
 set showmode
 syntax on
 set nu
@@ -196,3 +215,4 @@ set novb
 set paste
 
 let g:ale_languagetool_options='-d EN_QUOTES -l en-US'
+

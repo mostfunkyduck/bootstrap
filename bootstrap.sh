@@ -144,8 +144,10 @@ configure_vim_extensions() {
   # plantuml syntax
   pull_or_clone "https://github.com/aklt/plantuml-syntax.git" "$HOME/.vim/pack/git-plugins/start/plantuml-syntax"  "plantuml-syntax"
 
-  # vim syntax
+  # jinja2 syntax
   pull_or_clone "https://github.com/Glench/Vim-Jinja2-Syntax.git" "$HOME/.vim/pack/git-plugins/start/vim-jinja2-syntax" "jinja2"
+
+  pull_or_clone "https://github.com/k-takata/minpac.git" "$HOME/.vim/pack/minpac/opt/minpac" "minpac"
 }
 
 configure_vim() {
@@ -220,6 +222,7 @@ apply_arguments() {
     case "$arg" in
       --vim)
         bold "configuring vim"
+        configure_vim
         configure_vim_extensions
         ;;
       --bash)
