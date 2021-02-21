@@ -43,6 +43,8 @@ filetype plugin indent on
 
 au BufRead,BufNewFile *.json set filetype=javascript
 au BufRead,BufNewFile *.pp set filetype=ruby
+au BufRead,BufNewFile *.yml.j2 set filetype=yaml.jinja
+
 "au BufRead,BufNewFile *.tf set filetype=terraform
 au FileType python setl sw=4 ts=4
 au FileType make setl noet
