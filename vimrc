@@ -16,11 +16,18 @@ command! PackUpdate call PackInit() | call minpac#update()
 command! PackClean  call PackInit() | call minpac#clean()
 command! PackStatus packadd minpac | call minpac#status()
 
+" better plugin discoverability see https://github.com/tpope/vim-pathogen
+call pathogen#infect()
+call pathogen#helptags()
 
+
+" this overrides a bunch of flags, so we put it first so that it loses precedence
+set paste
+set autoindent
+set et
 set showmode
 syntax on
 set nu
-set et
 set ts=2
 set sw=2
 
@@ -65,6 +72,12 @@ au FileType conf setl et
   nmap <C-\>a :cs add .<CR>
   nmap <C-\>r :cs reset <CR>
 " }
+
+" for working with cscope
+nmap <Leader>ln :lnext<CR>
+nmap <Leader>lp :lprevious<CR>
+nmap <Leader>lf :lfirst<CR>
+
 
 " Awesome alias'
 
@@ -179,10 +192,6 @@ nmap ,r :/\e[0;31m<CR>
 nmap j gj
 nmap k gk
 
-" better plugin discoverability see https://github.com/tpope/vim-pathogen
-call pathogen#infect()
-call pathogen#helptags()
-
 " nerdtree time
 nmap <Leader>no :NERDTree<CR>
 nmap <Leader>nc :NERDTreeClose<CR>
@@ -205,16 +214,11 @@ let g:ale_linters = {
 " file, everything gets used
 let g:ale_go_golangci_lint_options = "2>&1"
 let g:ale_go_golangci_lint_package = 1
-nmap <Leader>ln :lnext<CR>
-nmap <Leader>lp :lprevious<CR>
-nmap <Leader>lf :lfirst<CR>
+let g:ale_languagetool_options='-d EN_QUOTES -l en-US'
 
 " https://vi.stackexchange.com/questions/177/what-is-the-purpose-of-swap-files
 set directory^=$HOME/.vim/swpfiles//
+
 " good bye annoying bell
 set noeb
 set novb
-set paste
-
-let g:ale_languagetool_options='-d EN_QUOTES -l en-US'
-
