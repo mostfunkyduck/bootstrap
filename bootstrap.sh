@@ -64,6 +64,7 @@ configure_brew() {
     go
     languagetool
     gh
+    jsonlint
   )
   for package in "${brewPackages[@]}"; do
     # remove package name down to the executable
