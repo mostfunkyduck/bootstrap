@@ -25,8 +25,8 @@ function dim() {
 
 configure_packages() {
   PACKAGES="jq vim tmux universal-ctags sysstat shellcheck cscope golang-cfssl"
-  if command -v X && [[ -n $WSL_DISTRO_NAME ]]; then
-    PACKAGES+=('xclip')
+  if command -v X >/dev/null && [[ -z $WSL_DISTRO_NAME ]]; then
+    PACKAGES+=" xclip"
   fi
 
   bold "installing packages, sudo required"
@@ -41,7 +41,7 @@ configure_packages() {
     # shellcheck disable=SC2128,SC2086
     sudo dnf install -y $PACKAGES
   else
-  bold "could not find a package manager!"
+    bold "could not find a package manager!"
   fi
 }
 
@@ -221,6 +221,10 @@ apply_arguments() {
   args=("$@")
   for arg in "${args[@]}"; do
     case "$arg" in
+      --packages)
+        bold "configuring packages"
+        configure_packages
+        ;;
       --vim)
         bold "configuring vim"
         configure_vim
@@ -247,7 +251,7 @@ apply_arguments() {
 ####
 
 # shellcheck disable=SC2207
-args=($(getopt -o l --long light --long help --long vim --long bash --long brew -- "$@"))
+args=($(getopt -o l --long packages --long light --long help --long vim --long bash --long brew -- "$@"))
 # shellcheck disable=SC2181
 if [[ $? != 0 ]]; then
   echo "incorrect or illegal arguments provided"

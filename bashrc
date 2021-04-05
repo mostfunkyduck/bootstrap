@@ -1,3 +1,8 @@
+# shellcheck disable=SC2086
+if [ -d $HOME/.local/bin ]; then
+  PATH+=:$HOME/.local/bin
+fi
+
 # go doesn't put itself in the global path on installs
 if [ -d "$HOME/go/bin" ]; then
   PATH=$PATH:$HOME/go/bin
