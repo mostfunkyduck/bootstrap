@@ -223,3 +223,8 @@ set directory^=$HOME/.vim/swpfiles//
 " good bye annoying bell
 set noeb
 set novb
+
+" allow adding local overrides
+if isdirectory($HOME . "/.vim/rc.d/")
+  source $HOME/.vim/rc.d/*
+endif
