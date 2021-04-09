@@ -48,6 +48,7 @@ set backspace=indent,eol,start
 " have encountered some plugins that need this on, leaving it in just in case
 filetype plugin indent on
 
+au BufRead,BufNewFile *.hcl set filetype=tf
 au BufRead,BufNewFile *.pp set filetype=ruby
 au BufRead,BufNewFile *.yml.j2 set filetype=yaml.jinja
 
