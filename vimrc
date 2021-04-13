@@ -7,6 +7,7 @@ function! PackInit() abort
   call minpac#init()
   call minpac#add('k-takata/minpac', {'type': 'opt'})
   call minpac#add('chimay/wheel', { 'type' : 'start' })
+  call minpac#add('hashivim/vim-terraform')
 endfunction
 
 " Define user commands for updating/cleaning the plugins.
@@ -48,7 +49,6 @@ set backspace=indent,eol,start
 " have encountered some plugins that need this on, leaving it in just in case
 filetype plugin indent on
 
-au BufRead,BufNewFile *.hcl set filetype=tf
 au BufRead,BufNewFile *.pp set filetype=ruby
 au BufRead,BufNewFile *.yml.j2 set filetype=yaml.jinja
 
