@@ -51,6 +51,7 @@ filetype plugin indent on
 
 au BufRead,BufNewFile *.pp set filetype=ruby
 au BufRead,BufNewFile *.yml.j2 set filetype=yaml.jinja
+au BufRead,BufNewFile *.hcl set filetype=tf
 au BufRead,BufNewFile *.pkr.hcl set filetype=tf
 
 "au BufRead,BufNewFile *.tf set filetype=terraform
