@@ -212,6 +212,7 @@ run_normal() {
   configure_packages
   configure_brew
   configure_bash_extensions
+  configure_bash_scripts
   configure_vim_extensions
   run_light
 }
