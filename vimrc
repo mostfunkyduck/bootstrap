@@ -22,9 +22,8 @@ call pathogen#infect()
 call pathogen#helptags()
 
 
-" this overrides a bunch of flags, so we put it first so that it loses precedence
-set paste
-set autoindent
+set paste " put this on first so we can undo most of what it does
+set noautoindent " makes pasting damn near impossible
 set et
 set showmode
 syntax on
