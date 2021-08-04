@@ -261,3 +261,7 @@ if [ -z "$WSL_DISTRO_NAME" ]; then
     setxkbmap -option ctrl:nocaps
   fi
 fi
+
+reporoot() {
+  git rev-parse --show-toplevel
+}
