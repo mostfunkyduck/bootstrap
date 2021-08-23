@@ -203,12 +203,13 @@ nmap <Leader>nc :NERDTreeClose<CR>
 let g:ale_python_auto_pipenv = 1
 let g:ale_python_pylint_auto_pipenv = 1
 let g:ale_python_pylint_options = "--max-line-length 100 --rcfile ~/.pylint"
+let g:ale_python_mypy_options = "--ignore-missing-imports" " otherwise it will yell if third party stuff isn't typed. pylint can fill the gap
 let g:ale_list_window_size = 5
 let g:ale_open_list = 1
 let g:ale_set_highlights = 0
 " ale syntax highlighting sucks
 let g:ale_linters = {
-\  'python': ['pylint', 'python'],
+\  'python': ['pylint', 'mypy', 'python'],
 \  'go': ['gofmt', 'govet', 'golangci-lint'], 
 \  'yaml': [] 
 \}
