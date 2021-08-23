@@ -23,7 +23,6 @@ call pathogen#helptags()
 
 
 set paste " put this on first so we can undo most of what it does
-set noautoindent " makes pasting damn near impossible
 set et
 set showmode
 syntax on
@@ -231,3 +230,5 @@ set novb
 if isdirectory($HOME . "/.vim/rc.d/")
   source $HOME/.vim/rc.d/*
 endif
+
+set noautoindent " makes pasting damn near impossible, this positioning overrides all stupid, but well meaning autoindents imported from modules
