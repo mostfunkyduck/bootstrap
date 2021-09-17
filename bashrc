@@ -244,6 +244,7 @@ fi
 if [[ -d /home/linuxbrew ]]; then
   # linuxbrew is installed
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  PATH="$PATH:/home/linuxbrew/.linuxbrew/bin"
 fi
 
 # because https://github.com/scop/bash-completion/issues/44
