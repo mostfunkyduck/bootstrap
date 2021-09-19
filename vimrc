@@ -11,7 +11,7 @@ function! PackInit() abort
   call minpac#add('tpope/vim-fugitive')
   call minpac#add('airblade/vim-gitgutter')
   call minpac#add('ellisonleao/glow.nvim')
-  call minpac#add('w0rp/ale')
+  call minpac#add('dense-analysis/ale')
 endfunction
 
 " Define user commands for updating/cleaning the plugins.
@@ -210,6 +210,7 @@ let g:ale_python_mypy_options = "--ignore-missing-imports" " otherwise it will y
 let g:ale_list_window_size = 5
 let g:ale_open_list = 1
 let g:ale_set_highlights = 0
+let g:ale_floating_preview = 1
 " ale syntax highlighting sucks
 let g:ale_linters = {
 \  'python': ['pylint', 'mypy', 'python'],
@@ -222,6 +223,10 @@ let g:ale_linters = {
 " file, everything gets used
 let g:ale_go_golangci_lint_options = "2>&1"
 let g:ale_go_golangci_lint_package = 1
+
+" hey, you know what would be cool? a quick hot key to make ale hovering work!
+nmap <Leader>h :ALEHover<CR>
+
 " https://vi.stackexchange.com/questions/177/what-is-the-purpose-of-swap-files
 set directory^=$HOME/.vim/swpfiles//
 
