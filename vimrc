@@ -8,6 +8,10 @@ function! PackInit() abort
   call minpac#add('k-takata/minpac', {'type': 'opt'})
   call minpac#add('chimay/wheel', { 'type' : 'start' })
   call minpac#add('hashivim/vim-terraform')
+  call minpac#add('tpope/vim-fugitive')
+  call minpac#add('airblade/vim-gitgutter')
+  call minpac#add('ellisonleao/glow.nvim')
+  call minpac#add('w0rp/ale')
 endfunction
 
 " Define user commands for updating/cleaning the plugins.
@@ -210,15 +214,14 @@ let g:ale_set_highlights = 0
 let g:ale_linters = {
 \  'python': ['pylint', 'mypy', 'python'],
 \  'go': ['gofmt', 'govet', 'golangci-lint'], 
-\  'yaml': [] 
+\  'yaml': [],
+\  'markdown': ['markdownlint']
 \}
 
 " the expectation here is that unless you program a per-repo .golangci-lint
 " file, everything gets used
 let g:ale_go_golangci_lint_options = "2>&1"
 let g:ale_go_golangci_lint_package = 1
-let g:ale_languagetool_options='-d EN_QUOTES -l en-US'
-
 " https://vi.stackexchange.com/questions/177/what-is-the-purpose-of-swap-files
 set directory^=$HOME/.vim/swpfiles//
 
