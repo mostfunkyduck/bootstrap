@@ -63,6 +63,7 @@ configure_brew() {
     vektra/tap/mockery
     go
     gopls
+    npm
     gh
     jsonlint
   )

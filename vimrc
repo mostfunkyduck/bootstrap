@@ -26,6 +26,7 @@ call pathogen#infect()
 call pathogen#helptags()
 
 
+setlocal spell spelllang=en_us
 set paste " put this on first so we can undo most of what it does
 set et
 set showmode
@@ -216,7 +217,7 @@ let g:ale_linters = {
 \  'python': ['pylint', 'mypy', 'python'],
 \  'go': ['gofmt', 'govet', 'golangci-lint'], 
 \  'yaml': [],
-\  'markdown': ['markdownlint']
+\  'markdown': ['remark']
 \}
 
 " the expectation here is that unless you program a per-repo .golangci-lint
