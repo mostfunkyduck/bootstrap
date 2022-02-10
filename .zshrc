@@ -265,7 +265,8 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 export PATH="/Users/jack/.pyenv/shims:${PATH}"
 export PYENV_SHELL=zsh
-source '/usr/local/Cellar/pyenv/2.2.3/libexec/../completions/pyenv.zsh'
+PYENV_COMPLETIONS='/usr/local/Cellar/pyenv/2.2.3/libexec/../completions/pyenv.zsh'
+[ -f "$PYENV_COMPLETIONS" ] && source "$PYENV_COMPLETIONS"
 command pyenv rehash 2>/dev/null
 pyenv() {
   local command
