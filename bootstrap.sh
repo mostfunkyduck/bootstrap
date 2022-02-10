@@ -4,13 +4,13 @@ set -e
 
 function usage() {
   >&2 echo "usage:"
-  >&2 echo "$0 [--help] [--bash] [--vim] [--brew] [--light]"
+  >&2 echo "$0 [--help] [--shell] [--vim] [--brew] [--light]"
   >&2 echo ""
-  >&2 echo "--help show this message" 
-  >&2 echo "--vim configure vim extensions"
-  >&2 echo "--bash configure bashrc and bash scripts"
-  >&2 echo "--brew configure/install/update homebrew"
-  >&2 echo "--light run the lightweight parts of the bootstrap"
+  >&2 echo "  --help show this message" 
+  >&2 echo "  --vim configure vim extensions"
+  >&2 echo "  --shell configure zshec, bashrc, and bash scripts"
+  >&2 echo "  --brew configure/install/update homebrew"
+  >&2 echo "  --light run the lightweight parts of the bootstrap"
   exit 0
 }
 # prints all arguments in bold
@@ -109,6 +109,10 @@ configure_shell() {
 
   # Bash my AWS
   pull_or_clone "https://github.com/bash-my-aws/bash-my-aws.git" "$HOME/.bash-my-aws" "bash-my-aws"
+
+  pull_or_clone "https://github.com/ohmyzsh/ohmyzsh.git" "$HOME/.oh-my-zsh" "oh-my-zsh"
+  [ -f "$HOME/.zshrc" ] && mv "$HOME/.zshrc" "$HOME/.zshrc.bkp"
+  cp .zshrc "$HOME/.zshrc"
 }
 
 pull_or_clone() {
@@ -227,7 +231,7 @@ apply_arguments() {
         configure_vim
         configure_vim_extensions
         ;;
-      --bash)
+      --shell)
         bold "configuring bash"
         configure_bash_extensions
         bold "configuring bash scripts"
