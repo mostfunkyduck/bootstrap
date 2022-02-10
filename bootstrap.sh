@@ -253,7 +253,7 @@ apply_arguments() {
 ####
 
 # shellcheck disable=SC2207
-args=($(getopt -o l --long packages --long light --long help --long vim --long bash --long brew -- "$@"))
+args=($(getopt -o l --long packages --long light --long help --long vim --long shell --long brew -- "$@"))
 # shellcheck disable=SC2181
 if [[ $? != 0 ]]; then
   echo "incorrect or illegal arguments provided"
