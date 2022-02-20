@@ -25,8 +25,6 @@ command! PackStatus packadd minpac | call minpac#status()
 call pathogen#infect()
 call pathogen#helptags()
 
-
-setlocal spell spelllang=en_us
 set paste " put this on first so we can undo most of what it does
 set et
 set showmode
