@@ -24,7 +24,7 @@ function dim() {
 }
 
 configure_packages() {
-  PACKAGES="jq vim tmux universal-ctags sysstat shellcheck cscope golang-cfssl"
+  PACKAGES="jq vim tmux golang-go gopls universal-ctags sysstat shellcheck cscope golang-cfssl"
   if command -v X >/dev/null && [[ -z $WSL_DISTRO_NAME ]]; then
     PACKAGES+=" xclip"
   fi
@@ -51,29 +51,13 @@ configure_brew() {
     return
   fi
 
-  if [[ ! -d /home/linuxbrew ]]; then
+  if ! command -v brew; then
     dim "installing homebrew for linux" >&2
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   fi
 
-  # run an upgrade check, could be slow, but will keep brew and its packages up to date
-  brew upgrade
-  brewPackages=(
-    vektra/tap/mockery
-    go
-    gopls
-    npm
-    gh
-    jsonlint
-  )
-  for package in "${brewPackages[@]}"; do
-    # remove package name down to the executable
-    if ! command -v "${package/*\//}" > /dev/null; then
-      dim "installing $package" >&2
-      brew install "$package"
-    fi
-  done
+  brew bundle
 }
 
 configure_shell() {
