@@ -24,7 +24,7 @@ function dim() {
 }
 
 configure_packages() {
-  PACKAGES="jq vim tmux golang-go gopls universal-ctags sysstat shellcheck cscope golang-cfssl"
+  PACKAGES="jq vim tmux golang-go gopls universal-ctags sysstat shellcheck cscope golang-cfssl pinentry-tty"
   if command -v X >/dev/null && [[ -z $WSL_DISTRO_NAME ]]; then
     PACKAGES+=" xclip"
   fi
