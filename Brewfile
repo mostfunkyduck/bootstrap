@@ -9,3 +9,4 @@ brew "jq"
 brew "ag"
 # need this because the version in repos is too old and there are compatibility issues b/c of course there are
 brew "gnupg"
+brew "rsc_2fa"
