@@ -8,7 +8,7 @@ function usage() {
   >&2 echo ""
   >&2 echo "  --help show this message" 
   >&2 echo "  --vim configure vim extensions"
-  >&2 echo "  --shell configure zshec, bashrc, and bash scripts"
+  >&2 echo "  --shell configure zshrc, bashrc, and bash scripts"
   >&2 echo "  --brew configure/install/update homebrew"
   >&2 echo "  --light run the lightweight parts of the bootstrap"
   exit 0
@@ -96,8 +96,10 @@ configure_shell() {
   pull_or_clone "https://github.com/bash-my-aws/bash-my-aws.git" "$HOME/.bash-my-aws" "bash-my-aws"
 
   pull_or_clone "https://github.com/ohmyzsh/ohmyzsh.git" "$HOME/.oh-my-zsh" "oh-my-zsh"
-  [ -f "$HOME/.zshrc" ] && mv "$HOME/.zshrc" "$HOME/.zshrc.bkp"
-  cp .zshrc "$HOME/.zshrc"
+  dim "installing $HOME/.custom_zshrc" >&2
+  [ -f "$HOME/.custom_zshrc" ] && cp "$HOME/.custom_zshrc" "$HOME/.custom_zshrc.bkp"
+  cp zshrc "$HOME/.custom_zshrc"
+  bold "after this runs, add 'source .custom_zshrc' to the regular zshrc"
 }
 
 pull_or_clone() {
