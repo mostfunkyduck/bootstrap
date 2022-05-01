@@ -179,3 +179,7 @@ notify_after_existing() {
     sleep 1
   done
 }
+
+if command -v kubectl &>/dev/null; then
+  source "$HOME/.kube/completion.zsh.inc"
+fi
