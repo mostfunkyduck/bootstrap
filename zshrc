@@ -181,5 +181,8 @@ notify_after_existing() {
 }
 
 if command -v kubectl &>/dev/null; then
-  source "$HOME/.kube/completion.zsh.inc"
+  KUBECTL_COMPLETIONS_FILE="$HOME/.kube/completion.zsh.inc"
+  if [ -f "$KUBECTL_COMPLETIONS_FILE" ]; then
+    source "$HOME/.kube/completion.zsh.inc"
+  fi
 fi
