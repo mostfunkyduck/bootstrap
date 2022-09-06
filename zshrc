@@ -186,3 +186,7 @@ if command -v kubectl &>/dev/null; then
     source "$HOME/.kube/completion.zsh.inc"
   fi
 fi
+
+if command -v gem &>/dev/null; then
+  export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+fi
