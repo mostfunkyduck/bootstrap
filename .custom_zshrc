@@ -1,9 +1,14 @@
-# test
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+#!/bin/zsh
+
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
+plugins=(ag git aws colored-man-pages) # jack
 
 source $ZSH/oh-my-zsh.sh
+
+
+
+export PATH="$HOME/bin:/usr/local/bin:$PATH"
 
 ## Git hacks
 in_git () {
@@ -99,8 +104,6 @@ PROMPT='s:[$SHLVL] j:[%j]$(echo "\t") %n %F{green}(%d)%f %F{blue}%D{%Y/%m/%d}%f 
 
 set -o vi
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 wait_for_ssh () {
   until nc -vz -w1 "$1" 22; do
     sleep 1;
@@ -118,20 +121,6 @@ remove_aws_vault_sessions() {
   aws-vault remove "$1" --sessions-only
 }
 
-# bash users may source the functions instead of loading the aliases
-if [ -d "$HOME/.bash-my-aws" ]; then
-  export PATH="$PATH:$HOME/.bash-my-aws/bin"
-  # shellcheck disable=SC1090
-  source "$HOME/.bash-my-aws/aliases"
-
-  # For ZSH users, uncomment the following two lines:
-  autoload -U +X compinit && compinit
-  autoload -U +X bashcompinit && bashcompinit
-
-  # shellcheck disable=SC1090
-  source "$HOME/.bash-my-aws/bash_completion.sh"
-fi
-
 alias ls='ls -FG'
 alias python=python3
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
@@ -140,8 +129,34 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
-alias selectVictim="$HOME/select.sh darren elvin xavier leonar matt eric jack"
 
+get_notifier() {
+  if command -v terminal-notifier &>/dev/null; then
+    echo 'terminal-notifier'
+  elif command -v notify-send &>/dev/null; then
+    echo 'notify-send'
+  else
+    echo "cannot send notification! no notifier found!" >&2
+    echo ""
+    return
+  fi
+}
+send_notification() {
+  title=$1
+  shift
+  cmd=$(get_notifier)
+  case "$cmd" in
+    "notify-send")
+      notify-send -- "$title" "$@"
+      ;;
+    "terminal-notifier")
+      terminal-notifier -- -message "$title completed" -sound default
+      ;;
+    *)
+      echo "unsupported notifier"
+      ;;
+  esac
+}
 # mac commands to send notification after running process
 notify_after() {
   local cmd
@@ -151,11 +166,10 @@ notify_after() {
     >&2 echo "usage: $0 <command>"
     return
   fi
-  if ! command -v terminal-notifier; then
-    >&2 echo 'terminal-notifier not found, cannot notify'
-    return
-  fi
-  trap "terminal-notifier -message \"$cmd completed\" -sound default" EXIT
+  OLDIFS="$IFS"
+  IFS=" "
+  trap "send_notification \"$*\" \"completed: (\$?)\"" EXIT
+  IFS="$OLDIFS"
   "$@"
 }
 
@@ -167,16 +181,13 @@ notify_after_existing() {
     >&2 echo "usage: $0 <pid>"
     return
   fi
-  if ! command -v terminal-notifier; then
-    >&2 echo 'terminal-notifier not found, cannot notify'
-    return
-  fi
-  trap "terminal-notifier -message \"$pid terminated\" -sound default" EXIT
-  echo "waiting for $pid to terminate"
-  ps -ef "$pid"
+  cmd="$(ps -o cmd= "$pid" | tr -d "\n")"
+  trap "send_notification \"$cmd (pid: $pid)\" \"completed\"" EXIT
+
+  echo "waiting for $pid ($cmd) to terminate"
+  ps "$pid"
   while true; do
     ps "$pid" &>/dev/null || break
-    echo -n '.'
     sleep 1
   done
 }
@@ -191,3 +202,13 @@ fi
 if command -v gem &>/dev/null; then
   export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 fi
+
+if [ -d /home/linuxbrew ]; then
+  # linuxbrew is installed
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+if command -v bat &>/dev/null; then
+  PAGER=bat
+fi
+# vim: ft=sh
