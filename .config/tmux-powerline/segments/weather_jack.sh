@@ -7,6 +7,10 @@ run_segment() {
     direction=$(echo "$wind" | awk '{ print $3 }')
     speed=$(echo "$wind" | awk '{ print $7, $8 }') 
     wind="$direction $speed"
+  elif [[ "$wind" =~ ^Variable ]]; then
+    direction="Variable"
+    speed=$(echo "$wind" | awk '{ print $3, $4 }')
+    wind="$direction $speed"
   fi
   sky=$($weather | grep ^Sky | sed 's/.*: //')
   echo -n "$temp | $wind | $sky"

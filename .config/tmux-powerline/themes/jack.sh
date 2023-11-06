@@ -79,14 +79,18 @@ fi
 
 if [ -z $TMUX_POWERLINE_LEFT_STATUS_SEGMENTS ]; then
 	TMUX_POWERLINE_LEFT_STATUS_SEGMENTS=(
-		# "tmux_session_info 148 234" \
-		# "mode_indicator 234 167" \
+		#"tmux_session_info 148 234" \
+		#"mode_indicator 234 167" \
 		#"hostname 33 0" \
 		#"ifstat_sys 30 255" \
 		# "lan_ip 24 255 ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN}" \
 		"ifstat-jack 30 255" \
 		"outgoing_interface 69 255" \
 		"tailscale 26 255" \
+    "weather_jack 69 96" \
+		"disk_usage 234 167" \
+		"tmux_mem_cpu_load_jack 234 136" \
+    "get-temps 0 42 . 0 0 right_disable separator_disable" \
     
 		#"vcs_branch 29 88" \
 		#"vcs_compare 60 255" \
@@ -98,6 +102,9 @@ fi
 
 if [ -z $TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS ]; then
 	TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS=(
+		"date_day 235 136 '#[align=right]'"\  
+		"date 235 136 ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN}" \
+		"time 235 136 ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN}" \
 		#"earthquake 3 0" \
 		#"pwd 89 211" \
 		#"macos_notification_count 29 255" \
@@ -106,8 +113,8 @@ if [ -z $TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS ]; then
 		#"cpu 240 136" \
 		#"load 237 167" \
 		# "uptime 237 167" \
-		"disk_usage 234 167" \
-		"tmux_mem_cpu_load_jack 234 136" \
+		# "disk_usage 234 167" \
+		# "tmux_mem_cpu_load_jack 234 136" \
 		#"battery 137 127" \
 		#"weather 37 255" \
 		#"rainbarf 0 ${TMUX_POWERLINE_DEFAULT_FOREGROUND_COLOR}" \
@@ -116,6 +123,6 @@ if [ -z $TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS ]; then
 		# "date 235 136 ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}" \
 		# "time 235 136 ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}" \
 		#"utc_time 235 136 ${TMUX_POWERLINE_SEPARATOR_LEFT_THIN}" \
-    "weather_jack 69 96" \
+    # "weather_jack 69 96" \
 	)
 fi
