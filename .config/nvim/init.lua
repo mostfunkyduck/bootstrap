@@ -105,6 +105,7 @@ let g:ale_linters = {
 let g:ale_fixers = {
 \  'terraform': ['terraform'],
 \  'python': ['black'],
+\  'lua': ['stylua'],
 \}
 let g:ale_go_golangci_lint_options = "2>&1"
 let g:ale_go_golangci_lint_package = 1
