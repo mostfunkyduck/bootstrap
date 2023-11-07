@@ -128,8 +128,6 @@ apply_arguments() {
         configure_packages
         ;;
       --shell)
-        bold "configuring bash"
-        configure_bash_extensions
         bold "configuring shell"
         configure_shell
         ;;
