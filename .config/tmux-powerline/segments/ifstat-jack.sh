@@ -1,3 +1,4 @@
+# #!/bin/bash
 # Show network statistics for all active interfaces found.
 
 run_segment() {
@@ -13,29 +14,7 @@ run_segment() {
 	fi
 
 	data=$(ifstat -T -z -S -q 1 1)
-	interfaces=$(echo -e "${data}" | head -n 1)
 	flow_data=$(echo -e "${data}" | tail -n 1 | ${sed} "s/\s\{1,\}/,/g")
-	index=1
-	for inf in ${interfaces}; do
-		type=""
-		case ${inf} in
-			eth*) type="⎆"
-				;;
-			wlan*) type="☫"
-				;;
-			en*) type=" "
-				;;
-      Total) type=" "
-        ;;
-		esac
-		if [ -n "${type}" ]; then
-			format=$(echo "${format} ${type} ⇊ %5.01f ⇈ %5.01f")
-			holder=$(echo "${holder},\$$((index)),\$$((index+1))")
-		fi
-		index=$((index+2))
-	done
-	if [ -n "${format}" ]; then
-		echo $(echo "${flow_data#,}" | awk -F"," "{printf(\"${format}\"${holder})}")
-	fi
+  echo $flow_data | awk '{ printf( "⇊%5.01f ⇈%5.01f", $(NF-1), $NF) }'
 	return 0
 }

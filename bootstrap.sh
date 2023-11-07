@@ -47,18 +47,13 @@ configure_packages() {
 }
 
 configure_brew() {
-  if [[ ! "$(uname -a)" =~ \ x86_64\   ]]; then
-    bold "unsupported architecture for brew, will skip brew packages"
-    return
-  fi
-
   if ! command -v brew &>/dev/null; then
     dim "installing homebrew for linux" >&2
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   fi
   deploy_symlink ".Brewfile"
-  brew bundle --global
+  HOMEBREW_BUNDLE_FILE="$HOME/.Brewfile" brew bundle
 }
 
 configure_shell() {
@@ -88,6 +83,7 @@ configure_shell() {
 
   ### tmux ###
   # gotta do this because tmux will continuously redeploy this directory if it's preconfigured
+  mkdir -p ~/.config/tmux-powerline
   deploy_symlink .config/tmux-powerline/config.sh
   deploy_symlink .config/tmux-powerline/themes
   deploy_symlink .config/tmux-powerline/segments
