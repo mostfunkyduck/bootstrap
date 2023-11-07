@@ -92,6 +92,7 @@ configure_shell() {
   deploy_symlink .config/tmux-powerline/themes
   deploy_symlink .config/tmux-powerline/segments
 
+  deploy_symlink .tmux/plugins/get-weather
   deploy_symlink .tmux.conf
   # gitignore
   deploy_symlink .gitignore_global
