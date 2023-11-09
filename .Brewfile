@@ -1,4 +1,7 @@
+# Allows dumping extra stuff in the brewfile without committing to sharing it everywhere
+instance_eval(File.read("#{Dir.home}/.Brewfile.local"))
 brew "age"
+brew "obsidian"
 brew "libnotify"
 brew "ncdu"
 brew "nvim"
@@ -17,8 +20,6 @@ brew "btop"
 brew "python3"
 brew "pylint"
 brew "mypy"
-brew "rust"
-brew "stylua"
 brew "ifstat"
 tap "wez/wezterm"
 cask "wez/wezterm/wezterm"
