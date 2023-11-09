@@ -1,7 +1,7 @@
 # Allows dumping extra stuff in the brewfile without committing to sharing it everywhere
 instance_eval(File.read("#{Dir.home}/.Brewfile.local"))
 brew "age"
-brew "obsidian"
+brew "obsidian" if OS.mac?
 brew "libnotify"
 brew "ncdu"
 brew "nvim"
