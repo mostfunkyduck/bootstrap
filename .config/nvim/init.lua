@@ -1,4 +1,5 @@
-require('plugins')
+require("plugins")
+
 vim.cmd([[
 set et
 set showmode
@@ -73,18 +74,35 @@ nmap <Leader>dp3 :diffput 3 <CR>
 nmap <Leader>dg4 :diffget 4 <CR>
 nmap <Leader>dp4 :diffput 4 <CR>
 
-" from stackoverflow: 
-set laststatus=2                             " always show statusbar  
-set statusline=  
-set statusline+=%-10.3n\                     " buffer number  
-set statusline+=%f\                          " filename   
-"set statusline+=%h%m%r%w                     " status flags  
-set statusline+=\[%{strlen(&ft)?&ft:'none'}] " file type  
-set statusline+=%=                           " right align remainder  
-" set statusline+=[%3{codeium#GetStatusString()}\ ]\   " codeium!
-set statusline+=0x%-8B                       " character value  
-set statusline+=%-14(%l,%c%V%)               " line, character  
-set statusline+=%<%P                         " file position  
+" from stackoverflow:
+set laststatus=2                             " always show statusbar
+set statusline=
+set statusline+=%-10.3n\                     " buffer number
+set statusline+=%f\                          " filename
+set statusline+=%h%m%r%w                     " status flags
+set statusline+=\[%{strlen(&ft)?&ft:'none'}] " file type
+set statusline+=%=                           " right align remainder
+set statusline+=[%3{codeium#GetStatusString()}\ ]\   " codeium!
+set statusline+=0x%-8B                       " character value
+set statusline+=%-14(%l,%c%V%)               " line, character
+set statusline+=%<%P                         " file position
+" https://stackoverflow.com/questions/9065941/how-can-i-change-vim-status-line-color
+function! InsertStatuslineColor(mode)
+  if a:mode == 'i'
+    hi statusline guibg=Cyan ctermfg=black guifg=Black ctermbg=darkgreen cterm=bold
+  elseif a:mode == 'r'
+    hi statusline guibg=Purple ctermfg=5 guifg=Black ctermbg=0
+  elseif a:mode == 'default'
+    hi statusline guibg=Black ctermfg=black guifg=White ctermbg=white
+  else
+    hi statusline guibg=DarkRed ctermfg=1 guifg=Black ctermbg=0
+  endif
+endfunction
+
+au InsertEnter * call InsertStatuslineColor(v:insertmode)
+au InsertLeave * call InsertStatuslineColor('default')
+call InsertStatuslineColor('default')
+
 nmap j gj
 nmap k gk
 let g:ale_python_auto_pipenv = 1
@@ -98,12 +116,13 @@ let g:ale_floating_preview = 1
 " ale syntax highlighting sucks
 let g:ale_linters = {
 \  'python': ['pylint', 'mypy', 'python'],
-\  'go': ['gofmt', 'govet', 'golangci-lint'], 
+\  'go': ['gofmt', 'govet', 'golangci-lint'],
 \  'yaml': [],
 \  'markdown': ['remark']
 \}
 let g:ale_fixers = {
 \  'terraform': ['terraform'],
+\  'rust': ['rustfmt'],
 \  'python': ['black'],
 \  'lua': ['stylua'],
 \}
@@ -161,21 +180,24 @@ au FileType groovy    call TextEnableCodeSnip( 'bash' , 'sh \"\"\"', '\"\"\"', '
 au FileType groovy    call TextEnableCodeSnip( 'yaml' , "yaml '''", "'''", 'yamlComment')
 " using bash to trick treesitter
 au FileType groovy    call TextEnableCodeSnip( 'bash' , "sh '''", "'''", 'shComment')
-au FileType markdown  call TextEnableCodeSnip( 'bash' , "```sh", "```", 'shComment') 
-au FileType markdown  call TextEnableCodeSnip( 'groovy' , "```groovy", "```", 'groovyComment') 
-au FileType markdown  call TextEnableCodeSnip( 'bash' , "```bash", "```", 'shComment') 
+au FileType markdown  call TextEnableCodeSnip( 'bash' , "```sh", "```", 'shComment')
+au FileType markdown  call TextEnableCodeSnip( 'groovy' , "```groovy", "```", 'groovyComment')
+au FileType markdown  call TextEnableCodeSnip( 'bash' , "```bash", "```", 'shComment')
+
+" pink is frickin ugly
+:highlight Pmenu ctermbg=darkblue guibg=darkblue
 ]])
 
-require("telescope").setup {
-  find_files = {
-    hidden = true
-  },
-  extensions = {
-    file_browser = {
-      theme = "ivy",
-    },
-    projects = {},
-  },
-}
-require('telescope').load_extension('projects')
-require("telescope").load_extension "file_browser"
+require("telescope").setup({
+	find_files = {
+		hidden = true,
+	},
+	extensions = {
+		file_browser = {
+			theme = "ivy",
+		},
+		projects = {},
+	},
+})
+require("telescope").load_extension("projects")
+require("telescope").load_extension("file_browser")
