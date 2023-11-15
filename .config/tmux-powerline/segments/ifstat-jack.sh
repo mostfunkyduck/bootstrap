@@ -15,6 +15,6 @@ run_segment() {
 
 	data=$(ifstat -T -z -S -q 1 1)
 	flow_data=$(echo -e "${data}" | tail -n 1 | ${sed} "s/\s\{1,\}/,/g")
-  echo $flow_data | awk '{ printf( "⇊%5.01f ⇈%5.01f", $(NF-1), $NF) }'
+  echo $flow_data | awk -F, '{ printf( "⇊%5.01f ⇈%5.01f", $(NF-1), $NF) }'
 	return 0
 }

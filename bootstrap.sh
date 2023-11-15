@@ -73,6 +73,7 @@ configure_shell() {
 
   deploy_symlink .wezterm.lua
   deploy_symlink .custom_bashrc
+  deploy_symlink .custom_zshrc
 
   # shellcheck disable=SC2016
   bashrc_source_line='source "$HOME/.custom_bashrc"'
@@ -88,6 +89,7 @@ configure_shell() {
   deploy_symlink .config/tmux-powerline/themes
   deploy_symlink .config/tmux-powerline/segments
 
+  mkdir -p ~/.tmux/plugins
   deploy_symlink .tmux/plugins/get-weather
   deploy_symlink .tmux.conf
   # gitignore
