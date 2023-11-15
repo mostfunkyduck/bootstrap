@@ -1,2 +1,2 @@
 #!/bin/sh
-gpg --decrypt ~/.openai.key.gpg
+cat ~/.openai_key | tr -d "\n"
