@@ -86,7 +86,7 @@ config.background = {
 	},
 }
 
-config.font_size = 12
+config.font_size = 15
 -- config.text_background_opacity = .69
 -- config.window_background_opacity = .85
 return config
