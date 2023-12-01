@@ -29,8 +29,6 @@ au BufNewFile,BufRead Jenkinsfile* setf groovy
 set tabpagemax=20
 set hlsearch
 set formatoptions-=cro
-au BufRead,BufNewFile *.hcl set filetype=tf
-au BufRead,BufNewFile *.pkr.hcl set filetype=tf
 
 " Same as regular 'd' in vim, but instead of copying to the default register, it blackholes the text
 let @d='"_d'
