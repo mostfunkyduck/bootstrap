@@ -1,2 +1,2 @@
 #!/bin/sh
-cat ~/.openai_key | tr -d "\n"
+cat ~/.openai/api-key | tr -d "\n"
