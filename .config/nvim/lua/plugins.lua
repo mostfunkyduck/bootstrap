@@ -2,6 +2,10 @@ vim.cmd([[packadd packer.nvim]])
 
 return require("packer").startup(function(use)
 	use({
+		"folke/neoconf.nvim",
+	})
+	require("neoconf").setup({})
+	use({
 		"jackMort/ChatGPT.nvim",
 		config = function()
 			require("chatgpt").setup({
@@ -46,8 +50,10 @@ return require("packer").startup(function(use)
 			"neovim/nvim-lspconfig",
 			config = function()
 				local lspconfig = require("lspconfig")
+				lspconfig.csharp_ls.setup({})
 				lspconfig.terraformls.setup({})
 				lspconfig.pyright.setup({})
+				lspconfig.lua_ls.setup({})
 				lspconfig.rust_analyzer.setup({
 					settings = {
 						["rust-analyzer"] = {},

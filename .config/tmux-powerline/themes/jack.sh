@@ -102,9 +102,9 @@ fi
 
 if [ -z $TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS ]; then
 	TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS=(
-		"date_day 235 136 '#[align=right]'"\  
-		"date 235 136 ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN}" \
-		"time 235 136 ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN}" \
+		#"date_day 235 136 '#[align=right]'"\  
+		#"date 235 136 ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN}" \
+		"time 235 136 #[align=right] ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN}" \
 		#"earthquake 3 0" \
 		#"pwd 89 211" \
 		#"macos_notification_count 29 255" \
