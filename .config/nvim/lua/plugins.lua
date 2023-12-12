@@ -1,10 +1,46 @@
 vim.cmd([[packadd packer.nvim]])
 
 return require("packer").startup(function(use)
+	use({ "kevinhwang91/nvim-bqf", ft = "qf" })
 	use({
-		"folke/neoconf.nvim",
+		"rcarriga/nvim-notify",
+	}, { "MunifTanjim/nui.nvim" })
+	use({
+		"folke/noice.nvim",
+		config = function()
+			require("noice").setup({
+				lsp = {
+					-- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+					override = {
+						["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+						["vim.lsp.util.stylize_markdown"] = true,
+						["cmp.entry.get_documentation"] = true,
+					},
+				},
+				-- you can enable a preset for easier configuration
+				presets = {
+					bottom_search = true, -- use a classic bottom cmdline for search
+					command_palette = true, -- position the cmdline and popupmenu together
+					long_message_to_split = true, -- long messages will be sent to a split
+					inc_rename = false, -- enables an input dialog for inc-rename.nvim
+					lsp_doc_border = false, -- add a border to hover docs and signature help
+				},
+				hover = {
+					silent = false,
+				},
+			})
+		end,
 	})
-	require("neoconf").setup({})
+	use({
+		"folke/tokyonight.nvim",
+		config = function()
+			require("tokyonight").setup({
+				style = "night",
+				transparent = true,
+			})
+			vim.cmd([[colorscheme tokyonight]])
+		end,
+	})
 	use({
 		"jackMort/ChatGPT.nvim",
 		config = function()
@@ -25,6 +61,11 @@ return require("packer").startup(function(use)
 			local ts_update = require("nvim-treesitter.install").update({ with_sync = true })
 			ts_update()
 		end,
+		config = function()
+			return require("nvim-treesitter").setup({
+				auto_install = true,
+			})
+		end,
 	})
 	use({
 		"nvim-telescope/telescope.nvim",
@@ -42,6 +83,10 @@ return require("packer").startup(function(use)
 		end,
 	})
 
+	use({
+		"folke/neoconf.nvim",
+	})
+	require("neoconf").setup()
 	use({
 		{
 			"williamboman/mason.nvim",
@@ -110,7 +155,97 @@ return require("packer").startup(function(use)
 	use("ellisonleao/glow.nvim")
 	use("dense-analysis/ale")
 	-- use 'ms-jpq/coq_nvim'
-	use("Exafunction/codeium.vim")
+	use({
+
+		"hrsh7th/nvim-cmp",
+		dependencies = {
+			"hrsh7th/cmp-nvim-lsp",
+			"onsails/lspkind-nvim",
+			"hrsh7th/cmp-path",
+			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-omni",
+			"hrsh7th/cmp-emoji",
+			"quangnguyen30192/cmp-nvim-ultisnips",
+		},
+		config = function()
+			-- Setup nvim-cmp.
+			local cmp = require("cmp")
+			local lspkind = require("lspkind")
+
+			cmp.setup({
+				snippet = {
+					expand = function(args)
+						-- For `ultisnips` user.
+						vim.fn["UltiSnips#Anon"](args.body)
+					end,
+				},
+				mapping = cmp.mapping.preset.insert({
+					["<Tab>"] = function(fallback)
+						if cmp.visible() then
+							cmp.select_next_item()
+						else
+							fallback()
+						end
+					end,
+					["<S-Tab>"] = function(fallback)
+						if cmp.visible() then
+							cmp.select_prev_item()
+						else
+							fallback()
+						end
+					end,
+					["<CR>"] = cmp.mapping.confirm({ select = true }),
+					["<C-e>"] = cmp.mapping.abort(),
+					["<Esc>"] = cmp.mapping.close(),
+					["<C-d>"] = cmp.mapping.scroll_docs(-4),
+					["<C-f>"] = cmp.mapping.scroll_docs(4),
+				}),
+				sources = {
+					{ name = "nvim_lsp" }, -- For nvim-lsp
+					{ name = "ultisnips" }, -- For ultisnips user.
+					{ name = "path" }, -- for path completion
+					{ name = "buffer", keyword_length = 2 }, -- for buffer word completion
+					{ name = "emoji", insert = true }, -- emoji completion
+					{ name = "codeium" },
+				},
+				completion = {
+					keyword_length = 1,
+					completeopt = "menu,noselect",
+				},
+				view = {
+					entries = "custom",
+				},
+				formatting = {
+					format = lspkind.cmp_format({
+						mode = "symbol_text",
+						menu = {
+							nvim_lsp = "[LSP]",
+							ultisnips = "[US]",
+							nvim_lua = "[Lua]",
+							path = "[Path]",
+							buffer = "[Buffer]",
+							emoji = "[Emoji]",
+							omni = "[Omni]",
+							codeium = "[Codeium]",
+						},
+					}),
+				},
+			})
+		end,
+	})
+	use({
+		"Exafunction/codeium.nvim",
+		-- "/home/jack/code/github/mostfunkyduck/codeium.nvim",
+		requires = {
+			"nvim-lua/plenary.nvim",
+			"onsails/lspkind-nvim",
+			"hrsh7th/nvim-cmp",
+		},
+		config = function()
+			require("codeium").setup({})
+		end,
+	})
+	-- use("/home/jack/code/github/mostfunkyduck/codeium.nvim")
 	-- this may be broken
 	use("vim-scripts/AnsiEsc.vim")
 end)
