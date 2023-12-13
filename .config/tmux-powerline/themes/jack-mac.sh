@@ -90,6 +90,7 @@ if [ -z $TMUX_POWERLINE_LEFT_STATUS_SEGMENTS ]; then
     #"weather_jack 69 96" \
 		"disk_usage 234 167" \
 		"tmux_mem_cpu_load_jack 234 136" \
+    "pomodoro 30 255" \
     #"get-temps 0 42 . 0 0 right_disable separator_disable" \
     
 		#"vcs_branch 29 88" \

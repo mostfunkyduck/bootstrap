@@ -8,7 +8,15 @@ source $ZSH/oh-my-zsh.sh
 
 
 
-export PATH="$HOME/bin:/usr/local/bin:$PATH"
+export PATH="/usr/local/bin:$PATH"
+
+if [ -d ~/.local/bin ]; then
+  export PATH="$PATH:~/.local/bin"
+fi
+
+if [ -d "$HOME/bin" ]; then
+  export PATH="$HOME/bin:$PATH"
+fi
 
 ## Git hacks
 in_git () {
