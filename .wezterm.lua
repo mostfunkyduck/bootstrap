@@ -63,7 +63,7 @@ config.background = {
 				-- How the colors are blended in the gradient.
 				-- "Rgb", "LinearRgb", "Hsv" and "Oklab" are supported.
 				-- The default is "Rgb".
-				blend = "Hsv",
+				blend = "Rgb",
 
 				-- To avoid vertical color banding for horizontal gradients, the
 				-- gradient position is randomly shifted by up to the `noise` value
@@ -71,7 +71,7 @@ config.background = {
 				-- Smaller values, or 0, will make bands more prominent.
 				-- The default value is 64 which gives decent looking results
 				-- on a retina macbook pro display.
-				-- noise = 101,
+				noise = 0,
 
 				-- By default, the gradient smoothly transitions between the colors.
 				-- You can adjust the sharpness by specifying the segment_size and
@@ -80,8 +80,8 @@ config.background = {
 				-- segment_smoothness is how hard the edge is; 0.0 is a hard edge,
 				-- 1.0 is a soft edge.
 
-				segment_size = 10,
-				segment_smoothness = 1.0,
+				-- segment_size = 10,
+				-- segment_smoothness = 1.0,
 			},
 		},
 	},
