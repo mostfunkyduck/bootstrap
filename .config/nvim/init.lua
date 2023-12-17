@@ -172,21 +172,17 @@ function! TextEnableCodeSnip(filetype,start,end,textSnipHl) abort
   \ start="'.a:start.'" end="'.a:end.'"
   \ contains=@'.group
 endfunction
-au FileType groovy    call TextEnableCodeSnip( 'yaml' , 'yaml \"\"\"', '\"\"\"', 'yamlComment')
+"au FileType groovy    call TextEnableCodeSnip( 'yaml' , 'yaml \"\"\"', '\"\"\"', 'yamlComment')
 " using bash to trick treesitter
-au FileType groovy    call TextEnableCodeSnip( 'bash' , 'sh \"\"\"', '\"\"\"', 'shComment')
-au FileType groovy    call TextEnableCodeSnip( 'yaml' , "yaml '''", "'''", 'yamlComment')
+"au FileType groovy    call TextEnableCodeSnip( 'bash' , 'sh \"\"\"', '\"\"\"', 'shComment')
+"au FileType groovy    call TextEnableCodeSnip( 'yaml' , "yaml '''", "'''", 'yamlComment')
 " using bash to trick treesitter
-au FileType groovy    call TextEnableCodeSnip( 'bash' , "sh '''", "'''", 'shComment')
-au FileType markdown  call TextEnableCodeSnip( 'bash' , "```sh", "```", 'shComment')
-au FileType markdown  call TextEnableCodeSnip( 'groovy' , "```groovy", "```", 'groovyComment')
-au FileType markdown  call TextEnableCodeSnip( 'bash' , "```bash", "```", 'shComment')
+"au FileType groovy    call TextEnableCodeSnip( 'bash' , "sh '''", "'''", 'shComment')
 
-" pink is frickin ugly
-:highlight Pmenu ctermbg=darkblue guibg=darkblue
 nnoremap <leader>sv :source /home/jack/.config/nvim/init.lua<CR>
 ]])
 
+-- i have no idea why this is here FIXME
 require("telescope").setup({
 	find_files = {
 		hidden = true,
