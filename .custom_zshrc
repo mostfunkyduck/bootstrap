@@ -10,8 +10,8 @@ source $ZSH/oh-my-zsh.sh
 
 export PATH="/usr/local/bin:$PATH"
 
-if [ -d ~/.local/bin ]; then
-  export PATH="$PATH:~/.local/bin"
+if [ -d "$HOME/.local/bin" ]; then
+  export PATH="$PATH:$HOME/.local/bin"
 fi
 
 if [ -d "$HOME/bin" ]; then
