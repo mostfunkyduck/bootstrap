@@ -24,16 +24,18 @@ local gradients = {
 		-- Accepts CSS style color specs, from named colors, through rgb
 		-- strings and more
 		colors = {
-			-- "#6699FF",
-			-- "#99CCFF",
-			"#B20000", -- Slightly Darker Red
-			"#990000", -- Darker Red
-			"#0000CC",
-			"#000099",
-			"#000066",
-			"#000077",
-			"#000060",
+			"#990000",
 			"#0000FF",
+			"#000099",
+			"#220099",
+			"#440099",
+			"#660099",
+			"#660099",
+			"#440099",
+			"#220099",
+			"#000099",
+			"#0000FF",
+			"#990000",
 		},
 
 		-- Instead of specifying `colors`, you can use one of a number of
@@ -114,7 +116,7 @@ config.background = {
 		hsb = { brightness = 0.3 },
 		opacity = 0.90,
 		source = {
-			Gradient = gradients.chrome_and_blue,
+			Gradient = gradients.blue_and_red,
 		},
 	},
 }
