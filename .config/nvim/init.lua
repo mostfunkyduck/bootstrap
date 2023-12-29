@@ -172,12 +172,6 @@ function! TextEnableCodeSnip(filetype,start,end,textSnipHl) abort
   \ start="'.a:start.'" end="'.a:end.'"
   \ contains=@'.group
 endfunction
-"au FileType groovy    call TextEnableCodeSnip( 'yaml' , 'yaml \"\"\"', '\"\"\"', 'yamlComment')
-" using bash to trick treesitter
-"au FileType groovy    call TextEnableCodeSnip( 'bash' , 'sh \"\"\"', '\"\"\"', 'shComment')
-"au FileType groovy    call TextEnableCodeSnip( 'yaml' , "yaml '''", "'''", 'yamlComment')
-" using bash to trick treesitter
-"au FileType groovy    call TextEnableCodeSnip( 'bash' , "sh '''", "'''", 'shComment')
 
 nnoremap <leader>sv :source /home/jack/.config/nvim/init.lua<CR>
 ]])

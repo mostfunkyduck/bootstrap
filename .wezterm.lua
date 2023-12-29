@@ -1,7 +1,9 @@
 local wezterm = require("wezterm")
+local mux = wezterm.mux
 local act = wezterm.action
 local config = {}
 
+config.show_update_window = true
 local gradients = {
 	blue_and_red = {
 		-- Can be "Vertical" or "Horizontal".  Specifies the direction
@@ -25,16 +27,17 @@ local gradients = {
 		-- strings and more
 		colors = {
 			"#990000",
+			"#990000",
 			"#0000FF",
 			"#000099",
 			"#220099",
 			"#440099",
 			"#660099",
-			"#660099",
 			"#440099",
 			"#220099",
 			"#000099",
 			"#0000FF",
+			"#990000",
 			"#990000",
 		},
 
@@ -46,12 +49,12 @@ local gradients = {
 		-- Specifies the interpolation style to be used.
 		-- "Linear", "Basis" and "CatmullRom" as supported.
 		-- The default is "Linear".
-		interpolation = "Basis",
+		interpolation = "Linear",
 
 		-- How the colors are blended in the gradient.
 		-- "Rgb", "LinearRgb", "Hsv" and "Oklab" are supported.
 		-- The default is "Rgb".
-		blend = "Rgb",
+		blend = "LinearRgb",
 
 		-- To avoid vertical color banding for horizontal gradients, the
 		-- gradient position is randomly shifted by up to the `noise` value
@@ -59,7 +62,7 @@ local gradients = {
 		-- Smaller values, or 0, will make bands more prominent.
 		-- The default value is 64 which gives decent looking results
 		-- on a retina macbook pro display.
-		noise = 0,
+		-- noise = 32,
 
 		-- By default, the gradient smoothly transitions between the colors.
 		-- You can adjust the sharpness by specifying the segment_size and
@@ -68,7 +71,7 @@ local gradients = {
 		-- segment_smoothness is how hard the edge is; 0.0 is a hard edge,
 		-- 1.0 is a soft edge.
 
-		-- segment_size = 10,
+		--segment_size = 300,
 		-- segment_smoothness = 1.0,
 	},
 	chrome_and_blue = {
@@ -94,12 +97,33 @@ local gradients = {
 
 		blend = "Rgb",
 
-		noise = 0,
+		-- noise = 32,
 		-- segment_size = 1,
 		-- segment_smoothness = 1.0,
 	},
+	black_to_gray = {
+		orientation = "Horizontal",
+
+		colors = {
+			"#1C1C1C",
+			"#202020",
+			"#282828",
+			"#303030",
+			"#383838",
+			"#555555",
+		},
+
+		interpolation = "Basis",
+
+		-- blend = "LinearRgb",
+
+		-- noise = 32,
+		-- segment_size = 20,
+		-- segment_smoothness = 0.9,
+	},
 }
-config.enable_tab_bar = false
+config.use_fancy_tab_bar = true
+config.hide_tab_bar_if_only_one_tab = true
 config.font = wezterm.font("JetBrains Mono", { weight = "ExtraBold" })
 -- config.font = wezterm.font("Nerd Font Mono", { weight = "Regular" })
 -- config.font = wezterm.font("Nerd Font Mono", { weight = "Regular" })
@@ -113,17 +137,15 @@ config.background = {
 	{
 		width = "100%",
 		height = "100%",
-		hsb = { brightness = 0.3 },
+		hsb = { brightness = 1.0 },
 		opacity = 0.90,
 		source = {
-			Gradient = gradients.blue_and_red,
+			Gradient = gradients.black_to_gray,
 		},
 	},
 }
 
-config.font_size = 15
--- config.text_background_opacity = .69
--- config.window_background_opacity = .85
+config.font_size = 12
 
 config.term = "wezterm"
 
@@ -142,6 +164,18 @@ config.mouse_bindings = {
 		end),
 	},
 }
+
+wezterm.on("gui-startup", function(cmd)
+	local _, _, window = mux.spawn_window(cmd or {})
+	window:gui_window():maximize()
+end)
+
+wezterm.on("window-resized", function()
+	-- the goal here is to work around a problem i keep having where the
+	-- backgroud gradient gets messed up when i maximize the thing
+	wezterm.reload_configuration()
+end)
+
 -- Use the defaults as a base
 config.hyperlink_rules = wezterm.default_hyperlink_rules()
 

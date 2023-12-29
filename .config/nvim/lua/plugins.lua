@@ -1,10 +1,21 @@
 vim.cmd([[packadd packer.nvim]])
 
 return require("packer").startup(function(use)
+	use("habamax/vim-godot")
 	use("wbthomason/packer.nvim")
-	-- this colors in hexcodes and would do ANSI codes too if there weren't a buggy
+	-- mapping hints
+	use({
+		"folke/which-key.nvim",
+		config = function()
+			vim.o.timeout = true
+			vim.o.timeoutlen = 500
+			require("which-key").setup()
+		end,
+	})
+	-- this colors in hexcodes and would do ANSI codes too if there weren't a buggler
 	-- #FFFFFF will show up colored in if you do `:ColorHighlight`
 	use({ "chrisbra/Colorizer" })
+
 	-- I did this to play with the quickfix window, unsure if i care enough about it
 	use({ "kevinhwang91/nvim-bqf", ft = "qf" })
 	-- used to do GUI stuff
@@ -24,7 +35,9 @@ return require("packer").startup(function(use)
 			"hrsh7th/cmp-emoji",
 			"dcampos/cmp-snippy",
 			"dcampos/nvim-snippy",
+			"hrsh7th/nvim-cmp",
 			"hrsh7th/cmp-cmdline",
+			"hrsh7th/cmp-buffer",
 		},
 		config = function()
 			-- Setup nvim-cmp.
@@ -40,6 +53,46 @@ return require("packer").startup(function(use)
 				return col ~= 0
 					and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 			end
+			-- https://github.com/hrsh7th/cmp-cmdline/issues/33#issuecomment-1793891721
+			local function handle_tab_complete(direction)
+				return function()
+					if vim.api.nvim_get_mode().mode == "c" and cmp.get_selected_entry() == nil then
+						local text = vim.fn.getcmdline()
+						---@diagnostic disable-next-line: param-type-mismatch
+						local expanded = vim.fn.expandcmd(text)
+						if expanded ~= text then
+							vim.api.nvim_feedkeys(
+								vim.api.nvim_replace_termcodes("<C-U>", true, true, true) .. expanded,
+								"n",
+								false
+							)
+							cmp.complete()
+						elseif cmp.visible() then
+							direction()
+						else
+							cmp.complete()
+						end
+					else
+						if cmp.visible() then
+							direction()
+						else
+							cmp.complete()
+						end
+					end
+				end
+			end
+			cmp.setup.cmdline(":", {
+				mapping = cmp.mapping.preset.cmdline({
+					["<Tab>"] = { c = handle_tab_complete(cmp.select_next_item) },
+					["<S-Tab>"] = { c = handle_tab_complete(cmp.select_prev_item) },
+				}),
+
+				sources = cmp.config.sources({
+					{ name = "path" },
+					{ name = "cmdline_history" },
+					{ name = "cmdline" },
+				}),
+			})
 
 			cmp.setup.cmdline("/", {
 				mapping = cmp.mapping.preset.cmdline(),
@@ -75,7 +128,7 @@ return require("packer").startup(function(use)
 							fallback()
 						end
 					end, { "i", "s" }),
-					["<CR>"] = cmp.mapping.confirm({ select = true }),
+					["<CR>"] = cmp.mapping.confirm({ select = false }),
 					["<C-e>"] = cmp.mapping.abort(),
 					["<Esc>"] = cmp.mapping.close(),
 					["<C-d>"] = cmp.mapping.scroll_docs(-4),
@@ -211,14 +264,46 @@ return require("packer").startup(function(use)
 	-- highlighting upgrade
 	use({
 		"nvim-treesitter/nvim-treesitter",
-		run = function()
-			local ts_update = require("nvim-treesitter.install").update({ with_sync = true })
-			ts_update()
-		end,
+		run = ":TSUpdate",
 		config = function()
-			return require("nvim-treesitter").setup({
+			require("nvim-treesitter.configs").setup({
+				sync_install = true,
 				auto_install = true,
+				ensure_installed = {
+					"python",
+					"rust",
+					"vim",
+					"typescript",
+					"javascript",
+					"terraform",
+					"bash",
+					"yaml",
+					"lua",
+				},
+				-- they say this is experimental
+				indent = {
+					enable = true,
+				},
+				incremental_selection = {
+					enable = true,
+					keymaps = {
+						init_selection = "gnn",
+						node_incremental = "grn",
+						scope_incremental = "grc",
+						node_decremental = "grm",
+					},
+				},
+				highlight = {
+					enable = true,
+					additional_vim_regex_highlighting = false,
+				},
 			})
+			vim.cmd([[
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
+" keeps it from folding everything at startup
+set nofoldenable
+]])
 		end,
 	})
 	-- fzf
@@ -257,6 +342,7 @@ return require("packer").startup(function(use)
 				lspconfig.csharp_ls.setup({})
 				lspconfig.terraformls.setup({})
 				lspconfig.pyright.setup({})
+				lspconfig.gdscript.setup({})
 				lspconfig.lua_ls.setup({})
 				lspconfig.rust_analyzer.setup({
 					settings = {
@@ -266,7 +352,6 @@ return require("packer").startup(function(use)
 
 				-- Global mappings.
 				-- See `:help vim.diagnostic.*` for documentation on any of the below functions
-				-- TODO: are these still useful with nvim-cmp on?
 				vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
 				vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 				vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
@@ -313,8 +398,6 @@ return require("packer").startup(function(use)
 	use("nvim-telescope/telescope-file-browser.nvim")
 	-- Not sure why this has to be here, it's a library of neovim functions FIXME
 	use("nvim-lua/plenary.nvim")
-	-- sigh
-	use("hashivim/vim-terraform")
 	-- Git stuff that I probably don't use
 	use("tpope/vim-fugitive")
 	-- Git stuff that I do use
@@ -325,8 +408,6 @@ return require("packer").startup(function(use)
 			require("glow").setup()
 		end,
 	})
-	-- better rendering of markdown, doesn't deal with the injections nonsense in ts
-	use("preservim/vim-markdown")
 	-- Awesome linter plugin, fills in gaps in the LSP
 	use("dense-analysis/ale")
 	-- use 'ms-jpq/coq_nvim'
