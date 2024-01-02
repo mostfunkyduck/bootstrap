@@ -26,9 +26,9 @@ local gradients = {
 		-- Accepts CSS style color specs, from named colors, through rgb
 		-- strings and more
 		colors = {
-			"#990000",
-			"#990000",
-			"#0000FF",
+			"#7B0000",
+			"#7B0000",
+			"#7B0000",
 			"#000099",
 			"#220099",
 			"#440099",
@@ -37,8 +37,8 @@ local gradients = {
 			"#220099",
 			"#000099",
 			"#0000FF",
-			"#990000",
-			"#990000",
+			"#8B0000",
+			"#8B0000",
 		},
 
 		-- Instead of specifying `colors`, you can use one of a number of
@@ -62,7 +62,7 @@ local gradients = {
 		-- Smaller values, or 0, will make bands more prominent.
 		-- The default value is 64 which gives decent looking results
 		-- on a retina macbook pro display.
-		-- noise = 32,
+		noise = 15,
 
 		-- By default, the gradient smoothly transitions between the colors.
 		-- You can adjust the sharpness by specifying the segment_size and
@@ -140,7 +140,7 @@ config.background = {
 		hsb = { brightness = 1.0 },
 		opacity = 0.90,
 		source = {
-			Gradient = gradients.black_to_gray,
+			Gradient = gradients.blue_and_red,
 		},
 	},
 }
