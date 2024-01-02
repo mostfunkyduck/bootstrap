@@ -116,7 +116,8 @@ let g:ale_linters = {
 \  'python': ['pylint', 'mypy', 'python'],
 \  'go': ['gofmt', 'govet', 'golangci-lint'],
 \  'yaml': [],
-\  'markdown': ['remark']
+\  'terraform': [],
+\  'markdown': []
 \}
 let g:ale_fixers = {
 \  'terraform': ['terraform'],
