@@ -140,7 +140,7 @@ config.background = {
 		hsb = { brightness = 1.0 },
 		opacity = 0.90,
 		source = {
-			Gradient = gradients.blue_and_red,
+			Gradient = gradients.black_to_gray,
 		},
 	},
 }

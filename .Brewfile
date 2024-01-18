@@ -22,6 +22,8 @@ brew "rsc_2fa"
 # Shell things
 brew "bat"
 brew "btop"
+brew "shellcheck"
+brew "bash-language-server"
 
 # Python things
 brew "python3"
