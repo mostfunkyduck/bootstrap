@@ -1,7 +1,12 @@
 # Allows dumping extra stuff in the brewfile without committing to sharing it everywhere
 instance_eval(File.read("#{Dir.home}/.Brewfile.local"))
+# k8s
+brew "kubectl"
+brew "argocd"
+
 # NeoVim
 brew "nvim"
+brew "bash-language-server"
 
 # Utilities
 brew "age"
@@ -39,3 +44,4 @@ brew "tmux-mem-cpu-load"
 
 # Useful, also used in tmux powerline extension
 brew "ifstat"
+

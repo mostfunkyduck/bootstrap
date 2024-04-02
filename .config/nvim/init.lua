@@ -175,6 +175,7 @@ function! TextEnableCodeSnip(filetype,start,end,textSnipHl) abort
 endfunction
 
 nnoremap <leader>sv :source /home/jack/.config/nvim/init.lua<CR>
+nnoremap <leader>gr :GodotRun<CR>
 ]])
 
 -- i have no idea why this is here FIXME

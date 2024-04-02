@@ -1,12 +1,11 @@
-#!/bin/zsh
-
+#!/usr/bin/env bash
+# Don't use 'zsh' above, shellcheck and the lsp won't work
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="robbyrussell"
-plugins=(ag git colored-man-pages) # jack
+export ZSH_THEME="robbyrussell"
+export plugins=(ag git colored-man-pages) # jack
 
-source $ZSH/oh-my-zsh.sh
-
-
+# shellcheck disable=SC1091
+source "$ZSH/oh-my-zsh.sh"
 
 export PATH="/usr/local/bin:$PATH"
 
@@ -17,6 +16,82 @@ fi
 if [ -d "$HOME/bin" ]; then
   export PATH="$HOME/bin:$PATH"
 fi
+## Random hacks
+get_notifier() {
+  if command -v terminal-notifier &>/dev/null; then
+    echo 'terminal-notifier'
+  elif command -v notify-send &>/dev/null; then
+    echo 'notify-send'
+  else
+    echo "cannot send notification! no notifier found!" >&2
+    echo ""
+    return
+  fi
+}
+send_notification() {
+  title=$1
+  shift
+  cmd=$(get_notifier)
+  case "$cmd" in
+    "notify-send")
+      notify-send -- "$title" "$@"
+      ;;
+    "terminal-notifier")
+      terminal-notifier -- -message "$title completed" -sound default
+      ;;
+    *)
+      echo "unsupported notifier"
+      ;;
+  esac
+}
+# mac commands to send notification after running process
+notify_after() {
+  local cmd
+  cmd="$1"
+  if [ -z "$cmd" ]; then
+    >&2 echo "this function will run a command and notify you when it completes"
+    >&2 echo "usage: $0 <command>"
+    return
+  fi
+  OLDIFS="$IFS"
+  IFS=" "
+  # shellcheck disable=SC2064
+  trap "send_notification \"$*\" \"completed: (\$?)\"" EXIT
+  IFS="$OLDIFS"
+  "$@"
+}
+
+notify_after_existing() {
+  local pid
+  pid="$1"
+  if [ -z "$pid" ]; then
+    >&2 echo "this function will notify you when a given pid terminates"
+    >&2 echo "usage: $0 <pid>"
+    return
+  fi
+  cmd="$(ps -o cmd= "$pid" | tr -d "\n")"
+  # shellcheck disable=SC2064
+  trap "send_notification \"$cmd (pid: $pid)\" \"completed\"" EXIT
+
+  echo "waiting for $pid ($cmd) to terminate"
+  ps "$pid"
+  while true; do
+    ps "$pid" &>/dev/null || break
+    sleep 1
+  done
+}
+
+get_gitignore () {
+  local arg
+  arg=$1
+  if [ -z "$arg" ]; then
+    echo "usage: $0 <desired template in github/gitignore repo>"
+    return
+  fi
+  # this is some zsh magic
+  # shellcheck disable=SC2296
+  curl "https://raw.githubusercontent.com/github/gitignore/main/${(C)arg}.gitignore"
+}
 
 ## Git hacks
 in_git () {
@@ -107,7 +182,9 @@ show_aws_profile () {
   [ "$AWS_VAULT" ] && echo "[%F{blue}$AWS_VAULT%f]"
 }
 
+# shellcheck disable=SC2034
 NEWLINE=$'\n'
+# shellcheck disable=all
 PROMPT='s:[$SHLVL] j:[%j]$(echo "\t") %n %F{green}(%d)%f %F{blue}%D{%Y/%m/%d}%f %F{cyan}%*%f $(show_aws_profile) $(in_git && echo && git_prompt 2>/dev/null )${NEWLINE} > '
 
 set -o vi
@@ -131,84 +208,28 @@ remove_aws_vault_sessions() {
 
 alias ls='ls -FG'
 alias python=python3
+# shellcheck disable=SC1091
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 export NVM_DIR="$HOME/.nvm"
+# shellcheck disable=SC1091
 [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+# shellcheck disable=SC1091
 [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 
-get_notifier() {
-  if command -v terminal-notifier &>/dev/null; then
-    echo 'terminal-notifier'
-  elif command -v notify-send &>/dev/null; then
-    echo 'notify-send'
-  else
-    echo "cannot send notification! no notifier found!" >&2
-    echo ""
-    return
-  fi
-}
-send_notification() {
-  title=$1
-  shift
-  cmd=$(get_notifier)
-  case "$cmd" in
-    "notify-send")
-      notify-send -- "$title" "$@"
-      ;;
-    "terminal-notifier")
-      terminal-notifier -- -message "$title completed" -sound default
-      ;;
-    *)
-      echo "unsupported notifier"
-      ;;
-  esac
-}
-# mac commands to send notification after running process
-notify_after() {
-  local cmd
-  cmd="$1"
-  if [ -z "$cmd" ]; then
-    >&2 echo "this function will run a command and notify you when it completes"
-    >&2 echo "usage: $0 <command>"
-    return
-  fi
-  OLDIFS="$IFS"
-  IFS=" "
-  trap "send_notification \"$*\" \"completed: (\$?)\"" EXIT
-  IFS="$OLDIFS"
-  "$@"
-}
-
-notify_after_existing() {
-  local pid
-  pid="$1"
-  if [ -z "$pid" ]; then
-    >&2 echo "this function will notify you when a given pid terminates"
-    >&2 echo "usage: $0 <pid>"
-    return
-  fi
-  cmd="$(ps -o cmd= "$pid" | tr -d "\n")"
-  trap "send_notification \"$cmd (pid: $pid)\" \"completed\"" EXIT
-
-  echo "waiting for $pid ($cmd) to terminate"
-  ps "$pid"
-  while true; do
-    ps "$pid" &>/dev/null || break
-    sleep 1
-  done
-}
-
 if command -v kubectl &>/dev/null; then
+  # shellcheck disable=SC1091
   KUBECTL_COMPLETIONS_FILE="$HOME/.kube/completion.zsh.inc"
   if [ -f "$KUBECTL_COMPLETIONS_FILE" ]; then
+    # shellcheck disable=SC1091
     source "$HOME/.kube/completion.zsh.inc"
   fi
 fi
 
 if command -v gem &>/dev/null; then
-  export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+  PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+  export PATH
 fi
 
 if [ -d /home/linuxbrew ]; then
@@ -218,9 +239,16 @@ fi
 
 if command -v bat &>/dev/null; then
   PAGER=bat
+  export PAGER
 fi
 #
 
 export HOMEBREW_BREWFILE="$HOME/.Brewfile"
 export HOMEBREW_BUNDLE_FILE="$HOME/.Brewfile"
+
+
+# shellcheck disable=SC1090
+command -v gh &>/dev/null && source <(gh completion -s zsh)
+autoload -U compinit
+compinit -i
 # vim: ft=sh

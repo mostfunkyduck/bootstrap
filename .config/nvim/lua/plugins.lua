@@ -332,9 +332,11 @@ set nofoldenable
 			"neovim/nvim-lspconfig",
 			config = function()
 				local lspconfig = require("lspconfig")
+				lspconfig.gopls.setup({})
 				lspconfig.csharp_ls.setup({})
 				lspconfig.terraformls.setup({})
 				lspconfig.pyright.setup({})
+				lspconfig.bashls.setup({})
 				lspconfig.gdscript.setup({})
 				lspconfig.lua_ls.setup({})
 				lspconfig.rust_analyzer.setup({
