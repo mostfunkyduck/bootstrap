@@ -6,7 +6,7 @@ brew "argocd"
 
 # NeoVim
 brew "nvim"
-brew "bash-language-server"
+brew "terraform-ls"
 
 # Utilities
 brew "age"

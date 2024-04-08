@@ -246,6 +246,9 @@ return require("packer").startup(function(use)
 		config = function()
 			require("chatgpt").setup({
 				api_key_cmd = "bash " .. vim.fn.expand("$HOME") .. "/.config/nvim/scripts/get_openai_key.sh",
+				predefined_chat_gpt_prompts = "file://"
+					.. vim.fn.expand("$HOME")
+					.. "/.config/nvim/chatgpt-prompts.csv",
 			})
 		end,
 		requires = {
