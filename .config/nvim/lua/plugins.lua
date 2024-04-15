@@ -2,6 +2,50 @@ vim.cmd([[packadd packer.nvim]])
 
 return require("packer").startup(function(use)
 	use({
+		"nvim-lualine/lualine.nvim",
+
+		requires = {
+			"nvim-treesitter/nvim-treesitter",
+		},
+		config = function()
+			require("lualine").setup({
+				sections = {
+					lualine_a = { "mode" },
+					lualine_b = {},
+					lualine_c = {
+						function()
+							return require("nvim-treesitter").statusline({
+								indicator_size = 100,
+								type_patterns = { "class", "function", "method" },
+								separator = " -> ",
+							})
+						end,
+					},
+					lualine_x = {},
+					lualine_y = {},
+					lualine_z = {},
+				},
+				winbar = {
+					lualine_a = {},
+					lualine_b = {
+						{ "buffers", mode = 4 },
+						"branch",
+						"diff",
+						{ "diagnostics", sources = { "nvim_lsp", "nvim_diagnostic", "ale" } },
+					},
+					lualine_c = {
+						{ "filename", path = 4 },
+						"filetype",
+					},
+					lualine_x = { { "windows", mode = 2 }, "encoding", "searchcount", "selectioncount" },
+					lualine_y = { "progress" },
+					lualine_z = { "location" },
+				},
+				inactive_sections = {},
+			})
+		end,
+	})
+	use({
 		"lewis6991/gitsigns.nvim",
 		config = function()
 			require("gitsigns").setup({
@@ -349,10 +393,10 @@ return require("packer").startup(function(use)
 				incremental_selection = {
 					enable = true,
 					keymaps = {
-						init_selection = "gnn",
-						node_incremental = "grn",
-						scope_incremental = "grc",
-						node_decremental = "grm",
+						init_selection = "<leader>gnn",
+						node_incremental = "<leader>grn",
+						scope_incremental = "<leader>grc",
+						node_decremental = "<leader>grm",
 					},
 				},
 				highlight = {

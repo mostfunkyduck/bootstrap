@@ -2,6 +2,7 @@ require("plugins")
 
 vim.cmd([[
 set et
+set termguicolors
 set showmode
 syntax on
 set nu
@@ -73,34 +74,38 @@ nmap <Leader>dp3 :diffput 3 <CR>
 nmap <Leader>dg4 :diffget 4 <CR>
 nmap <Leader>dp4 :diffput 4 <CR>
 
-" from stackoverflow:
-set laststatus=2                             " always show statusbar
-set statusline=
-set statusline+=%-10.3n\                     " buffer number
-set statusline+=%f\                          " filename
-set statusline+=%h%m%r%w                     " status flags
-set statusline+=\[%{strlen(&ft)?&ft:'none'}] " file type
-set statusline+=%=                           " right align remainder
-"set statusline+=[%3{codeium#GetStatusString()}\ ]\   " codeium!
-set statusline+=0x%-8B                       " character value
-set statusline+=%-14(%l,%c%V%)               " line, character
-set statusline+=%<%P                         " file position
-" https://stackoverflow.com/questions/9065941/how-can-i-change-vim-status-line-color
-function! InsertStatuslineColor(mode)
-  if a:mode == 'i'
-    hi statusline guibg=Cyan ctermfg=black guifg=Black ctermbg=darkgreen cterm=bold
-  elseif a:mode == 'r'
-    hi statusline guibg=Purple ctermfg=5 guifg=Black ctermbg=0
-  elseif a:mode == 'default'
-    hi statusline guibg=Black ctermfg=black guifg=White ctermbg=white
-  else
-    hi statusline guibg=DarkRed ctermfg=1 guifg=Black ctermbg=0
-  endif
-endfunction
+" all this is deprecated in favor of lualine currently
+hi TreeSitter ctermfg=blue guifg=Blue guibg=gray ctermbg=gray cterm=bold gui=bold
+hi DefaultStatusline guibg=Gray ctermfg=red guifg=DarkRed ctermbg=Blue
 
-au InsertEnter * call InsertStatuslineColor(v:insertmode)
-au InsertLeave * call InsertStatuslineColor('default')
-call InsertStatuslineColor('default')
+set laststatus=0                             
+"set statusline=%#DefaultStatusline#
+"set statusline+=%-10.3n\                     " buffer number
+"set statusline+=%f\                          " filename
+"set statusline+=%h%m%r%w                     " status flags
+"set statusline+=%y
+"set statusline+=\ \ \ \ \ %#TreeSitter#%{nvim_treesitter#statusline()}%#DefaultStatusline#
+"set statusline+=%=                           " right align remainder
+""set statusline+=[%3{codeium#GetStatusString()}\ ]\   " codeium!
+"set statusline+=0x%-8B                       " character value
+"set statusline+=%-14(%l,%c%V%)               " line, character
+"set statusline+=%<%P                         " file position
+" https://stackoverflow.com/questions/9065941/how-can-i-change-vim-status-line-color
+"function! InsertStatuslineColor(mode)
+  "if a:mode == 'i'
+    "hi statusline guibg=DarkGreen ctermfg=black guifg=Black ctermbg=darkgreen cterm=bold gui=bold
+  "elseif a:mode == 'r'
+    "hi statusline guibg=Purple ctermfg=5 guifg=Black ctermbg=0
+  "elseif a:mode == 'default'
+    "hi statusline guibg=White ctermfg=black guifg=Black ctermbg=white gui=bold cterm=bold
+  "else
+    "hi statusline guibg=DarkRed ctermfg=1 guifg=Black ctermbg=0 gui=bold cterm=bold
+  "endif
+"endfunction
+
+"au InsertEnter * call InsertStatuslineColor(v:insertmode)
+"au InsertLeave * call InsertStatuslineColor('default')
+"call InsertStatuslineColor('default')
 
 nmap j gj
 nmap k gk
@@ -149,7 +154,8 @@ nmap <Leader>fml2 :CellularAutomaton scramble<CR>
 nmap <Leader>fml3 :CellularAutomaton game_of_life<CR>
 
 " https://vi.stackexchange.com/questions/177/what-is-the-purpose-of-swap-files
-set directory^=$HOME/.vim/swpfiles//
+" set directory^=$HOME/.vim/swpfiles//
+set noswapfile
 set noeb
 set novb
 set noautoindent " makes pasting damn near impossible, this positioning overrides all stupid, but well meaning autoindents imported from modules
