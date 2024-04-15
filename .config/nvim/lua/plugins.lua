@@ -1,6 +1,68 @@
 vim.cmd([[packadd packer.nvim]])
 
 return require("packer").startup(function(use)
+	use({
+		"lewis6991/gitsigns.nvim",
+		config = function()
+			require("gitsigns").setup({
+				auto_attach = true,
+				on_attach = function(bufnr)
+					local gitsigns = require("gitsigns")
+
+					local function map(mode, l, r, opts)
+						opts = opts or {}
+						opts.buffer = bufnr
+						vim.keymap.set(mode, l, r, opts)
+					end
+
+					-- Navigation
+					map("n", "]c", function()
+						if vim.wo.diff then
+							vim.cmd.normal({ "]c", bang = true })
+						else
+							gitsigns.nav_hunk("next")
+						end
+					end)
+
+					map("n", "[c", function()
+						if vim.wo.diff then
+							vim.cmd.normal({ "[c", bang = true })
+						else
+							gitsigns.nav_hunk("prev")
+						end
+					end)
+
+					-- Actions
+					map("n", "<leader>hs", gitsigns.stage_hunk)
+					map("n", "<leader>hr", gitsigns.reset_hunk)
+					map("v", "<leader>hs", function()
+						gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+					end)
+					map("v", "<leader>hr", function()
+						gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+					end)
+					map("n", "<leader>hS", gitsigns.stage_buffer)
+					map("n", "<leader>hu", gitsigns.undo_stage_hunk)
+					map("n", "<leader>hR", gitsigns.reset_buffer)
+					map("n", "<leader>hp", gitsigns.preview_hunk)
+					map("n", "<leader>hb", function()
+						gitsigns.blame_line({ full = true })
+					end)
+					map("n", "<leader>tb", gitsigns.toggle_current_line_blame)
+					map("n", "<leader>hd", gitsigns.diffthis)
+					map("n", "<leader>hl", gitsigns.toggle_linehl)
+					map("n", "<leader>hn", gitsigns.toggle_numhl)
+					map("n", "<leader>hD", function()
+						gitsigns.diffthis("~")
+					end)
+					map("n", "<leader>td", gitsigns.toggle_deleted)
+
+					-- Text object
+					map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+				end,
+			})
+		end,
+	})
 	use("habamax/vim-godot")
 	use("wbthomason/packer.nvim")
 	-- mapping hints
@@ -25,19 +87,18 @@ return require("packer").startup(function(use)
 
 		"hrsh7th/nvim-cmp",
 		requires = {
-			"hrsh7th/cmp-nvim-lsp",
 			-- this makes it have completions for the built in vim shit the LSP can't see
 			"hrsh7th/cmp-nvim-lua",
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-nvim-lsp-signature-help",
 			"onsails/lspkind-nvim",
 			"hrsh7th/cmp-path",
-			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-omni",
 			"hrsh7th/cmp-emoji",
 			"dcampos/cmp-snippy",
 			"dcampos/nvim-snippy",
 			"hrsh7th/nvim-cmp",
 			"hrsh7th/cmp-cmdline",
-			"hrsh7th/cmp-buffer",
 		},
 		config = function()
 			-- Setup nvim-cmp.
@@ -133,10 +194,10 @@ return require("packer").startup(function(use)
 					{ name = "omni" },
 					{ name = "snippy" },
 					{ name = "emoji", insert = true }, -- emoji completion
-					{ name = "codeium" },
+					{ name = "nvim_lsp_signature_help" },
 					{ name = "nvim_lua" },
 					{ name = "nvim_lsp" },
-					{ name = "buffer" },
+					{ name = "codeium" },
 				}),
 				completion = {
 					keyword_length = 3,
@@ -153,7 +214,6 @@ return require("packer").startup(function(use)
 							snippy = "[Snippy]",
 							nvim_lua = "[Lua]",
 							path = "[Path]",
-							buffer = "[Buffer]",
 							emoji = "[Emoji]",
 							omni = "[Omni]",
 							codeium = "[Codeium]",
@@ -189,6 +249,11 @@ return require("packer").startup(function(use)
 						filter_opts = { reverse = true },
 					},
 				},
+				messages = {
+					-- NOTE: If you enable messages, then the cmdline is enabled automatically.
+					-- This is a current Neovim limitation.
+					enabled = true, -- enables the Noice messages UI
+				},
 				lsp = {
 					-- override markdown rendering so that **cmp** and other plugins use **Treesitter**
 					override = {
@@ -208,23 +273,9 @@ return require("packer").startup(function(use)
 				hover = {
 					silent = false,
 				},
-				messages = {
-					-- NOTE: If you enable messages, then the cmdline is enabled automatically.
-					-- This is a current Neovim limitation.
-					view = "mini", -- default view for messages
-					view_error = "mini", -- view for errors
-					view_warn = "mini", -- view for warnings
-					view_history = "messages", -- view for :messages
-					view_search = "virtualtext", -- view for search count messages. Set to `false` to disable
-				},
-				views = {
-					mini = {
-						timeout = 10000,
-					},
-				},
 				-- notify is too big and opaque and interferes with reading the actual code
 				notify = {
-					enabled = false,
+					enabled = true,
 				},
 			})
 		end,
@@ -354,6 +405,7 @@ set nofoldenable
 				vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 				vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
 				vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist)
+				vim.keymap.set("n", "<space>qf", vim.diagnostic.setqflist)
 
 				-- Use LspAttach autocommand to only map the following keys
 				-- after the language server attaches to the current buffer
@@ -399,7 +451,7 @@ set nofoldenable
 	-- Git stuff that I probably don't use
 	use("tpope/vim-fugitive")
 	-- Git stuff that I do use
-	use("airblade/vim-gitgutter")
+	--use("airblade/vim-gitgutter")
 	use({
 		"ellisonleao/glow.nvim",
 		config = function()
