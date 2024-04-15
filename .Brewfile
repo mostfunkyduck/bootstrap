@@ -6,6 +6,7 @@ brew "argocd"
 
 # NeoVim
 brew "nvim"
+brew "ripgrep"
 
 # Utilities
 brew "age"
@@ -44,6 +45,7 @@ brew "tmux-mem-cpu-load"
 brew "ifstat"
 
 # LSPs
+brew "jsonls"
 brew "lua-language-server"
 brew "bash-language-server"
 brew "terraform-ls"

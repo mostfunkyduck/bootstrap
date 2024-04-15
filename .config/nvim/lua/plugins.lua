@@ -113,8 +113,7 @@ return require("packer").startup(function(use)
 				unpack = unpack or table.unpack
 				local line, col = unpack(vim.api.nvim_win_get_cursor(0))
 				return col ~= 0
-				    and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") ==
-				    nil
+					and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 			end
 			-- https://github.com/hrsh7th/cmp-cmdline/issues/33#issuecomment-1793891721
 			local function handle_tab_complete(direction)
@@ -125,8 +124,7 @@ return require("packer").startup(function(use)
 						local expanded = vim.fn.expandcmd(text)
 						if expanded ~= text then
 							vim.api.nvim_feedkeys(
-								vim.api.nvim_replace_termcodes("<C-U>", true, true, true) ..
-								expanded,
+								vim.api.nvim_replace_termcodes("<C-U>", true, true, true) .. expanded,
 								"n",
 								false
 							)
@@ -196,7 +194,7 @@ return require("packer").startup(function(use)
 					{ name = "path" }, -- for path completion
 					{ name = "omni" },
 					{ name = "snippy" },
-					{ name = "emoji",                  insert = true }, -- emoji completion
+					{ name = "emoji", insert = true }, -- emoji completion
 					{ name = "nvim_lsp_signature_help" },
 					{ name = "nvim_lua" },
 					{ name = "nvim_lsp" },
@@ -226,11 +224,23 @@ return require("packer").startup(function(use)
 			})
 		end,
 	})
+	use({
+		"rcarriga/nvim-notify",
+		config = function()
+			require("notify").setup({
+				render = "compact",
+				stages = "static",
+				timeout = 10000,
+				top_down = false,
+			})
+		end,
+	})
 	-- complete UX overhaul, basically
 	use({
 		"folke/noice.nvim",
 		requires = {
 			"MunifTanjim/nui.nvim",
+			"rcarriga/nvim-notify",
 		},
 		config = function()
 			require("noice").setup({
@@ -255,7 +265,8 @@ return require("packer").startup(function(use)
 				messages = {
 					-- NOTE: If you enable messages, then the cmdline is enabled automatically.
 					-- This is a current Neovim limitation.
-					enabled = true, -- enables the Noice messages UI
+					enabled = false, -- enables the Noice messages UI
+					view = nil,
 				},
 				lsp = {
 					-- override markdown rendering so that **cmp** and other plugins use **Treesitter**
@@ -276,7 +287,6 @@ return require("packer").startup(function(use)
 				hover = {
 					silent = false,
 				},
-				-- notify is too big and opaque and interferes with reading the actual code
 				notify = {
 					enabled = true,
 				},
@@ -299,11 +309,10 @@ return require("packer").startup(function(use)
 		"jackMort/ChatGPT.nvim",
 		config = function()
 			require("chatgpt").setup({
-				api_key_cmd = "bash " ..
-				vim.fn.expand("$HOME") .. "/.config/nvim/scripts/get_openai_key.sh",
+				api_key_cmd = "bash " .. vim.fn.expand("$HOME") .. "/.config/nvim/scripts/get_openai_key.sh",
 				predefined_chat_gpt_prompts = "file://"
-				    .. vim.fn.expand("$HOME")
-				    .. "/.config/nvim/chatgpt-prompts.csv",
+					.. vim.fn.expand("$HOME")
+					.. "/.config/nvim/chatgpt-prompts.csv",
 			})
 		end,
 		requires = {
@@ -330,6 +339,8 @@ return require("packer").startup(function(use)
 					"bash",
 					"yaml",
 					"lua",
+					"markdown_inline",
+					"regex",
 				},
 				-- they say this is experimental
 				indent = {
@@ -362,6 +373,26 @@ set nofoldenable
 		"nvim-telescope/telescope.nvim",
 		branch = "0.1.x",
 		requires = { { "nvim-lua/plenary.nvim" } },
+		config = function()
+			local telescope = require("telescope")
+			telescope.setup({
+				defaults = {
+					file_ignore_patterns = { ".git/" },
+				},
+			})
+			local builtin = require("telescope.builtin")
+			vim.keymap.set("n", "<leader>fn", telescope.extensions.notify.notify)
+			vim.keymap.set("n", "<leader>ff", function()
+				require("telescope.builtin").find_files({
+					follow = true,
+					hidden = true,
+				})
+			end)
+			vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
+			vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
+			vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
+			vim.keymap.set("n", "<leader>fz", builtin.current_buffer_fuzzy_find, {})
+		end,
 	})
 	-- makes it easier to navigate git projects
 	use({
@@ -392,6 +423,7 @@ set nofoldenable
 				local lspconfig = require("lspconfig")
 				lspconfig.tsserver.setup({})
 				lspconfig.gopls.setup({})
+				lspconfig.jsonls.setup({})
 				lspconfig.csharp_ls.setup({})
 				lspconfig.terraformls.setup({
 					filetypes = { "terraform", "tf", "terraform-vars" },
@@ -438,8 +470,7 @@ set nofoldenable
 						vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
 						vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
 						vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, opts)
-						vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder,
-							opts)
+						vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, opts)
 						vim.keymap.set("n", "<space>wl", function()
 							print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 						end, opts)
@@ -459,14 +490,9 @@ set nofoldenable
 	use("junegunn/fzf")
 	-- MOAR fzf
 	use("junegunn/fzf.vim")
-	-- I haven't actually used this, it looks hella cool
 	use("nvim-telescope/telescope-file-browser.nvim")
 	-- Not sure why this has to be here, it's a library of neovim functions FIXME
 	use("nvim-lua/plenary.nvim")
-	-- Git stuff that I probably don't use
-	use("tpope/vim-fugitive")
-	-- Git stuff that I do use
-	--use("airblade/vim-gitgutter")
 	use({
 		"ellisonleao/glow.nvim",
 		config = function()
@@ -475,7 +501,6 @@ set nofoldenable
 	})
 	-- Awesome linter plugin, fills in gaps in the LSP
 	use("dense-analysis/ale")
-	-- use 'ms-jpq/coq_nvim'
 	-- Codeium
 	use({
 		"Exafunction/codeium.nvim",

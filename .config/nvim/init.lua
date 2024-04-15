@@ -62,8 +62,8 @@ fun! WhatTheFunc(shouldMove)
   echo linenum ':' getline( linenum )
 endfun
 
-map <Leader>f :call WhatTheFunc(0) <CR>
-map <Leader>F :call WhatTheFunc(1) <CR>
+map <Leader>w :call WhatTheFunc(0) <CR>
+map <Leader>W :call WhatTheFunc(1) <CR>
 nmap <Leader>dg1 :diffget 1 <CR>
 nmap <Leader>dp1 :diffput 1 <CR>
 nmap <Leader>dg2 :diffget 2 <CR>
