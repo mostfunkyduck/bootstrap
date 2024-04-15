@@ -22,6 +22,7 @@ au FileType go setl noet
 au FileType js setl noet
 au FileType ts setl noet
 au FileType sh setl et
+au FileType tf setf terraform
 au FileType jinja setl et
 au FileType conf setl et
 au BufNewFile,BufRead Jenkinsfile* setf groovy
@@ -115,12 +116,14 @@ let g:ale_floating_preview = 1
 let g:ale_linters = {
 \  'python': ['pylint', 'mypy', 'python'],
 \  'go': ['gofmt', 'govet', 'golangci-lint'],
+\  'javascript': ['standard', 'jshint'],
 \  'yaml': [],
 \  'terraform': [],
 \  'markdown': []
 \}
 let g:ale_fixers = {
-\  'terraform': ['terraform'],
+"\  'terraform': ['terraform'],
+\  'javascript': ['standard', 'prettier-standard'],
 \  'rust': ['rustfmt'],
 \  'python': ['black'],
 \  'lua': ['stylua'],
@@ -141,6 +144,9 @@ nmap <Leader>lf :lfirst<CR>
 
 nmap <Leader>an :ALENext -wrap -error<CR>
 nmap <Leader>ap :ALEPrevious -wrap -error<CR>
+nmap <Leader>fml1 :CellularAutomaton make_it_rain<CR>
+nmap <Leader>fml2 :CellularAutomaton scramble<CR>
+nmap <Leader>fml3 :CellularAutomaton game_of_life<CR>
 
 " https://vi.stackexchange.com/questions/177/what-is-the-purpose-of-swap-files
 set directory^=$HOME/.vim/swpfiles//

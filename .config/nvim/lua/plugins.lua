@@ -63,6 +63,7 @@ return require("packer").startup(function(use)
 			})
 		end,
 	})
+	use("eandrju/cellular-automaton.nvim")
 	use("habamax/vim-godot")
 	use("wbthomason/packer.nvim")
 	-- mapping hints
@@ -112,7 +113,8 @@ return require("packer").startup(function(use)
 				unpack = unpack or table.unpack
 				local line, col = unpack(vim.api.nvim_win_get_cursor(0))
 				return col ~= 0
-					and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+				    and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") ==
+				    nil
 			end
 			-- https://github.com/hrsh7th/cmp-cmdline/issues/33#issuecomment-1793891721
 			local function handle_tab_complete(direction)
@@ -123,7 +125,8 @@ return require("packer").startup(function(use)
 						local expanded = vim.fn.expandcmd(text)
 						if expanded ~= text then
 							vim.api.nvim_feedkeys(
-								vim.api.nvim_replace_termcodes("<C-U>", true, true, true) .. expanded,
+								vim.api.nvim_replace_termcodes("<C-U>", true, true, true) ..
+								expanded,
 								"n",
 								false
 							)
@@ -193,7 +196,7 @@ return require("packer").startup(function(use)
 					{ name = "path" }, -- for path completion
 					{ name = "omni" },
 					{ name = "snippy" },
-					{ name = "emoji", insert = true }, -- emoji completion
+					{ name = "emoji",                  insert = true }, -- emoji completion
 					{ name = "nvim_lsp_signature_help" },
 					{ name = "nvim_lua" },
 					{ name = "nvim_lsp" },
@@ -296,10 +299,11 @@ return require("packer").startup(function(use)
 		"jackMort/ChatGPT.nvim",
 		config = function()
 			require("chatgpt").setup({
-				api_key_cmd = "bash " .. vim.fn.expand("$HOME") .. "/.config/nvim/scripts/get_openai_key.sh",
+				api_key_cmd = "bash " ..
+				vim.fn.expand("$HOME") .. "/.config/nvim/scripts/get_openai_key.sh",
 				predefined_chat_gpt_prompts = "file://"
-					.. vim.fn.expand("$HOME")
-					.. "/.config/nvim/chatgpt-prompts.csv",
+				    .. vim.fn.expand("$HOME")
+				    .. "/.config/nvim/chatgpt-prompts.csv",
 			})
 		end,
 		requires = {
@@ -386,13 +390,23 @@ set nofoldenable
 			"neovim/nvim-lspconfig",
 			config = function()
 				local lspconfig = require("lspconfig")
+				lspconfig.tsserver.setup({})
 				lspconfig.gopls.setup({})
 				lspconfig.csharp_ls.setup({})
-				lspconfig.terraformls.setup({})
+				lspconfig.terraformls.setup({
+					filetypes = { "terraform", "tf", "terraform-vars" },
+				})
 				lspconfig.pyright.setup({})
 				lspconfig.bashls.setup({})
 				lspconfig.gdscript.setup({})
 				lspconfig.lua_ls.setup({})
+				lspconfig.groovyls.setup({
+					cmd = {
+						"/opt/homebrew/opt/openjdk@17/bin/java",
+						"-jar",
+						"/Users/Jack.Kuperman/code/groovy-language-server/build/libs/groovy-language-server-all.jar",
+					},
+				})
 				lspconfig.rust_analyzer.setup({
 					settings = {
 						["rust-analyzer"] = {},
@@ -424,7 +438,8 @@ set nofoldenable
 						vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
 						vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
 						vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, opts)
-						vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, opts)
+						vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder,
+							opts)
 						vim.keymap.set("n", "<space>wl", function()
 							print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 						end, opts)

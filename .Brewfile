@@ -6,7 +6,6 @@ brew "argocd"
 
 # NeoVim
 brew "nvim"
-brew "terraform-ls"
 
 # Utilities
 brew "age"
@@ -28,7 +27,6 @@ brew "rsc_2fa"
 brew "bat"
 brew "btop"
 brew "shellcheck"
-brew "bash-language-server"
 
 # Python things
 brew "python3"
@@ -45,3 +43,7 @@ brew "tmux-mem-cpu-load"
 # Useful, also used in tmux powerline extension
 brew "ifstat"
 
+# LSPs
+brew "lua-language-server"
+brew "bash-language-server"
+brew "terraform-ls"
