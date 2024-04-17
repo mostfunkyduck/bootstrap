@@ -125,14 +125,15 @@ local gradients = {
 config.use_fancy_tab_bar = true
 config.hide_tab_bar_if_only_one_tab = true
 config.font = wezterm.font("JetBrains Mono", { weight = "ExtraBold" })
--- config.font = wezterm.font("Nerd Font Mono", { weight = "Regular" })
--- config.font = wezterm.font("Nerd Font Mono", { weight = "Regular" })
+
+-- config.font = wezterm.font("Symbols Nerd Font Mono", { weight = "Regular" })
+-- config.font = wezterm.font("Nerd Font Mono")
 -- config.font = wezterm.font("Noto Color Emoji", { weight = "Regular" })
 
 -- config.font = wezterm.font("Ubuntu Mono", {weight="Bold", stretch="Normal"}) -- /usr/share/fonts/truetype/ubuntu/UbuntuMono-BI.ttf, FontConfig
 -- wezterm.font("Ubuntu", { weight = "Bold", stretch = "Normal", style = "Oblique" }) -- /usr/share/fonts/truetype/ubuntu/Ubuntu-Th.ttf, FontConfig
 -- -> should be ->, not some fancy ligature madness
-config.harfbuzz_features = { "calt=0", "clig=0", "liga=0" }
+config.harfbuzz_features = { "calt=0", "zero" }
 config.background = {
 	{
 		width = "100%",

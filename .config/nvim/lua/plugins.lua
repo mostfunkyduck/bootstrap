@@ -342,10 +342,10 @@ return require("packer").startup(function(use)
 		"folke/tokyonight.nvim",
 		config = function()
 			require("tokyonight").setup({
-				style = "night",
+				style = "storm",
 				transparent = true,
 			})
-			vim.cmd([[colorscheme tokyonight]])
+			vim.cmd([[colorscheme tokyonight-storm]])
 		end,
 	})
 	-- guess
@@ -353,6 +353,14 @@ return require("packer").startup(function(use)
 		"jackMort/ChatGPT.nvim",
 		config = function()
 			require("chatgpt").setup({
+				openai_edit_params = {
+					model = "gpt-4-turbo",
+					frequency_penalty = 0,
+					presence_penalty = 0,
+					temperature = 0,
+					top_p = 1,
+					n = 1,
+				},
 				api_key_cmd = "bash " .. vim.fn.expand("$HOME") .. "/.config/nvim/scripts/get_openai_key.sh",
 				predefined_chat_gpt_prompts = "file://"
 					.. vim.fn.expand("$HOME")
@@ -362,6 +370,7 @@ return require("packer").startup(function(use)
 		requires = {
 			"MunifTanjim/nui.nvim",
 			"nvim-lua/plenary.nvim",
+			"folke/trouble.nvim",
 			"nvim-telescope/telescope.nvim",
 		},
 	})
