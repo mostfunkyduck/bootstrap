@@ -251,4 +251,10 @@ export HOMEBREW_BUNDLE_FILE="$HOME/.Brewfile"
 command -v gh &>/dev/null && source <(gh completion -s zsh)
 autoload -U compinit
 compinit -i
+
+if command -v "$HOME"/.local/bin/gpt >/dev/null && [ -f "$HOME/.openai/api-key" ] ; then
+  alias g='OPENAI_API_KEY=$(cat $HOME/.openai/api-key) $HOME/.local/bin/gpt'
+  alias gbp='g bash --prompt'
+fi
+
 # vim: ft=sh

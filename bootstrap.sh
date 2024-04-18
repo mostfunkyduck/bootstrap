@@ -44,6 +44,10 @@ configure_packages() {
   else
     bold "could not find a package manager!"
   fi
+
+  if command -v pipx >/dev/null; then
+    pipx install gpt-command-line
+  fi
 }
 
 configure_brew() {
