@@ -151,7 +151,7 @@ args=($(getopt -o l --long packages --long light --long help --long vim --long s
 # shellcheck disable=SC2181
 if [[ $? != 0 ]]; then
   echo "incorrect or illegal arguments provided"
-  exit 1
+  usage
 fi
 
 # determine if we need to short circuit which components to run due to --light being passed in
@@ -161,12 +161,11 @@ for arg in "${args[@]}"; do
   case "$arg" in
     --light)
       LIGHTMODE=1
-      break;
       ;;
   esac
 done
 
-if [ $LIGHTMODE == 1 ]; then
+if [ $LIGHTMODE = 1 ]; then
   bold "running in light mode"
   run_light
 elif [ $# == 0 ]; then

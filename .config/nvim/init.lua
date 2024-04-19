@@ -139,8 +139,6 @@ let g:ale_fix_on_save = 1
 
 nmap <Leader>h :ALEHover<CR>
 nmap <Leader>af :ALEFix<CR>
-nmap <Leader>tfb :Telescope file_browser<CR>
-nmap <Leader>tp :Telescope projects<CR>
 nmap <Leader>fb :Buffers<CR>
 
 nmap <Leader>ln :lnext<CR>

@@ -47,16 +47,29 @@ return require("packer").startup(function(use)
 	})
 	use({
 		"lewis6991/gitsigns.nvim",
+		requires = { "folke/which-key.nvim" },
 		config = function()
 			require("gitsigns").setup({
 				auto_attach = true,
 				on_attach = function(bufnr)
 					local gitsigns = require("gitsigns")
+					local wk = require("which-key")
 
-					local function map(mode, l, r, opts)
+					wk.register({ ["<leader>h"] = { name = "+gitsigns" } })
+					local function map(mode, l, r, opts, wk_desc)
 						opts = opts or {}
 						opts.buffer = bufnr
 						vim.keymap.set(mode, l, r, opts)
+						if wk_desc or "" ~= "" then
+							wk.register({
+								[l] = {
+									[r] = wk_desc,
+								},
+								{
+									mode = mode,
+								},
+							})
+						end
 					end
 
 					-- Navigation
@@ -66,7 +79,7 @@ return require("packer").startup(function(use)
 						else
 							gitsigns.nav_hunk("next")
 						end
-					end)
+					end, {}, "next hunk")
 
 					map("n", "[c", function()
 						if vim.wo.diff then
@@ -74,35 +87,36 @@ return require("packer").startup(function(use)
 						else
 							gitsigns.nav_hunk("prev")
 						end
-					end)
+					end, {}, "previous hunk")
 
 					-- Actions
-					map("n", "<leader>hs", gitsigns.stage_hunk)
-					map("n", "<leader>hr", gitsigns.reset_hunk)
+
+					map("n", "<leader>hs", gitsigns.stage_hunk, {}, "stage hunk")
+					map("n", "<leader>hr", gitsigns.reset_hunk, {}, "reset hunk")
 					map("v", "<leader>hs", function()
 						gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-					end)
+					end, {}, "stage hunk")
 					map("v", "<leader>hr", function()
 						gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-					end)
-					map("n", "<leader>hS", gitsigns.stage_buffer)
-					map("n", "<leader>hu", gitsigns.undo_stage_hunk)
-					map("n", "<leader>hR", gitsigns.reset_buffer)
-					map("n", "<leader>hp", gitsigns.preview_hunk)
+					end, {}, "reset hunk")
+					map("n", "<leader>hS", gitsigns.stage_buffer, {}, "stage buffer")
+					map("n", "<leader>hu", gitsigns.undo_stage_hunk, {}, "undo stage hunk")
+					map("n", "<leader>hR", gitsigns.reset_buffer, {}, "reset buffer")
+					map("n", "<leader>hp", gitsigns.preview_hunk, {}, "preview hunk")
 					map("n", "<leader>hb", function()
 						gitsigns.blame_line({ full = true })
-					end)
-					map("n", "<leader>tb", gitsigns.toggle_current_line_blame)
-					map("n", "<leader>hd", gitsigns.diffthis)
-					map("n", "<leader>hl", gitsigns.toggle_linehl)
-					map("n", "<leader>hn", gitsigns.toggle_numhl)
+					end, {}, "blame line")
+					map("n", "<leader>ht", gitsigns.toggle_current_line_blame, {}, "toggle current line blame")
+					map("n", "<leader>hd", gitsigns.diffthis, {}, "diff this")
+					map("n", "<leader>hl", gitsigns.toggle_linehl, {}, "toggle linehl")
+					map("n", "<leader>hn", gitsigns.toggle_numhl, {}, "toggle numhl")
 					map("n", "<leader>hD", function()
 						gitsigns.diffthis("~")
-					end)
-					map("n", "<leader>td", gitsigns.toggle_deleted)
+					end, {}, "diff against last commit")
+					map("n", "<leader>htd", gitsigns.toggle_deleted, {}, "toggle deleted")
 
 					-- Text object
-					map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+					map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", {}, "select hunk")
 				end,
 			})
 		end,
@@ -236,12 +250,12 @@ return require("packer").startup(function(use)
 				}),
 				sources = cmp.config.sources({
 					{ name = "path" }, -- for path completion
-					{ name = "omni" },
 					{ name = "snippy" },
 					{ name = "emoji", insert = true }, -- emoji completion
 					{ name = "nvim_lsp_signature_help" },
 					{ name = "nvim_lua" },
 					{ name = "nvim_lsp" },
+					{ name = "omni" },
 					{ name = "codeium" },
 				}),
 				completion = {
@@ -255,9 +269,10 @@ return require("packer").startup(function(use)
 					format = lspkind.cmp_format({
 						mode = "symbol_text",
 						menu = {
+							nvim_lsp_signature_help = "[LSP Signature Help]",
 							nvim_lsp = "[LSP]",
 							snippy = "[Snippy]",
-							nvim_lua = "[Lua]",
+							nvim_lua = "[Nvim Lua]",
 							path = "[Path]",
 							emoji = "[Emoji]",
 							omni = "[Omni]",
@@ -361,6 +376,11 @@ return require("packer").startup(function(use)
 					top_p = 1,
 					n = 1,
 				},
+				--[[
+        -- How I enabled Gemini Pro (Google AI Studio)
+				api_key_cmd = "cat " .. vim.fn.expand("$HOME") .. "/.gemini/api-key",
+				api_host_cmd = "echo -n http://127.0.0.1:4000",
+        ]]
 				api_key_cmd = "bash " .. vim.fn.expand("$HOME") .. "/.config/nvim/scripts/get_openai_key.sh",
 				predefined_chat_gpt_prompts = "file://"
 					.. vim.fn.expand("$HOME")
@@ -425,26 +445,43 @@ set nofoldenable
 	use({
 		"nvim-telescope/telescope.nvim",
 		branch = "0.1.x",
-		requires = { { "nvim-lua/plenary.nvim" } },
+		requires = { { "nvim-lua/plenary.nvim", "folke/which-key.nvim" } },
 		config = function()
 			local telescope = require("telescope")
+			local wk = require("which-key")
 			telescope.setup({
 				defaults = {
 					file_ignore_patterns = { ".git/" },
 				},
 			})
 			local builtin = require("telescope.builtin")
-			vim.keymap.set("n", "<leader>fn", telescope.extensions.notify.notify)
-			vim.keymap.set("n", "<leader>ff", function()
-				require("telescope.builtin").find_files({
-					follow = true,
-					hidden = true,
-				})
-			end)
-			vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
-			vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
-			vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
-			vim.keymap.set("n", "<leader>fz", builtin.current_buffer_fuzzy_find, {})
+			wk.register({
+				["<leader>t"] = {
+					name = "telescope",
+					n = { telescope.extensions.notify.notify, "telescope notify extension" },
+					f = {
+						name = "file browser and find",
+						f = {
+							function()
+								require("telescope.builtin").find_files({
+									follow = true,
+									hidden = true,
+								})
+							end,
+							"telescope ff, follow and hidden",
+						},
+						z = { builtin.current_buffer_fuzzy_find, "telescope current buffer fuzzy find" },
+					},
+					g = { builtin.live_grep, "telescope live grep" },
+					b = { builtin.buffers, "telescope buffers" },
+					h = { builtin.help_tags, "telescope help tags" },
+					p = { "<CMD>Telescope projects<CR>", "telescope projects" },
+				},
+				["<leader>tfb"] = {
+					telescope.extensions.file_browser.file_browser,
+					"telescope file browser",
+				},
+			})
 		end,
 	})
 	-- makes it easier to navigate git projects
