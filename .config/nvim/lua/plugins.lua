@@ -369,7 +369,7 @@ return require("packer").startup(function(use)
 		config = function()
 			require("chatgpt").setup({
 				openai_edit_params = {
-					model = "gpt-4-turbo",
+					model = "gpt-4o",
 					frequency_penalty = 0,
 					presence_penalty = 0,
 					temperature = 0,

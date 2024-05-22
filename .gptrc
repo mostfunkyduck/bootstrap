@@ -4,15 +4,28 @@ markdown: False
 log_file: /tmp/.gpt.log
 log_level: INFO
 assistants:
+  textgen:
+    mode: gpt-4o
+    temperature: 0.25
+    messages:
+      - role: system
+        content: You take bullet points and generate a 3-5 sentence paragraph or two of text, no more, no less.
+  summarizer:
+    model: gpt-4o
+    temperature: 0.25
+    messages:
+      - role: system
+        content: |
+          You provide summaries of the text you are given. Unless otherwise specified, provide one short paragraph.
   coder:
-    model: gpt-4-turbo
+    model: gpt-4o
     temperature: 0.0
     messages:
       - role: system
         content: |
           You provide code samples, nothing else. If the prompt doesn't relate to code, print "I only provide code samples". If it does relate to code, print the relevant code sample and nothing else, no explanations.
   reviewer:
-    model: gpt-4-turbo
+    model: gpt-4o
     temperature: 0.0
     messages:
       - role: system
