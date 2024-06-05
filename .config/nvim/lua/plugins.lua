@@ -256,7 +256,6 @@ return require("packer").startup(function(use)
 					{ name = "nvim_lua" },
 					{ name = "nvim_lsp" },
 					{ name = "omni" },
-					{ name = "codeium" },
 				}),
 				completion = {
 					keyword_length = 3,
@@ -276,7 +275,6 @@ return require("packer").startup(function(use)
 							path = "[Path]",
 							emoji = "[Emoji]",
 							omni = "[Omni]",
-							codeium = "[Codeium]",
 						},
 					}),
 				},
@@ -591,18 +589,4 @@ set nofoldenable
 	})
 	-- Awesome linter plugin, fills in gaps in the LSP
 	use("dense-analysis/ale")
-	-- Codeium
-	use({
-		"Exafunction/codeium.nvim",
-		-- "/home/jack/code/github/mostfunkyduck/codeium.nvim",
-		requires = {
-			"nvim-lua/plenary.nvim",
-			"onsails/lspkind-nvim",
-			"hrsh7th/nvim-cmp",
-		},
-		config = function()
-			require("codeium").setup({})
-		end,
-	})
-	-- use("/home/jack/code/github/mostfunkyduck/codeium.nvim")
 end)
