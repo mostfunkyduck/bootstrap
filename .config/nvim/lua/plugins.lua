@@ -150,21 +150,17 @@ return require("packer").startup(function(use)
 			"hrsh7th/cmp-nvim-lua",
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-nvim-lsp-signature-help",
-			"onsails/lspkind-nvim",
+			"hrsh7th/cmp-nvim-lsp-document-symbol",
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-omni",
 			"hrsh7th/cmp-emoji",
-			"dcampos/cmp-snippy",
-			"dcampos/nvim-snippy",
+			"hrsh7th/cmp-buffer",
 			"hrsh7th/nvim-cmp",
 			"hrsh7th/cmp-cmdline",
 		},
 		config = function()
 			-- Setup nvim-cmp.
 			local cmp = require("cmp")
-			local lspkind = require("lspkind")
-			local snippy = require("snippy")
-			lspkind.init()
 
 			-- https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings
 			local has_words_before = function()
@@ -215,28 +211,21 @@ return require("packer").startup(function(use)
 			})
 
 			cmp.setup({
-				snippet = {
-					expand = function(args)
-						snippy.expand_snippet(args.body)
-					end,
-				},
 				mapping = cmp.mapping.preset.insert({
+
 					["<Tab>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then
 							cmp.select_next_item()
-						elseif snippy.can_expand_or_advance() then
-							snippy.expand_or_advance()
 						elseif has_words_before() then
 							cmp.complete()
 						else
 							fallback()
 						end
 					end, { "i", "s" }),
+
 					["<S-Tab>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then
 							cmp.select_prev_item()
-						elseif snippy.can_jump(-1) then
-							snippy.previous()
 						else
 							fallback()
 						end
@@ -250,33 +239,36 @@ return require("packer").startup(function(use)
 				}),
 				sources = cmp.config.sources({
 					{ name = "path" }, -- for path completion
-					{ name = "snippy" },
-					{ name = "emoji", insert = true }, -- emoji completion
-					{ name = "nvim_lsp_signature_help" },
+				}, {
 					{ name = "nvim_lua" },
+					{ name = "nvim_lsp_signature_help" },
 					{ name = "nvim_lsp" },
+				}, { -- this is the stuff that's less interesting
+					{ name = "emoji", insert = true }, -- emoji completion
 					{ name = "omni" },
+					{ name = "nvim_lsp_document_symbol" },
+					{
+						name = "buffer",
+						option = {
+							keyword_pattern = [[\k\+]],
+						},
+					},
 				}),
 				completion = {
 					keyword_length = 3,
 					completeopt = "menu,menuone,noselect,noinsert",
 				},
 				view = {
-					entries = "custom",
+					entries = {
+						name = "custom",
+					},
 				},
-				formatting = {
-					format = lspkind.cmp_format({
-						mode = "symbol_text",
-						menu = {
-							nvim_lsp_signature_help = "[LSP Signature Help]",
-							nvim_lsp = "[LSP]",
-							snippy = "[Snippy]",
-							nvim_lua = "[Nvim Lua]",
-							path = "[Path]",
-							emoji = "[Emoji]",
-							omni = "[Omni]",
-						},
-					}),
+				window = {
+					completion = cmp.config.window.bordered(),
+					documentation = cmp.config.window.bordered(),
+				},
+				experimental = {
+					ghost_text = false, -- turn this off, it makes things annoying when i don't want what's in the auto-completion
 				},
 			})
 		end,
@@ -509,18 +501,37 @@ set nofoldenable
 			"neovim/nvim-lspconfig",
 			config = function()
 				local lspconfig = require("lspconfig")
-				lspconfig.tsserver.setup({})
-				lspconfig.gopls.setup({})
-				lspconfig.jsonls.setup({})
-				lspconfig.csharp_ls.setup({})
+				local capabilities = require("cmp_nvim_lsp").default_capabilities()
+				lspconfig.tsserver.setup({
+					capabilities = capabilities,
+				})
+				lspconfig.gopls.setup({
+					capabilities = capabilities,
+				})
+				lspconfig.jsonls.setup({
+					capabilities = capabilities,
+				})
+				lspconfig.csharp_ls.setup({
+					capabilities = capabilities,
+				})
 				lspconfig.terraformls.setup({
+					capabilities = capabilities,
 					filetypes = { "terraform", "tf", "terraform-vars" },
 				})
-				lspconfig.pyright.setup({})
-				lspconfig.bashls.setup({})
-				lspconfig.gdscript.setup({})
-				lspconfig.lua_ls.setup({})
+				lspconfig.pyright.setup({
+					capabilities = capabilities,
+				})
+				lspconfig.bashls.setup({
+					capabilities = capabilities,
+				})
+				lspconfig.gdscript.setup({
+					capabilities = capabilities,
+				})
+				lspconfig.lua_ls.setup({
+					capabilities = capabilities,
+				})
 				lspconfig.groovyls.setup({
+					capabilities = capabilities,
 					cmd = {
 						"/opt/homebrew/opt/openjdk@17/bin/java",
 						"-jar",
@@ -528,6 +539,7 @@ set nofoldenable
 					},
 				})
 				lspconfig.rust_analyzer.setup({
+					capabilities = capabilities,
 					settings = {
 						["rust-analyzer"] = {},
 					},
