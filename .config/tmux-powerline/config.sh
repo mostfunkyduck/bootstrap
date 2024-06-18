@@ -31,7 +31,7 @@
 	# The maximum length of the left status bar.
 	export TMUX_POWERLINE_STATUS_LEFT_LENGTH="260"
 	# The maximum length of the right status bar.
-	export TMUX_POWERLINE_STATUS_RIGHT_LENGTH="1"
+	export TMUX_POWERLINE_STATUS_RIGHT_LENGTH="120"
 
 	# Uncomment these if you want to enable tmux bindings for muting (hiding) one of the status bars.
 	# E.g. this example binding would mute the left status bar when pressing <prefix> followed by Ctrl-[
