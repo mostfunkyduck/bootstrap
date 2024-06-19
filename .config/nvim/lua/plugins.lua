@@ -157,6 +157,7 @@ return require("packer").startup(function(use)
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/nvim-cmp",
 			"hrsh7th/cmp-cmdline",
+			"f3fora/cmp-spell",
 		},
 		config = function()
 			-- Setup nvim-cmp.
@@ -270,6 +271,15 @@ return require("packer").startup(function(use)
 				experimental = {
 					ghost_text = false, -- turn this off, it makes things annoying when i don't want what's in the auto-completion
 				},
+			})
+			vim.opt.spell = true
+			vim.opt.spelllang = { "en_us" }
+			cmp.setup.filetype("markdown", {
+				sources = cmp.config.sources({
+					{
+						name = "spell",
+					},
+				}),
 			})
 		end,
 	})
@@ -544,6 +554,7 @@ set nofoldenable
 						["rust-analyzer"] = {},
 					},
 				})
+				lspconfig.gdscript.setup({})
 
 				-- Global mappings.
 				-- See `:help vim.diagnostic.*` for documentation on any of the below functions

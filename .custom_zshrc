@@ -260,4 +260,13 @@ fi
 if command -v xclip &>/dev/null; then
   alias xc='xclip -sel clipboard'
 fi
+
+if [ -d "$HOME/adb-fastboot/platform-tools" ] ; then
+ export PATH="$HOME/adb-fastboot/platform-tools:$PATH"
+fi
+
+for cmd in tailscale kubectl helm; do
+  #shellcheck disable=SC1090
+  command -v "$cmd" >/dev/null 2>&1 && source <("$cmd" completion zsh)
+done
 # vim: ft=sh
