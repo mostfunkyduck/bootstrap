@@ -61,6 +61,7 @@ configure_brew() {
 }
 
 configure_shell() {
+  deploy_symlink .config/i3/config
   deploy_symlink .gptrc
   if [ ! -d "$HOME/.oh-my-zsh" ]; then
     bold "installing oh-my-zsh"
