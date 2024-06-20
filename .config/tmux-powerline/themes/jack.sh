@@ -89,10 +89,7 @@ if [ -z $TMUX_POWERLINE_LEFT_STATUS_SEGMENTS ]; then
 		"tailscale 26 255" \
     "weather_jack 69 96" \
 		"disk_usage 234 167" \
-		"tmux_mem_cpu_load_jack 234 136" \
-		"date_day 235 136"
-		"date 235 136 ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN}" \
-		"time 235 136 #[align=right] ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN}" \
+		"tmux_mem_cpu_load_jack 234 136"
     #"get-temps 0 42 . 0 0 separator_disable" \
     
 		#"vcs_branch 29 88" \
@@ -107,7 +104,9 @@ if [ -z $TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS ]; then
 	TMUX_POWERLINE_RIGHT_STATUS_SEGMENTS=(
 		#"date_day 235 136 '#[align=right]'"\  
 		#"date 235 136 ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN}" \
-		"time 235 136 #[align=right] ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN}" \
+		"date_day 235 136 #[align=right]"\
+		"date 235 136 #[align=right] ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN}" \
+		"time 235 136  ${TMUX_POWERLINE_SEPARATOR_RIGHT_THIN}"
 		#"earthquake 3 0" \
 		#"pwd 89 211" \
 		#"macos_notification_count 29 255" \

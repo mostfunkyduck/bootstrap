@@ -37,7 +37,7 @@ deploy_symlink() {
 configure_packages() {
   bold "installing packages, sudo required"
   if command -v apt-get >/dev/null; then
-    sudo apt-get -y install build-essential weather-util zsh-syntax-highlighting i3 pipx
+    sudo apt-get -y install build-essential weather-util zsh-syntax-highlighting i3 pipx rofi
   elif command -v yum >/dev/null; then
     sudo yum -y groupinstall "Development Tools"
     sudo yum -y install weather-util pipx i3
