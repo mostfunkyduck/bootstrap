@@ -48,3 +48,7 @@ brew "ifstat"
 brew "lua-language-server"
 brew "bash-language-server"
 brew "terraform-ls"
+brew "gopls"
+
+# Languages
+brew "go"
