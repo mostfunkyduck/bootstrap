@@ -23,7 +23,7 @@ set $smod4 bindsym Mod4+Shift
 set $cmod4 bindsym Mod4+Control
 set $scmod4 bindsym Mod4+Shift+Control
 
-set $mod Mod4
+set $mod Mod3
 
 bindsym $mod+Control+L exec lock.sh
 
