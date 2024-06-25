@@ -21,6 +21,13 @@ order += "battery all"
 # order += "load"
 order += "memory"
 order += "tztime local"
+order += "read_file name"
+
+read_file name {
+  format = "\t\t%content\t"
+  path = "/etc/hostname"
+  align = "right"
+}
 
 volume main {
   format =  "Vol (%devicename): %volume"
@@ -29,7 +36,7 @@ volume main {
 }
 
 wireless _first_ {
-        format_up = "W: (%quality at %essid) %ip"
+        format_up = "W: (%quality at %essid) %bitrate / %frequency"
         format_down = "W: down"
 }
 
@@ -39,7 +46,7 @@ ethernet _first_ {
 }
 
 battery all {
-        format = "%status %percentage %remaining"
+        format = "%status %percentage"
 }
 
 disk "/" {
@@ -47,8 +54,8 @@ disk "/" {
 }
 
 memory {
-        format = "%used | %available"
-        threshold_degraded = "1G"
+        format = "%used/%total (%percentage_used)"
+        threshold_degraded = "2G"
         format_degraded = "MEMORY < %available"
 }
 
