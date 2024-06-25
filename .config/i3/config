@@ -23,8 +23,9 @@ set $smod4 bindsym Mod4+Shift
 set $cmod4 bindsym Mod4+Control
 set $scmod4 bindsym Mod4+Shift+Control
 
-set $mod Mod3
+set $mod Mod4
 
+bindsym $mod+Control+R exec gnome-screenshot -i
 bindsym $mod+Control+L exec lock.sh
 
 # Enable touchpad using a hack that tries to dynamically retrieve the right device ID
@@ -32,6 +33,7 @@ exec xinput set-prop "$(xinput | grep 'Touchpad' | head -1 | awk -F ' ' '{ print
 
 # caffeine!
 exec command -v caffeine-indicator >/dev/null 2>&1 && caffeine-indicator
+exec xinput set-prop "SYNA801A:00 06CB:CEC6 Touchpad" "libinput Tapping Enabled" 1 || true
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
 font pango:monospace 8
