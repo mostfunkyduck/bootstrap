@@ -10,23 +10,24 @@ general {
         colors = true
         interval = 5
         markup = "pango"
+        output_format = "i3bar"
 }
 
 # order += "ipv6"
+order += "read_file name"
+order += "load"
 order += "volume main"
 order += "wireless _first_"
 order += "ethernet _first_"
 order += "battery all"
 # order += "disk /"
-# order += "load"
 order += "memory"
 order += "tztime local"
-order += "read_file name"
 
 read_file name {
-  format = "\t\t%content\t"
+  format = "%content\t\t\t"
   path = "/etc/hostname"
-  align = "right"
+  align = "left"
 }
 
 volume main {
@@ -36,30 +37,32 @@ volume main {
 }
 
 wireless _first_ {
-        format_up = "W: (%quality at %essid) %bitrate / %frequency"
-        format_down = "W: down"
+  format_up = "W: (%quality at %essid) %bitrate / %frequency"
+  format_down = "W: down"
 }
 
 ethernet _first_ {
-        format_up = "E: %ip (%speed)"
-        format_down = "E: down"
+  format_up = "E: %ip (%speed)"
+  format_down = "E: down"
 }
 
 battery all {
-        format = "%status %percentage"
+  format = "%status %percentage"
 }
 
 disk "/" {
-        format = "%free"
+  format = "%free"
 }
 
 memory {
-        format = "%used/%total (%percentage_used)"
-        threshold_degraded = "2G"
-        format_degraded = "MEMORY < %available"
+  format = "%used/%total (%percentage_used)"
+  threshold_degraded = "2G"
+  format_degraded = "MEMORY < %available"
 }
 
 tztime local {
-        format = "%time"
-        format_time = "%Y-%m-%d %H:%M:%S"
+  format = "%time"
+  format_time = "%Y-%m-%d %l:%M:%S"
+  align = "left"
 }
+
