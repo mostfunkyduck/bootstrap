@@ -62,7 +62,7 @@ memory {
 
 tztime local {
   format = "%time"
-  format_time = "%Y-%m-%d %l:%M:%S"
+  format_time = "%a %Y-%m-%d %l:%M:%S"
   align = "left"
 }
 
