@@ -31,6 +31,9 @@ bindsym $mod+Control+L exec lock.sh
 # Enable touchpad using a hack that tries to dynamically retrieve the right device ID
 exec xinput set-prop "$(xinput | grep 'Touchpad' | head -1 | awk -F ' ' '{ print $3 " " $4 " " $5 }')" "libinput Tapping Enabled" 1 || true
 
+# if autorandr is around, make it do its thing 
+exec command -v autorandr >/dev/null 2>&1 && autorandr -c
+
 # caffeine!
 exec command -v caffeine-indicator >/dev/null 2>&1 && caffeine-indicator
 exec xinput set-prop "SYNA801A:00 06CB:CEC6 Touchpad" "libinput Tapping Enabled" 1 || true
@@ -69,7 +72,7 @@ floating_modifier $mod
 
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return exec wezterm
+bindsym $mod+Return exec PATH=$PATH:/home/linuxbrew/.linuxbrew/bin wezterm -e tmux
 
 for_window [instance="steam"] fullscreen enable 
 for_window [instance="feh"] fullscreen enable
