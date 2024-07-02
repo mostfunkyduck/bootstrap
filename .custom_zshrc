@@ -265,8 +265,19 @@ if [ -d "$HOME/adb-fastboot/platform-tools" ] ; then
  export PATH="$HOME/adb-fastboot/platform-tools:$PATH"
 fi
 
-for cmd in tailscale kubectl helm; do
+for cmd in op tailscale kubectl helm; do
   #shellcheck disable=SC1090
   command -v "$cmd" >/dev/null 2>&1 && source <("$cmd" completion zsh)
 done
+
+authSock="$HOME"/.ssh/agent.sock
+if [ -z "$SSH_AUTH_PID" ] || [ -z "$SSH_AUTH_SOCK" ]; then
+  if [ ! -S "$authSock" ]; then
+    echo "no existing ssh-agent or socket detected for this session, starting ssh-agent"
+    eval "$(ssh-agent -s -a "$HOME"/.ssh/agent.sock)"
+  else
+    echo "detected existing ssh-agent sock in $authSock, will reuse that"
+    export SSH_AUTH_SOCK=$authSock
+  fi
+fi
 # vim: ft=sh
