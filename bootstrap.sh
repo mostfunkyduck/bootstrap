@@ -47,6 +47,7 @@ configure_packages() {
 
   if command -v pipx >/dev/null; then
     pipx install gpt-command-line
+    pipx install autorandr
   fi
 }
 
